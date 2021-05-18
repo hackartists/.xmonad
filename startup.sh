@@ -74,10 +74,11 @@ feh --bg-scale ~/Pictures/osw.jpg &
 stalonetray -c ~/.xmonad/.stalonetrayrc &
 
 /opt/notifier/bin/notifier.AppImage
-
-copyq --start-server show &
+(sleep 5; copyq) &
+xrandr --dpi 90
 
 # natural mouse scroll
 echo "pointer = 1 2 3 5 4 7 6 8 9 10 11 12" > ~/.Xmodmap && xmodmap ~/.Xmodmap
+
 # xbindkeys
 xbindkeys

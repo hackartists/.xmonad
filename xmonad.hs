@@ -16,6 +16,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Config.Gnome
 
 import XMonad.Layout.Gaps
 import XMonad.Layout.Fullscreen
@@ -125,7 +126,7 @@ tab          =  avoidStruts
                $ renamed [Replace "Tabbed"]
                $ addTopBar
                $ myGaps
-               $ tabbed shrinkText myTabTheme
+               $ tabbed shrinkText (theme adwaitaDarkTheme) -- myTabTheme
 
 layouts      = avoidStruts (
                 (
@@ -133,7 +134,7 @@ layouts      = avoidStruts (
                   $ addTopBar
                   $ windowNavigation
                   $ renamed [Replace "BSP"]
-                  $ addTabs shrinkText myTabTheme
+                  $ addTabs shrinkText (theme adwaitaDarkTheme) --  myTabTheme
                   $ subLayout [] Simplest
                   $ myGaps
                   $ addSpace (BSP.emptyBSP)
@@ -207,10 +208,10 @@ unfocusColor = base02
 
 -- myFont      = "-*-Zekton-medium-*-*-*-*-160-*-*-*-*-*-*"
 -- myBigFont   = "-*-Zekton-medium-*-*-*-*-240-*-*-*-*-*-*"
-myFont      = "xft:Zekton:size=9:bold:antialias=true"
-myBigFont   = "xft:Zekton:size=9:bold:antialias=true"
+myFont      = "xft:Zekton:size=14:bold:antialias=true"
+myBigFont   = "xft:Zekton:size=14:bold:antialias=true"
 myWideFont  = "xft:Eurostar Black Extended:"
-            ++ "style=Regular:pixelsize=180:hinting=true"
+            ++ "style=Regular:pixelsize=240:hinting=true"
 
 -- this is a "fake title" used as a highlight bar in lieu of full borders
 -- (I find this a cleaner and less visually intrusive solution)
@@ -502,7 +503,7 @@ main = do
                                 , (mod4Mask .|. shiftMask, windowSwap)
                                ]
                                False
-         $ ewmh
+         $ ewmh -- gnomeConfig
          -- $ pagerHints -- uncomment to use taffybar
          $ defaults {
          logHook = dynamicLogWithPP xmobarPP {
