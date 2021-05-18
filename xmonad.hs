@@ -36,6 +36,7 @@ import XMonad.Layout.ZoomRow
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Util.Cursor
+import XMonad.Util.Themes
 
 import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
@@ -69,7 +70,7 @@ myLauncher = "rofi -show"
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = ["1: term","2: web","3: code","4: media"] ++ map show [5..9]
+myWorkspaces = ["1: emacs","2: web","3: misc","4: media"] ++ map show [5..9]
 
 
 ------------------------------------------------------------------------
@@ -361,7 +362,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Push window back into tiling.
   , ((modMask, xK_t),
-     withFocused $ windows . W.sink)
+     withFocused toggleFloat)
+     -- withFocused $ windows . W.sink)
 
   -- Increment the number of windows in the master area. , ((modMask, xK_comma), sendMessage (IncMasterN 1))
 
@@ -392,7 +394,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
   [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-      | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+      | (key, sc) <- zip [xK_e, xK_r, xK_w] [0..]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
@@ -422,14 +424,14 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Some bindings for BinarySpacePartition
   -- https://github.com/benweitzman/BinarySpacePartition
   [
-    ((modMask .|. controlMask,               xK_Right ), sendMessage $ ExpandTowards R)
-  , ((modMask .|. controlMask .|. shiftMask, xK_Right ), sendMessage $ ShrinkFrom R)
-  , ((modMask .|. controlMask,               xK_Left  ), sendMessage $ ExpandTowards L)
-  , ((modMask .|. controlMask .|. shiftMask, xK_Left  ), sendMessage $ ShrinkFrom L)
-  , ((modMask .|. controlMask,               xK_Down  ), sendMessage $ ExpandTowards D)
-  , ((modMask .|. controlMask .|. shiftMask, xK_Down  ), sendMessage $ ShrinkFrom D)
-  , ((modMask .|. controlMask,               xK_Up    ), sendMessage $ ExpandTowards U)
-  , ((modMask .|. controlMask .|. shiftMask, xK_Up    ), sendMessage $ ShrinkFrom U)
+    ((modMask .|. controlMask,               xK_l ), sendMessage $ ExpandTowards R)
+  , ((modMask .|. controlMask .|. shiftMask, xK_l ), sendMessage $ ShrinkFrom R)
+  , ((modMask .|. controlMask,               xK_h  ), sendMessage $ ExpandTowards L)
+  , ((modMask .|. controlMask .|. shiftMask, xK_h  ), sendMessage $ ShrinkFrom L)
+  , ((modMask .|. controlMask,               xK_j  ), sendMessage $ ExpandTowards D)
+  , ((modMask .|. controlMask .|. shiftMask, xK_j  ), sendMessage $ ShrinkFrom D)
+  , ((modMask .|. controlMask,               xK_k    ), sendMessage $ ExpandTowards U)
+  , ((modMask .|. controlMask .|. shiftMask, xK_k    ), sendMessage $ ShrinkFrom U)
   -- , ((modMask,                               xK_r     ), sendMessage BSP.Rotate)
   , ((modMask,                               xK_s     ), sendMessage BSP.Swap)
   -- , ((modMask,                               xK_n     ), sendMessage BSP.FocusParent)
@@ -458,7 +460,6 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- mod-button3, Set the window to floating mode and resize by dragging
     , ((modMask, button3),
        (\w -> focus w >> mouseResizeWindow w))
-
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
   ]
 
@@ -512,6 +513,9 @@ main = do
          } >> updatePointer (0.75, 0.75) (0.75, 0.75)
       }
 
+toggleFloat w = windows (\s -> if M.member w (W.floating s)
+                            then W.sink w s
+                            else (W.float w (W.RationalRect (1/3) (1/4) (1/2) (4/5)) s))
 ------------------------------------------------------------------------
 -- Combine it all together
 -- A structure containing your configuration settings, overriding

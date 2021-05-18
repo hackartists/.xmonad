@@ -4,7 +4,7 @@ Config {
        , allDesktops = True
        , bgColor = "#282c34"
        , fgColor = "#bbc2cf"
-       , position = TopW L 100
+       , position = Static { xpos = 3840 , ypos = 0, width = 3839, height = 25 }
        , commands = [ Run Cpu [ "--template", "<fc=#a9a1e1><fn=1></fn></fc> <total>%"
                               , "--Low","3"
                               , "--High","50"
@@ -55,5 +55,5 @@ Config {
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %cpu% | %coretemp% | %memory% | %battery% | %dynnetwork% | %date%  |"   -- #69DFFA
+       , template = "%StdinReader% }{ %cpu% | %coretemp% | %memory%  | %date%  |"   -- #69DFFA
        }
