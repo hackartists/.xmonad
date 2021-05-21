@@ -57,25 +57,23 @@ if [ -z "$(pgrep insync)" ] ; then
     insync start &
 fi
 
-# Albert
-albert &
 xset r rate 200 30
 xset -dpms
 setterm -blank 0 -powerdown 0
 xset s off
-export XMODIFIERS=@im=ibus
-export GTK_IM_MODULE="ibus"
-ibus-daemon  -drx &
-
 # wallpaper setting
 feh --bg-scale ~/Pictures/osw.jpg &
 
 # system tray
-stalonetray -c ~/.xmonad/.stalonetrayrc &
+# xrandr --dpi 90
 
-/opt/notifier/bin/notifier.AppImage
-(sleep 5; copyq) &
-xrandr --dpi 90
+stalonetray -c ~/.xmonad/.stalonetrayrc &
+/opt/notifier/bin/notifier.AppImage &
+albert &
+export XMODIFIERS=@im=ibus
+export GTK_IM_MODULE="ibus"
+ibus-daemon  -drx &
+(sleep 5 && copyq) &
 
 # natural mouse scroll
 echo "pointer = 1 2 3 5 4 7 6 8 9 10 11 12" > ~/.Xmodmap && xmodmap ~/.Xmodmap

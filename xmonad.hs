@@ -59,7 +59,7 @@ myScreensaver = "dm-tool switch-to-greeter"
 mySelectScreenshot = "select-screenshot"
 
 -- The command to take a fullscreen screenshot.
-myScreenshot = "xfce4-screenshooter"
+myScreenshot = "xfce4-screen shooter"
 
 -- The command to use as a launcher, to launch commands that don't have
 -- preset keybindings.
@@ -71,7 +71,7 @@ myLauncher = "rofi -show"
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = ["1: emacs","2: web","3: misc","4: media"] ++ map show [5..9]
+myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:media","8:business"] ++ map show [8..9]
 
 
 ------------------------------------------------------------------------
@@ -91,17 +91,19 @@ myWorkspaces = ["1: emacs","2: web","3: misc","4: media"] ++ map show [5..9]
 myManageHook = composeAll
     [
       className =? "Google-chrome"                --> doShift "2:web"
-    , resource  =? "desktop_window"               --> doIgnore
-    , className =? "Galculator"                   --> doCenterFloat
-    , className =? "Steam"                        --> doCenterFloat
-    , className =? "Gimp"                         --> doCenterFloat
+    , stringProperty "_NET_WM_NAME" =? "Emulator" --> (doShift "3:mobile" <+> doFloat)
+    , className =? "Stoplight Studio"             --> doShift "4:testing"
+    , className =? "Slack"                        --> doShift "6:messenger"
+    , className =? "yakyak"                       --> doShift "6:messenger"
+    , className =? "obs"                          --> doShift "7:media"
+    , className =? "kdelive"                      --> doShift "7:media"
+    , className =? "Org.gnome.Nautilus"           --> doCenterFloat
+    , className =? "Gimp-2.10"                    --> doCenterFloat
     , resource  =? "gpicview"                     --> doCenterFloat
     , className =? "MPlayer"                      --> doCenterFloat
     , className =? "Pavucontrol"                  --> doCenterFloat
-    , className =? "Mate-power-preferences"       --> doCenterFloat
-    , className =? "Xfce4-power-manager-settings" --> doCenterFloat
-    , className =? "VirtualBox"                   --> doShift "4:vm"
-    , className =? "Xchat"                        --> doShift "5:media"
+    , className =? "systemsettings"               --> doCenterFloat
+    , resource  =? "desktop_window"               --> doIgnore
     , className =? "stalonetray"                  --> doIgnore
     , isFullscreen                                --> (doF W.focusDown <+> doFullFloat)
     -- , isFullscreen                             --> doFullFloat
@@ -131,12 +133,12 @@ tab          =  avoidStruts
 layouts      = avoidStruts (
                 (
                     renamed [CutWordsLeft 1]
-                  $ addTopBar
+                  -- $ addTopBar
                   $ windowNavigation
                   $ renamed [Replace "BSP"]
                   $ addTabs shrinkText (theme adwaitaDarkTheme) --  myTabTheme
                   $ subLayout [] Simplest
-                  $ myGaps
+                  -- $ myGaps
                   $ addSpace (BSP.emptyBSP)
                 )
                 ||| tab
@@ -200,7 +202,7 @@ border      = 0
 prompt      = 20
 status      = 20
 
-active      = blue
+active      = red
 activeWarn  = red
 inactive    = base02
 focusColor  = blue
@@ -496,14 +498,13 @@ main = do
   xmproc <- spawnPipe "xmobar ~/.xmonad/xmobarrc.hs"
   -- xmproc <- spawnPipe "taffybar"
   xmonad $ docks
-         $ withNavigation2DConfig myNav2DConf
          $ additionalNav2DKeys (xK_k, xK_h, xK_j, xK_l)
                                [
                                   (mod4Mask,               windowGo  )
                                 , (mod4Mask .|. shiftMask, windowSwap)
                                ]
                                False
-         $ ewmh -- gnomeConfig
+         $ ewmh -- 
          -- $ pagerHints -- uncomment to use taffybar
          $ defaults {
          logHook = dynamicLogWithPP xmobarPP {
@@ -525,7 +526,7 @@ toggleFloat w = windows (\s -> if M.member w (W.floating s)
 --
 -- No need to modify this.
 --
-defaults = def {
+defaults = gnomeConfig {
     -- simple stuff
     terminal           = myTerminal,
     focusFollowsMouse  = myFocusFollowsMouse,
@@ -543,6 +544,6 @@ defaults = def {
     layoutHook         = myLayout,
     -- handleEventHook    = E.fullscreenEventHook,
     handleEventHook    = fullscreenEventHook,
-    manageHook         = manageDocks <+> myManageHook,
+    manageHook         = myManageHook,
     startupHook        = myStartupHook
 }
