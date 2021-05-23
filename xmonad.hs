@@ -71,7 +71,7 @@ myLauncher = "rofi -show"
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:media","8:business"] ++ map show [8..9]
+myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:media","8:meeting","9:misc"] -- ++ map show [8..9]
 
 
 ------------------------------------------------------------------------
@@ -92,12 +92,15 @@ myManageHook = composeAll
     [
       className =? "Google-chrome"                --> doShift "2:web"
     , stringProperty "_NET_WM_NAME" =? "Emulator" --> (doShift "3:mobile" <+> doFloat)
+    , stringProperty "_NET_WM_NAME" =? "Android Emulator - luffy:5554" --> doShift "3:mobile"
+    , stringProperty "_NET_WM_NAME" =? "Android Emulator - zoro:5556" --> doShift "3:mobile"
     , className =? "Stoplight Studio"             --> doShift "4:testing"
     , className =? "Slack"                        --> doShift "6:messenger"
     , className =? "yakyak"                       --> doShift "6:messenger"
     , className =? "obs"                          --> doShift "7:media"
-    , className =? "kdelive"                      --> doShift "7:media"
-    , className =? "Org.gnome.Nautilus"           --> doCenterFloat
+    , className =? "kdenlive"                     --> doShift "7:media"
+    , className =? "NoiseTorch"                   --> doShift "9:misc"
+    -- , className =? "Org.gnome.Nautilus"           --> doFloat
     , className =? "Gimp-2.10"                    --> doCenterFloat
     , resource  =? "gpicview"                     --> doCenterFloat
     , className =? "MPlayer"                      --> doCenterFloat
@@ -316,8 +319,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   --
 
   -- Close focused window.
-  , ((modMask .|. shiftMask, xK_c),
-     kill)
+  , ((controlMask, xK_c), kill)
 
   -- Cycle through the available layout algorithms.
   , ((modMask, xK_space),
