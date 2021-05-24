@@ -75,6 +75,14 @@ export GTK_IM_MODULE="ibus"
 ibus-daemon  -drx &
 (sleep 5 && copyq) &
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
+emacs --daemon &
+google-chrome &
+google-chrome-unstable &
+noisetorch &
+sudo rmmod pcspkr
+slack &
+yakyak &
+NO_AT_BRIDGE=1 evolution &
 
 # natural mouse scroll
 echo "pointer = 1 2 3 5 4 7 6 8 9 10 11 12" > ~/.Xmodmap && xmodmap ~/.Xmodmap

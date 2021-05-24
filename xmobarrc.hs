@@ -1,5 +1,5 @@
 Config {
-       font = "xft:Zekton:size=11:bold:antialias=true"
+       font = "xft:NanumGothic:size=11:bold:antialias=true"
        , additionalFonts = [ "xft:FontAwesome:size=11" ]
        , allDesktops = True
        , bgColor = "#282c34"
@@ -52,6 +52,7 @@ Config {
                                                    , "-i"   , "<fc=#98be65>Charged</fc>"
                                          ] 50
                     , Run StdinReader
+                    -- , Run GMail "js.choi.85" "password" ["-t", "Mail: <count>"] 3000
                     ]
        , sepChar = "%"
        , alignSep = "}{"

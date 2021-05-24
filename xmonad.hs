@@ -71,8 +71,8 @@ myLauncher = "rofi -show"
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:media","8:meeting","9:misc"] -- ++ map show [8..9]
-
+myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:meeting","8:media","9:email"] ++ (map snd myExtraWorkspaces)
+myExtraWorkspaces = [(xK_0, "0:misc")]
 
 ------------------------------------------------------------------------
 -- Window rules
@@ -97,9 +97,11 @@ myManageHook = composeAll
     , className =? "Stoplight Studio"             --> doShift "4:testing"
     , className =? "Slack"                        --> doShift "6:messenger"
     , className =? "yakyak"                       --> doShift "6:messenger"
-    , className =? "obs"                          --> doShift "7:media"
-    , className =? "kdenlive"                     --> doShift "7:media"
-    , className =? "NoiseTorch"                   --> doShift "9:misc"
+    , className =? "Google-chrome-unstable"       --> doShift "7:meeting"
+    , className =? "obs"                          --> doShift "8:media"
+    , className =? "kdenlive"                     --> doShift "8:media"
+    , className =? "Evolution"                    --> doShift "9:email"
+    , stringProperty "_NET_WM_NAME" =? "NoiseTorch" --> doShift "0:misc"
     -- , className =? "Org.gnome.Nautilus"           --> doFloat
     , className =? "Gimp-2.10"                    --> doCenterFloat
     , resource  =? "gpicview"                     --> doCenterFloat
@@ -213,8 +215,8 @@ unfocusColor = base02
 
 -- myFont      = "-*-Zekton-medium-*-*-*-*-160-*-*-*-*-*-*"
 -- myBigFont   = "-*-Zekton-medium-*-*-*-*-240-*-*-*-*-*-*"
-myFont      = "xft:Zekton:size=14:bold:antialias=true"
-myBigFont   = "xft:Zekton:size=14:bold:antialias=true"
+myFont      = "xft:NanumGothic:size=14:bold:antialias=true"
+myBigFont   = "xft:NanumGothic:size=14:bold:antialias=true"
 myWideFont  = "xft:Eurostar Black Extended:"
             ++ "style=Regular:pixelsize=240:hinting=true"
 
@@ -442,6 +444,14 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- , ((modMask,                               xK_n     ), sendMessage BSP.FocusParent)
   -- , ((modMask .|. controlMask,               xK_n     ), sendMessage BSP.SelectNode)
   -- , ((modMask .|. shiftMask,                 xK_n     ), sendMessage BSP.MoveNode)
+  ]
+  ++
+  [
+      ((myModMask, key), (windows $ W.greedyView ws))
+      | (key, ws) <- myExtraWorkspaces
+  ] ++ [
+      ((myModMask .|. shiftMask, key), (windows $ W.shift ws))
+      | (key, ws) <- myExtraWorkspaces
   ]
 
 ------------------------------------------------------------------------
