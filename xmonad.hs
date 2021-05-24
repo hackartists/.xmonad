@@ -319,7 +319,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   --
 
   -- Close focused window.
-  , ((controlMask, xK_c), kill)
+  , ((controlMask, xK_q), kill)
 
   -- Cycle through the available layout algorithms.
   , ((modMask, xK_space),
