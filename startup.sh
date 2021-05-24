@@ -80,8 +80,8 @@ google-chrome &
 google-chrome-unstable &
 noisetorch &
 sudo rmmod pcspkr
-slack &
 yakyak &
+slack &
 NO_AT_BRIDGE=1 evolution &
 /opt/appimages/stoplight-studio.AppImage &
 

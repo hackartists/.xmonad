@@ -272,6 +272,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_0),
      spawn myScreensaver)
 
+  , ((controlMask, xK_grave), spawn "~/.emacs_anywhere/bin/run")
+
   -- Spawn the launcher using command specified by myLauncher.
   -- Use this to launch programs without a key binding.
   , ((modMask, xK_p),
