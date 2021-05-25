@@ -75,7 +75,14 @@ export GTK_IM_MODULE="ibus"
 ibus-daemon  -drx &
 (sleep 5 && copyq) &
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
-emacs --daemon &
+
+function emacsAlive {
+    while [ 1==1 ]; do
+        emacs --fg-daemon
+    done
+}
+emacsAlive &
+
 google-chrome &
 google-chrome-beta &
 noisetorch &
