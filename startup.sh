@@ -77,7 +77,7 @@ ibus-daemon  -drx &
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
 emacs --daemon &
 google-chrome &
-google-chrome-unstable &
+google-chrome-beta &
 noisetorch &
 sudo rmmod pcspkr
 yakyak &
