@@ -260,226 +260,7 @@
 -- myModMask = mod4Mask
 -- altMask = mod1Mask
 
--- myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
---   ----------------------------------------------------------------------
---   -- Custom key bindings
---   --
 
---   -- Start a terminal.  Terminal to start is specified by myTerminal variable.
---   [ ((modMask .|. shiftMask, xK_Return),
---      spawn $ XMonad.terminal conf)
-
---   -- Lock the screen using command specified by myScreensaver.
---   , ((modMask, xK_0),
---      spawn myScreensaver)
-
---   , ((controlMask, xK_grave), spawn "~/.emacs_anywhere/bin/run")
-
---   -- Spawn the launcher using command specified by myLauncher.
---   -- Use this to launch programs without a key binding.
---   , ((modMask, xK_p),
---      spawn myLauncher)
-
---   -- Take a selective screenshot using the command specified by mySelectScreenshot.
---   , ((modMask .|. shiftMask, xK_p),
---      spawn mySelectScreenshot)
-
---   -- Take a full screenshot using the command specified by myScreenshot.
---   , ((modMask .|. controlMask .|. shiftMask, xK_p),
---      spawn myScreenshot)
-
---   -- Toggle current focus window to fullscreen
---   , ((modMask, xK_f), sendMessage $ Toggle FULL)
-
---   -- Mute volume.
---   , ((0, xF86XK_AudioMute),
---      spawn "amixer -q set Master toggle")
-
---   -- Decrease volume.
---   , ((0, xF86XK_AudioLowerVolume),
---      spawn "amixer -q set Master 5%-")
-
---   -- Increase volume.
---   , ((0, xF86XK_AudioRaiseVolume),
---      spawn "amixer -q set Master 5%+")
-
---   -- Audio previous.
---   , ((0, 0x1008FF16),
---      spawn "")
-
---   -- Play/pause.
---   , ((0, 0x1008FF14),
---      spawn "")
-
---   -- Audio next.
---   , ((0, 0x1008FF17),
---      spawn "")
-
---   -- Eject CD tray.
---   , ((0, 0x1008FF2C),
---      spawn "eject -T")
-
---   --------------------------------------------------------------------
---   -- "Standard" xmonad key bindings
---   --
-
---   -- Close focused window.
---   , ((controlMask, xK_q), kill)
-
---   -- Cycle through the available layout algorithms.
---   , ((modMask, xK_space),
---      sendMessage NextLayout)
-
---   --  Reset the layouts on the current workspace to default.
---   , ((modMask .|. shiftMask, xK_space),
---      setLayout $ XMonad.layoutHook conf)
-
---   -- Resize viewed windows to the correct size.
---   , ((modMask, xK_n),
---      refresh)
-
---   -- Move focus to the next window.
---   , ((modMask, xK_j),
---      windows W.focusDown)
-
---   -- Move focus to the previous window.
---   , ((modMask, xK_k),
---      windows W.focusUp  )
-
---   -- Move focus to the master window.
---   , ((modMask, xK_m),
---      windows W.focusMaster  )
-
---   -- Swap the focused window and the master window.
---   , ((modMask, xK_Return),
---      windows W.swapMaster)
-
---   -- Swap the focused window with the next window.
---   , ((modMask .|. shiftMask, xK_j),
---      windows W.swapDown  )
-
---   -- Swap the focused window with the previous window.
---   , ((modMask .|. shiftMask, xK_k),
---      windows W.swapUp    )
-
---   -- Shrink the master area.
---   , ((modMask, xK_h),
---      sendMessage Shrink)
-
---   -- Expand the master area.
---   , ((modMask, xK_comma),
---      sendMessage Expand)
-
---   -- Push window back into tiling.
---   , ((modMask, xK_t),
---      withFocused toggleFloat)
---      -- withFocused $ windows . W.sink)
-
---   -- Increment the number of windows in the master area. , ((modMask, xK_comma), sendMessage (IncMasterN 1))
-
---   -- Decrement the number of windows in the master area.
---   , ((modMask, xK_period),
---      sendMessage (IncMasterN (-1)))
-
---   -- Toggle the status bar gap.
---   -- TODO: update this binding with avoidStruts, ((modMask, xK_b),
-
---   -- Quit xmonad.
---   , ((modMask .|. shiftMask, xK_q),
---      io (exitWith ExitSuccess))
-
---   -- Restart xmonad.
---   , ((modMask, xK_q),
---      restart "xmonad" True)
---   ]
---   ++
-
---   -- mod-[1..9], Switch to workspace N
---   -- mod-shift-[1..9], Move client to workspace N
---   [((m .|. modMask, k), windows $ f i)
---       | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
---       , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
---   ++
-
---   -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
---   -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
---   [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
---       | (key, sc) <- zip [xK_e, xK_r, xK_w] [0..]
---       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-
-
---   ++
---   -- Bindings for manage sub tabs in layouts please checkout the link below for reference
---   -- https://hackage.haskell.org/package/xmonad-contrib-0.13/docs/XMonad-Layout-SubLayouts.html
---   [
---     -- Tab current focused window with the window to the left
---     ((modMask .|. controlMask, xK_h), sendMessage $ pullGroup L)
---     -- Tab current focused window with the window to the right
---   , ((modMask .|. controlMask, xK_l), sendMessage $ pullGroup R)
---     -- Tab current focused window with the window above
---   , ((modMask .|. controlMask, xK_k), sendMessage $ pullGroup U)
---     -- Tab current focused window with the window below
---   , ((modMask .|. controlMask, xK_j), sendMessage $ pullGroup D)
-
---   -- Tab all windows in the current workspace with current window as the focus
---   , ((modMask .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
---   -- Group the current tabbed windows
---   , ((modMask .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
-
---   -- Toggle through tabes from the right
---   , ((modMask, xK_Tab), onGroup W.focusDown')
---   ]
-
---   ++
---   -- Some bindings for BinarySpacePartition
---   -- https://github.com/benweitzman/BinarySpacePartition
---   [
---     ((modMask .|. controlMask,               xK_l ), sendMessage $ ExpandTowards R)
---   , ((modMask .|. controlMask .|. shiftMask, xK_l ), sendMessage $ ShrinkFrom R)
---   , ((modMask .|. controlMask,               xK_h  ), sendMessage $ ExpandTowards L)
---   , ((modMask .|. controlMask .|. shiftMask, xK_h  ), sendMessage $ ShrinkFrom L)
---   , ((modMask .|. controlMask,               xK_j  ), sendMessage $ ExpandTowards D)
---   , ((modMask .|. controlMask .|. shiftMask, xK_j  ), sendMessage $ ShrinkFrom D)
---   , ((modMask .|. controlMask,               xK_k    ), sendMessage $ ExpandTowards U)
---   , ((modMask .|. controlMask .|. shiftMask, xK_k    ), sendMessage $ ShrinkFrom U)
---   -- , ((modMask,                               xK_r     ), sendMessage BSP.Rotate)
---   , ((modMask,                               xK_s     ), sendMessage BSP.Swap)
---   -- , ((modMask,                               xK_n     ), sendMessage BSP.FocusParent)
---   -- , ((modMask .|. controlMask,               xK_n     ), sendMessage BSP.SelectNode)
---   -- , ((modMask .|. shiftMask,                 xK_n     ), sendMessage BSP.MoveNode)
---   ]
---   ++
---   [
---       ((myModMask, key), (windows $ W.greedyView ws))
---       | (key, ws) <- myExtraWorkspaces
---   ] ++ [
---       ((myModMask .|. shiftMask, key), (windows $ W.shift ws))
---       | (key, ws) <- myExtraWorkspaces
---   ]
-
--- ------------------------------------------------------------------------
--- -- Mouse bindings
--- --
--- -- Focus rules
--- -- True if your focus should follow your mouse cursor.
--- myFocusFollowsMouse :: Bool
--- myFocusFollowsMouse = True
-
--- myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
---   [
---     -- mod-button1, Set the window to floating mode and move by dragging
---     ((modMask, button1),
---      (\w -> focus w >> mouseMoveWindow w))
-
---     -- mod-button2, Raise the window to the top of the stack
---     , ((modMask, button2),
---        (\w -> focus w >> windows W.swapMaster))
-
---     -- mod-button3, Set the window to floating mode and resize by dragging
---     , ((modMask, button3),
---        (\w -> focus w >> mouseResizeWindow w))
---     -- you may also bind events to the mouse scroll wheel (button4 and button5)
---   ]
 
 
 -- ------------------------------------------------------------------------
@@ -581,6 +362,8 @@ import XMonad.Actions.RotSlaves (rotSlavesDown, rotAllDown)
 import XMonad.Actions.WindowGo (runOrRaise)
 import XMonad.Actions.WithAll (sinkAll, killAll)
 import qualified XMonad.Actions.Search as S
+import XMonad.Actions.Navigation2D
+import XMonad.Actions.UpdatePointer
 
     -- Data
 import Data.Char (isSpace, toUpper)
@@ -607,6 +390,18 @@ import XMonad.Layout.Spiral
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
+import XMonad.Layout.BinarySpacePartition as BSP
+-- import XMonad.Layout.Fullscreen
+-- import XMonad.Layout.NoBorders
+-- import XMonad.Layout.Spacing
+-- import XMonad.Layout.MultiToggle
+-- import XMonad.Layout.MultiToggle.Instances
+-- import XMonad.Layout.NoFrillsDecoration
+-- import XMonad.Layout.Renamed
+-- import XMonad.Layout.Simplest
+-- import XMonad.Layout.SubLayouts
+-- import XMonad.Layout.WindowNavigation
+-- import XMonad.Layout.ZoomRow
 
     -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
@@ -669,6 +464,7 @@ myStartupHook = do
     spawnOnce "xset -dpms"
     spawnOnce "setterm -blank 0 -powerdown 0"
     spawnOnce "set s off"
+    spawnOnce "/usr/lib/xfce4/notifyd/xfce4-notifyd &"
 
     spawnOnce "picom &"
     spawnOnce "nm-applet &"
@@ -945,8 +741,220 @@ myManageHook = composeAll
      , isFullscreen -->  doFullFloat
      ] <+> namedScratchpadManageHook myScratchPads
 
-myKeys :: [(String, X ())]
-myKeys =
+myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
+  ----------------------------------------------------------------------
+  -- Custom key bindings
+  --
+
+  -- Start a terminal.  Terminal to start is specified by myTerminal variable.
+  [ ((modMask .|. shiftMask, xK_Return),
+     spawn $ XMonad.terminal conf)
+
+  -- Lock the screen using command specified by myScreensaver.
+  -- , ((modMask, xK_0), spawn myScreensaver)
+
+  , ((controlMask, xK_grave), spawn "~/.emacs_anywhere/bin/run")
+
+  -- Spawn the launcher using command specified by myLauncher.
+  -- Use this to launch programs without a key binding.
+  -- , ((modMask, xK_p), spawn myLauncher)
+
+  -- Take a selective screenshot using the command specified by mySelectScreenshot.
+  -- , ((modMask .|. shiftMask, xK_p), spawn mySelectScreenshot)
+
+  -- Take a full screenshot using the command specified by myScreenshot.
+  -- , ((modMask .|. controlMask .|. shiftMask, xK_p), spawn myScreenshot)
+
+  -- Toggle current focus window to fullscreen
+  -- , ((modMask, xK_f), sendMessage $ Toggle FULL)
+
+  -- Mute volume.
+  -- , ((0, xF86XK_AudioMute),
+  --    spawn "amixer -q set Master toggle")
+
+  -- -- Decrease volume.
+  -- , ((0, xF86XK_AudioLowerVolume),
+  --    spawn "amixer -q set Master 5%-")
+
+  -- -- Increase volume.
+  -- , ((0, xF86XK_AudioRaiseVolume),
+  --    spawn "amixer -q set Master 5%+")
+
+  -- Audio previous.
+  , ((0, 0x1008FF16),
+     spawn "")
+
+  -- Play/pause.
+  , ((0, 0x1008FF14),
+     spawn "")
+
+  -- Audio next.
+  , ((0, 0x1008FF17),
+     spawn "")
+
+  -- Eject CD tray.
+  , ((0, 0x1008FF2C),
+     spawn "eject -T")
+
+  --------------------------------------------------------------------
+  -- "Standard" xmonad key bindings
+  --
+
+  -- Close focused window.
+  , ((controlMask, xK_q), kill)
+
+  -- Cycle through the available layout algorithms.
+  , ((modMask, xK_space),
+     sendMessage NextLayout)
+
+  --  Reset the layouts on the current workspace to default.
+  , ((modMask .|. shiftMask, xK_space),
+     setLayout $ XMonad.layoutHook conf)
+
+  -- Resize viewed windows to the correct size.
+  , ((modMask, xK_n),
+     refresh)
+
+  -- Move focus to the next window.
+  , ((modMask, xK_j),
+     windows W.focusDown)
+
+  -- Move focus to the previous window.
+  , ((modMask, xK_k),
+     windows W.focusUp  )
+
+  -- Move focus to the master window.
+  , ((modMask, xK_m),
+     windows W.focusMaster  )
+
+  -- Swap the focused window and the master window.
+  , ((modMask, xK_Return),
+     windows W.swapMaster)
+
+  -- Swap the focused window with the next window.
+  , ((modMask .|. shiftMask, xK_j),
+     windows W.swapDown  )
+
+  -- Swap the focused window with the previous window.
+  , ((modMask .|. shiftMask, xK_k),
+     windows W.swapUp    )
+
+  -- Shrink the master area.
+  , ((modMask, xK_h), sendMessage Shrink)
+
+  -- Expand the master area.
+  , ((modMask, xK_comma), sendMessage Expand)
+
+  -- Push window back into tiling.
+  -- , ((modMask, xK_t), withFocused toggleFloat)
+     -- withFocused $ windows . W.sink)
+
+  -- Increment the number of windows in the master area. , ((modMask, xK_comma), sendMessage (IncMasterN 1))
+
+  -- Decrement the number of windows in the master area.
+  , ((modMask, xK_period), sendMessage (IncMasterN (-1)))
+
+  -- Toggle the status bar gap.
+  -- TODO: update this binding with avoidStruts, ((modMask, xK_b),
+
+  -- Quit xmonad.
+  -- , ((modMask .|. shiftMask, xK_q), io (exitWith ExitSuccess))
+
+  -- Restart xmonad.
+  , ((modMask, xK_q),
+     restart "xmonad" True)
+  ]
+  ++
+
+  -- mod-[1..9], Switch to workspace N
+  -- mod-shift-[1..9], Move client to workspace N
+  [((m .|. modMask, k), windows $ f i)
+      | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+      , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+  ++
+
+  -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
+  -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
+  [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
+      | (key, sc) <- zip [xK_e, xK_r, xK_w] [0..]
+      , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+
+
+  ++
+  -- Bindings for manage sub tabs in layouts please checkout the link below for reference
+  -- https://hackage.haskell.org/package/xmonad-contrib-0.13/docs/XMonad-Layout-SubLayouts.html
+  [
+    -- Tab current focused window with the window to the left
+    ((modMask .|. controlMask, xK_h), sendMessage $ pullGroup L)
+    -- Tab current focused window with the window to the right
+  , ((modMask .|. controlMask, xK_l), sendMessage $ pullGroup R)
+    -- Tab current focused window with the window above
+  , ((modMask .|. controlMask, xK_k), sendMessage $ pullGroup U)
+    -- Tab current focused window with the window below
+  , ((modMask .|. controlMask, xK_j), sendMessage $ pullGroup D)
+
+  -- Tab all windows in the current workspace with current window as the focus
+  , ((modMask .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
+  -- Group the current tabbed windows
+  , ((modMask .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
+
+  -- Toggle through tabes from the right
+  , ((modMask, xK_Tab), onGroup W.focusDown')
+  ]
+
+  ++
+  -- Some bindings for BinarySpacePartition
+  -- https://github.com/benweitzman/BinarySpacePartition
+  [
+    ((modMask .|. controlMask,               xK_l ), sendMessage $ ExpandTowards R)
+  , ((modMask .|. controlMask .|. shiftMask, xK_l ), sendMessage $ ShrinkFrom R)
+  , ((modMask .|. controlMask,               xK_h  ), sendMessage $ ExpandTowards L)
+  , ((modMask .|. controlMask .|. shiftMask, xK_h  ), sendMessage $ ShrinkFrom L)
+  , ((modMask .|. controlMask,               xK_j  ), sendMessage $ ExpandTowards D)
+  , ((modMask .|. controlMask .|. shiftMask, xK_j  ), sendMessage $ ShrinkFrom D)
+  , ((modMask .|. controlMask,               xK_k    ), sendMessage $ ExpandTowards U)
+  , ((modMask .|. controlMask .|. shiftMask, xK_k    ), sendMessage $ ShrinkFrom U)
+  -- , ((modMask,                               xK_r     ), sendMessage BSP.Rotate)
+  , ((modMask,                               xK_s     ), sendMessage BSP.Swap)
+  -- , ((modMask,                               xK_n     ), sendMessage BSP.FocusParent)
+  -- , ((modMask .|. controlMask,               xK_n     ), sendMessage BSP.SelectNode)
+  -- , ((modMask .|. shiftMask,                 xK_n     ), sendMessage BSP.MoveNode)
+  ]
+  -- ++
+  -- [
+  --     ((myModMask, key), (windows $ W.greedyView ws))
+  --     | (key, ws) <- myExtraWorkspaces
+  -- ] ++ [
+  --     ((myModMask .|. shiftMask, key), (windows $ W.shift ws))
+  --     | (key, ws) <- myExtraWorkspaces
+  -- ]
+
+-- ------------------------------------------------------------------------
+-- -- Mouse bindings
+-- --
+-- -- Focus rules
+-- -- True if your focus should follow your mouse cursor.
+-- myFocusFollowsMouse :: Bool
+-- myFocusFollowsMouse = True
+
+myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
+  [
+    -- mod-button1, Set the window to floating mode and move by dragging
+    ((modMask, button1),
+     (\w -> focus w >> mouseMoveWindow w))
+
+    -- mod-button2, Raise the window to the top of the stack
+    , ((modMask, button2),
+       (\w -> focus w >> windows W.swapMaster))
+
+    -- mod-button3, Set the window to floating mode and resize by dragging
+    , ((modMask, button3),
+       (\w -> focus w >> mouseResizeWindow w))
+    -- you may also bind events to the mouse scroll wheel (button4 and button5)
+  ]
+
+myAdditionalKeys :: [(String, X ())]
+myAdditionalKeys =
     -- Xmonad
         [ ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
         , ("M-S-r", spawn "xmonad --restart")    -- Restarts xmonad
@@ -1025,17 +1033,17 @@ myKeys =
         , ("M-C-<Down>", decreaseLimit)                 -- Decrease # of windows
 
     -- Window resizing
-        , ("M-h", sendMessage Shrink)                   -- Shrink horiz window width
-        , ("M-l", sendMessage Expand)                   -- Expand horiz window width
+        , ("M-C-h", sendMessage Shrink)                   -- Shrink horiz window width
+        , ("M-C-l", sendMessage Expand)                   -- Expand horiz window width
         , ("M-M1-j", sendMessage MirrorShrink)          -- Shrink vert window width
         , ("M-M1-k", sendMessage MirrorExpand)          -- Expand vert window width
 
     -- Sublayouts
     -- This is used to push windows to tabbed sublayouts, or pull them out of it.
-        , ("M-C-h", sendMessage $ pullGroup L)
-        , ("M-C-l", sendMessage $ pullGroup R)
-        , ("M-C-k", sendMessage $ pullGroup U)
-        , ("M-C-j", sendMessage $ pullGroup D)
+        -- , ("M-C-h", sendMessage $ pullGroup L)
+        -- , ("M-C-l", sendMessage $ pullGroup R)
+        -- , ("M-C-k", sendMessage $ pullGroup U)
+        -- , ("M-C-j", sendMessage $ pullGroup D)
         , ("M-C-m", withFocused (sendMessage . MergeAll))
         -- , ("M-C-u", withFocused (sendMessage . UnMerge))
         , ("M-C-/", withFocused (sendMessage . UnMergeAll))
@@ -1092,6 +1100,10 @@ myKeys =
         , ("<XF86Calculator>", runOrRaise "qalculate-gtk" (resource =? "qalculate-gtk"))
         , ("<XF86Eject>", spawn "toggleeject")
         , ("<Print>", spawn "dmscrot")
+
+        -- , ("M-w", screenWorkspace 0)
+        -- , ("M-e", screenWorkspace 1)
+        -- , ("M-r", screenWorkspace 1)
         ]
         ++
         [
@@ -1116,7 +1128,14 @@ main = do
     -- xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmobar/xmobarrc1"
     -- xmproc2 <- spawnPipe "xmobar -x 2 $HOME/.config/xmobar/xmobarrc2"
     -- the xmonad, ya know...what the WM is named after!
-    xmonad $ ewmh def
+    xmonad
+      $ additionalNav2DKeys (xK_k, xK_h, xK_j, xK_l)
+                               [
+                                  (mod4Mask,               windowGo  )
+                                , (mod4Mask .|. shiftMask, windowSwap)
+                               ]
+                               False
+      $ ewmh def
         { manageHook         = myManageHook <+> manageDocks
         , handleEventHook    = docksEventHook
                                -- Uncomment this line to enable fullscreen support on things like YouTube/Netflix.
@@ -1132,6 +1151,8 @@ main = do
         , borderWidth        = myBorderWidth
         , normalBorderColor  = myNormColor
         , focusedBorderColor = myFocusColor
+        , keys               = myKeys
+        , mouseBindings      = myMouseBindings
         , logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
               -- the following variables beginning with 'pp' are settings for xmobar.
               { ppOutput = \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
@@ -1147,4 +1168,4 @@ main = do
               , ppExtras  = [windowCount]                                     -- # of windows current workspace
               , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]                    -- order of things in xmobar
               }
-        } `additionalKeysP` myKeys
+        } `additionalKeysP` myAdditionalKeys
