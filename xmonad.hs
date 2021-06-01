@@ -674,7 +674,7 @@ myStartupHook = do
     spawnOnce "nm-applet &"
     spawnOnce "volumeicon &"
     spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
-    spawnOnce "trayer --edge top --align right --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 &"
+    spawnOnce "trayer --edge top --align center --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 &"
     spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
     -- spawnOnce "kak -d -s mysession &"  -- kakoune daemon for better performance
     -- spawnOnce "urxvtd -q -o -f &"      -- urxvt daemon for better performance
@@ -684,6 +684,22 @@ myStartupHook = do
     spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
     -- spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
     -- spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
+    spawnOnce "google-chrome &"
+    spawnOnce "google-chrome-beta &"
+    spawnOnce "noisetorch &"
+    spawnOnce "sudo rmmod pcspkr"
+    spawnOnce "yakyak &"
+    spawnOnce "slack &"
+    spawnOnce "NO_AT_BRIDGE=1 evolution &"
+    spawnOnce "/opt/appimages/stoplight-studio.AppImage &"
+    -- spawnOnce "stalonetray -c ~/.xmonad/.stalonetrayrc &"
+    spawnOnce "/opt/notifier/bin/notifier.AppImage &"
+    spawnOnce "albert &"
+    spawnOnce "export XMODIFIERS=@im=ibus"
+    spawnOnce "export GTK_IM_MODULE=ibus"
+    spawnOnce "ibus-daemon  -drx &"
+    spawnOnce "(sleep 5 && copyq) &"
+
     setWMName "LG3D"
 
 myColorizer :: Window -> Bool -> X (String, String)
