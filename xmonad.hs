@@ -804,8 +804,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((controlMask, xK_q), kill)
 
   -- Cycle through the available layout algorithms.
-  , ((modMask, xK_space),
-     sendMessage NextLayout)
+  , ((modMask, xK_space), sendMessage NextLayout)
 
   --  Reset the layouts on the current workspace to default.
   , ((modMask .|. shiftMask, xK_space),
@@ -861,8 +860,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- , ((modMask .|. shiftMask, xK_q), io (exitWith ExitSuccess))
 
   -- Restart xmonad.
-  , ((modMask, xK_q),
-     restart "xmonad" True)
+  -- , ((modMask, xK_q), restart "xmonad" True)
   ]
   ++
 
@@ -883,26 +881,26 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   ++
   -- Bindings for manage sub tabs in layouts please checkout the link below for reference
   -- https://hackage.haskell.org/package/xmonad-contrib-0.13/docs/XMonad-Layout-SubLayouts.html
-  [
-    -- Tab current focused window with the window to the left
-    ((modMask .|. controlMask, xK_h), sendMessage $ pullGroup L)
-    -- Tab current focused window with the window to the right
-  , ((modMask .|. controlMask, xK_l), sendMessage $ pullGroup R)
-    -- Tab current focused window with the window above
-  , ((modMask .|. controlMask, xK_k), sendMessage $ pullGroup U)
-    -- Tab current focused window with the window below
-  , ((modMask .|. controlMask, xK_j), sendMessage $ pullGroup D)
+  -- [
+  --   -- Tab current focused window with the window to the left
+  -- --   ((modMask .|. controlMask, xK_h), sendMessage $ pullGroup L)
+  -- --   -- Tab current focused window with the window to the right
+  -- -- , ((modMask .|. controlMask, xK_l), sendMessage $ pullGroup R)
+  -- --   -- Tab current focused window with the window above
+  -- -- , ((modMask .|. controlMask, xK_k), sendMessage $ pullGroup U)
+  -- --   -- Tab current focused window with the window below
+  -- -- , ((modMask .|. controlMask, xK_j), sendMessage $ pullGroup D)
 
-  -- Tab all windows in the current workspace with current window as the focus
-  , ((modMask .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
-  -- Group the current tabbed windows
-  , ((modMask .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
+  -- -- Tab all windows in the current workspace with current window as the focus
+  -- -- , ((modMask .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
+  -- -- -- Group the current tabbed windows
+  -- -- , ((modMask .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
 
-  -- Toggle through tabes from the right
-  , ((modMask, xK_Tab), onGroup W.focusDown')
-  ]
+  -- -- Toggle through tabes from the right
+  -- , ((modMask, xK_Tab), onGroup W.focusDown')
+  -- ]
 
-  ++
+  -- ++
   -- Some bindings for BinarySpacePartition
   -- https://github.com/benweitzman/BinarySpacePartition
   [
@@ -934,8 +932,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- --
 -- -- Focus rules
 -- -- True if your focus should follow your mouse cursor.
--- myFocusFollowsMouse :: Bool
--- myFocusFollowsMouse = True
+myFocusFollowsMouse :: Bool
+myFocusFollowsMouse = True
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   [
@@ -956,9 +954,9 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 myAdditionalKeys :: [(String, X ())]
 myAdditionalKeys =
     -- Xmonad
-        [ ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
-        , ("M-S-r", spawn "xmonad --restart")    -- Restarts xmonad
-        , ("M-S-q", io exitSuccess)              -- Quits xmonad
+        [ -- ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
+        ("M-C-r", spawn "xmonad --restart")    -- Restarts xmonad
+        , ("M-C-q", io exitSuccess)              -- Quits xmonad
 
     -- Run Prompt
         , ("M-S-<Return>", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
@@ -1013,8 +1011,8 @@ myAdditionalKeys =
 
     -- Windows navigation
         , ("M-m", windows W.focusMaster)  -- Move focus to the master window
-        , ("M-j", windows W.focusDown)    -- Move focus to the next window
-        , ("M-k", windows W.focusUp)      -- Move focus to the prev window
+        -- , ("M-j", windows W.focusDown)    -- Move focus to the next window
+        -- , ("M-k", windows W.focusUp)      -- Move focus to the prev window
         , ("M-S-m", windows W.swapMaster) -- Swap the focused window and the master window
         , ("M-S-j", windows W.swapDown)   -- Swap focused window with next window
         , ("M-S-k", windows W.swapUp)     -- Swap focused window with prev window
@@ -1045,7 +1043,7 @@ myAdditionalKeys =
         -- , ("M-C-k", sendMessage $ pullGroup U)
         -- , ("M-C-j", sendMessage $ pullGroup D)
         , ("M-C-m", withFocused (sendMessage . MergeAll))
-        -- , ("M-C-u", withFocused (sendMessage . UnMerge))
+        , ("M-C-u", withFocused (sendMessage . UnMerge))
         , ("M-C-/", withFocused (sendMessage . UnMergeAll))
         , ("M-C-.", onGroup W.focusUp')    -- Switch focus to next tab
         , ("M-C-,", onGroup W.focusDown')  -- Switch focus to prev tab
@@ -1113,11 +1111,6 @@ myAdditionalKeys =
           ("M-S-"++key, (windows $ W.shift ws))
           | (key, ws) <- myExtraWorkspaces
         ]
-        ++
-        [("M-"++key, screenWorkspace sc >>= flip whenJust (windows . f))
-          | (key, sc) <- zip ["e", "r", "w"] [0..]
-          , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-
           where nonNSP          = WSIs (return (\ws -> W.tag ws /= "NSP"))
                 nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "NSP"))
 
@@ -1152,6 +1145,7 @@ main = do
         , normalBorderColor  = myNormColor
         , focusedBorderColor = myFocusColor
         , keys               = myKeys
+        -- , focusFollowsMouse  = myFocusFollowsMouse
         , mouseBindings      = myMouseBindings
         , logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
               -- the following variables beginning with 'pp' are settings for xmobar.
