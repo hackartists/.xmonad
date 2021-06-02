@@ -464,7 +464,7 @@ myStartupHook = do
     spawnOnce "xset r rate 200 30"
     spawnOnce "xset -dpms"
     spawnOnce "setterm -blank 0 -powerdown 0"
-    spawnOnce "set s off"
+    spawnOnce "xset s off"
     spawnOnce "/usr/lib/xfce4/notifyd/xfce4-notifyd &"
 
     spawnOnce "picom &"
