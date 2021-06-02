@@ -591,7 +591,7 @@ tall     = renamed [Replace "tall"]
            $ addTabs shrinkText myTabTheme
            -- $ subLayout [] (smartBorders Simplest)
            $ limitWindows 12
-           $ mySpacing 8
+           $ mySpacing 0
            $ ResizableTall 1 (3/100) (1/2) []
 magnify  = renamed [Replace "magnify"]
            $ smartBorders
@@ -1025,6 +1025,7 @@ myAdditionalKeys  =
 
     -- Run Prompt
         , ("C-<Space> .", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
+        , ("C-<Space> <Return>", spawn "~/.emacs_anywhere/bin/run")
 
     -- Windows (Application)
         , ("C-<Space> a .", windows W.focusMaster)  -- Move focus to the master window
@@ -1101,7 +1102,6 @@ myAdditionalKeys  =
         , ("M-u <Space>", spawn "mocp --toggle-pause")
 
     -- Emacs (CTRL-e followed by a key)
-        , ("M-`", spawn "~/.emacs_anywhere/bin/run")
         -- , ("C-e e", spawn myEmacs)                 -- start emacs
         , ("C-e e", spawn (myEmacs ++ ("--eval '(dashboard-refresh-buffer)'")))   -- emacs dashboard
         , ("C-e b", spawn (myEmacs ++ ("--eval '(ibuffer)'")))   -- list buffers
