@@ -781,13 +781,13 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   --    spawn "amixer -q set Master 5%+")
 
   -- Audio previous.
-  , ((0, 0x1008FF16), spawn "")
+  -- , ((0, 0x1008FF16), spawn "")
 
-  -- Play/pause.
-  , ((0, 0x1008FF14), spawn "")
+  -- -- Play/pause.
+  -- , ((0, 0x1008FF14), spawn "")
 
-  -- Audio next.
-  , ((0, 0x1008FF17), spawn "")
+  -- -- Audio next.
+  -- , ((0, 0x1008FF17), spawn "")
 
   -- Eject CD tray.
   -- , ((0, 0x1008FF2C), spawn "eject -T")
@@ -815,7 +815,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- , ((modMask, xK_k), windows W.focusUp  )
 
   -- Move focus to the master window.
-  , ((modMask, xK_m), windows W.focusMaster  )
+  ((modMask, xK_m), windows W.focusMaster  )
 
   -- Swap the focused window and the master window.
   , ((modMask, xK_Return), windows W.swapMaster)
@@ -1012,7 +1012,7 @@ myAdditionalKeys =
     -- Layouts
         , ("M-<Tab>", sendMessage NextLayout)           -- Switch to next layout
         , ("M-<Space>", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
-        , ("M-S-<Space>", setLayout $ XMonad.layoutHook conf)
+        -- , ("M-S-<Space>", setLayout $ XMonad.layoutHook conf)
 
     -- Increase/decrease windows in the master pane or the stack
         , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
