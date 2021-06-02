@@ -347,6 +347,7 @@
 
 -- Base
 import XMonad
+import XMonad.Config
 import System.Directory
 import System.IO (hPutStrLn)
 import System.Exit (exitSuccess)
@@ -563,7 +564,7 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                  h = 0.9
                  w = 0.9
                  t = 0.95 -h
-                 l = 0.95 -w 
+                 l = 0.95 -w
     spawnCalc  = "qalculate-gtk"
     findCalc   = className =? "Qalculate-gtk"
     manageCalc = customFloating $ W.RationalRect l t w h
@@ -681,10 +682,49 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
                                  ||| tallAccordion
                                  ||| wideAccordion
 
+
+-- Config
+myGoToSelectedColorizer  :: Window -> Bool -> X (String, String)
+myGoToSelectedColorizer  = colorRangeFromClassName
+                  (0x31,0x2e,0x39) -- lowest inactive bg
+                  (0x31,0x2e,0x39) -- highest inactive bg
+                  (0x78,0x3e,0x57) -- active bg
+                  (0xc0,0xa7,0x9a) -- inactive fg
+                  (0xff,0xff,0xff) -- active fg
+
+wsconfig = defaultGSConfig
+    { gs_cellheight   = 30
+    , gs_cellwidth    = 200
+    , gs_cellpadding  = 16
+    , gs_originFractX = 0.5
+    , gs_originFractY = 0.5
+    , gs_font         = myFont
+  }
+
+-- wsconfig            = def
+--     { gs_cellheight   = 30
+--     , gs_cellwidth    = 300
+--     , gs_cellpadding  = 16
+--     , gs_originFractX = 0.5
+--     , gs_originFractY = 0.0
+--     , gs_font         = myFont
+--     }
+
+-- -- gridSelect move Workspace layout
+-- wsconfig2           = def
+--     { gs_cellheight   = 30
+--     , gs_cellwidth    = 300
+--     , gs_cellpadding  = 16
+--     , gs_originFractX = 1.5
+--     , gs_originFractY = 0.0
+--     , gs_font         = myFont
+--     }
+
 -- myWorkspaces = [" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "]
 -- myWorkspaces = [" dev ", " www ", " sys ", " doc ", " vbox ", " chat ", " mus ", " vid ", " gfx "]
 myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:meeting","8:media","9:email"] ++ (map snd myExtraWorkspaces)
 myExtraWorkspaces = [("0", "0:misc")]
+myAllWorkspaces = [("1","1:emacs"),("2","2:web"),("3","3:mobile"),("4","4:testing"),("5","5:dev-misc"),("6","6:messenger"),("7","7:meeting"),("8","8:media"),("9", "9:email"),("0", "0:misc")]
 
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
@@ -697,7 +737,7 @@ myManageHook = composeAll
      -- using 'doShift ( myWorkspaces !! 7)' sends program to workspace 8!
      -- I'm doing it this way because otherwise I would have to write out the full
      -- name of my workspaces and the names would be very long if using clickable workspaces.
-     [ 
+     [
        className =? "Google-chrome"                --> doShift "2:web"
      , stringProperty "_NET_WM_NAME" =? "Emulator" --> (doShift "3:mobile" <+> doFloat)
      , stringProperty "_NET_WM_NAME" =? "Android Emulator - luffy:5554" --> doShift "3:mobile"
@@ -940,14 +980,11 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   ]
 
 myAdditionalKeys :: [(String, X ())]
-myAdditionalKeys =
-    -- Xmonad
+myAdditionalKeys  = 
         [ -- ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
         ("M-C-r", spawn "xmonad --restart")    -- Restarts xmonad
         , ("M-C-q", io exitSuccess)              -- Quits xmonad
 
-    -- Run Prompt
-        , ("M-S-<Return>", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
 
     -- Other Dmenu Prompts
     -- In Xmonad and many tiling window managers, M-p is the default keybinding to
@@ -974,13 +1011,6 @@ myAdditionalKeys =
         , ("C-q", kill)     -- Kill the currently focused client
         , ("M-S-c", kill)     -- Kill the currently focused client
         , ("M-S-a", killAll)   -- Kill all windows on current workspace
-        , ("M-n", refresh)
-
-    -- Workspaces
-        , ("M-.", nextScreen)  -- Switch focus to next monitor
-        , ("M-,", prevScreen)  -- Switch focus to prev monitor
-        , ("M-S-<KP_Add>", shiftTo Next nonNSP >> moveTo Next nonNSP)       -- Shifts focused window to next ws
-        , ("M-S-<KP_Subtract>", shiftTo Prev nonNSP >> moveTo Prev nonNSP)  -- Shifts focused window to prev ws
 
     -- Floating windows
         , ("M-f", sendMessage (T.Toggle "floats")) -- Toggles my 'floats' layout
@@ -993,26 +1023,43 @@ myAdditionalKeys =
         , ("C-M1-h", decScreenSpacing 4)         -- Decrease screen spacing
         , ("C-M1-l", incScreenSpacing 4)         -- Increase screen spacing
 
-    -- Grid Select (CTR-g followed by a key)
-        , ("M-g g", spawnSelected' myAppGrid)                 -- grid select favorite apps
-        , ("M-g t", goToSelected $ mygridConfig myColorizer)  -- goto selected window
-        , ("M-g b", bringSelected $ mygridConfig myColorizer) -- bring selected window
+    -- Run Prompt
+        , ("C-<Space> .", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
 
-    -- Windows navigation
-        , ("M-m", windows W.focusMaster)  -- Move focus to the master window
+    -- Windows (Application)
+        , ("C-<Space> a .", windows W.focusMaster)  -- Move focus to the master window
+        , ("C-<Space> a m", windows W.swapMaster) -- Swap the focused window and the master window
+        , ("C-<Space> a j", windows W.swapDown)   -- Swap focused window with next window
+        , ("C-<Space> a k", windows W.swapUp)     -- Swap focused window with prev window
+        , ("C-<Space> a p", promote)      -- Moves focused window to master, others maintain order
+        , ("C-<Space> a r s", rotSlavesDown)    -- Rotate all windows except master and keep focus in place
+        , ("C-<Space> a r a", rotAllDown)       -- Rotate all the windows in the current stack
+        , ("C-<Space> a <Return>", refresh)
         , ("M-j", windows W.focusDown)    -- Move focus to the next window
         , ("M-k", windows W.focusUp)      -- Move focus to the prev window
-        , ("M-S-m", windows W.swapMaster) -- Swap the focused window and the master window
-        , ("M-S-j", windows W.swapDown)   -- Swap focused window with next window
-        , ("M-S-k", windows W.swapUp)     -- Swap focused window with prev window
-        , ("M-<Backspace>", promote)      -- Moves focused window to master, others maintain order
-        , ("M-S-<Tab>", rotSlavesDown)    -- Rotate all windows except master and keep focus in place
-        , ("M-C-<Tab>", rotAllDown)       -- Rotate all the windows in the current stack
+
+    -- Grid Select (CTR-g followed by a key)
+        , ("C-<Space> g n", spawnSelected' myAppGrid)                 -- grid select favorite apps
+        , ("C-<Space> g a", goToSelected $ mygridConfig myColorizer)  -- goto selected window
+        , ("C-<Space> g b a", bringSelected $ mygridConfig myColorizer) -- bring selected window
+        , ("C-<Space> g b w", gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
+        , ("C-<Space> g w", gridselectWorkspace wsconfig (\ws -> W.greedyView ws))
 
     -- Layouts
-        , ("M-<Tab>", sendMessage NextLayout)           -- Switch to next layout
-        , ("M-<Space>", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
+        , ("C-<Space> l n", sendMessage NextLayout)           -- Switch to next layout
+        , ("C-<Space> l f", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
+        , ("C-<Space> l m", withFocused (sendMessage . MergeAll))
+        , ("C-<Space> l u", withFocused (sendMessage . UnMerge))
+        , ("C-<Space> l U", withFocused (sendMessage . UnMergeAll))
+        , ("C-<Space> l .", onGroup W.focusUp')    -- Switch focus to next tab
+        , ("C-<Space> l ,", onGroup W.focusDown')  -- Switch focus to prev tab
         -- , ("M-S-<Space>", setLayout $ XMonad.layoutHook conf)
+
+    -- Screen
+        , ("C-<Space> s n", nextScreen)  -- Switch focus to next monitor
+        , ("C-<Space> s p", prevScreen)  -- Switch focus to prev monitor
+        , ("C-<Space> s m n", shiftTo Next nonNSP >> moveTo Next nonNSP)       -- Shifts focused window to next ws
+        , ("C-<Space> s m p", shiftTo Prev nonNSP >> moveTo Prev nonNSP)  -- Shifts focused window to prev ws
 
     -- Increase/decrease windows in the master pane or the stack
         , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
@@ -1032,11 +1079,6 @@ myAdditionalKeys =
         -- , ("M-C-l", sendMessage $ pullGroup R)
         -- , ("M-C-k", sendMessage $ pullGroup U)
         -- , ("M-C-j", sendMessage $ pullGroup D)
-        , ("M-C-m", withFocused (sendMessage . MergeAll))
-        , ("M-C-u", withFocused (sendMessage . UnMerge))
-        , ("M-C-/", withFocused (sendMessage . UnMergeAll))
-        , ("M-C-.", onGroup W.focusUp')    -- Switch focus to next tab
-        , ("M-C-,", onGroup W.focusDown')  -- Switch focus to prev tab
 
     -- Scratchpads
     -- Toggle show/hide these programs.  They run on a hidden workspace.
@@ -1096,11 +1138,11 @@ myAdditionalKeys =
         ]
         ++
         [
-          ("M-"++key, (windows $ W.greedyView ws))
-          | (key, ws) <- myExtraWorkspaces
+          ("C-<Space> "++key, windows $ W.greedyView ws)
+          | (key, ws) <- myAllWorkspaces
         ] ++ [
-          ("M-S-"++key, (windows $ W.shift ws))
-          | (key, ws) <- myExtraWorkspaces
+          ("C-<Space> a "++key, windows $ W.shift ws)
+          | (key, ws) <- myAllWorkspaces
         ]
           where nonNSP          = WSIs (return (\ws -> W.tag ws /= "NSP"))
                 nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "NSP"))
