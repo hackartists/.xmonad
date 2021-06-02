@@ -747,13 +747,13 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   --
 
   -- Start a terminal.  Terminal to start is specified by myTerminal variable.
-  [ ((modMask .|. shiftMask, xK_Return),
-     spawn $ XMonad.terminal conf)
+  [
+    -- ((modMask .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
   -- Lock the screen using command specified by myScreensaver.
   -- , ((modMask, xK_0), spawn myScreensaver)
 
-  , ((controlMask, xK_grave), spawn "~/.emacs_anywhere/bin/run")
+  -- , ((controlMask, xK_grave), spawn "~/.emacs_anywhere/bin/run")
 
   -- Spawn the launcher using command specified by myLauncher.
   -- Use this to launch programs without a key binding.
@@ -781,62 +781,50 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   --    spawn "amixer -q set Master 5%+")
 
   -- Audio previous.
-  , ((0, 0x1008FF16),
-     spawn "")
+  , ((0, 0x1008FF16), spawn "")
 
   -- Play/pause.
-  , ((0, 0x1008FF14),
-     spawn "")
+  , ((0, 0x1008FF14), spawn "")
 
   -- Audio next.
-  , ((0, 0x1008FF17),
-     spawn "")
+  , ((0, 0x1008FF17), spawn "")
 
   -- Eject CD tray.
-  , ((0, 0x1008FF2C),
-     spawn "eject -T")
+  -- , ((0, 0x1008FF2C), spawn "eject -T")
 
   --------------------------------------------------------------------
   -- "Standard" xmonad key bindings
   --
 
   -- Close focused window.
-  , ((controlMask, xK_q), kill)
+  -- , ((controlMask, xK_q), kill)
 
   -- Cycle through the available layout algorithms.
-  , ((modMask, xK_space), sendMessage NextLayout)
+  -- , ((modMask, xK_space), sendMessage NextLayout)
 
   --  Reset the layouts on the current workspace to default.
-  , ((modMask .|. shiftMask, xK_space),
-     setLayout $ XMonad.layoutHook conf)
+  -- , ((modMask .|. shiftMask, xK_space), setLayout $ XMonad.layoutHook conf)
 
   -- Resize viewed windows to the correct size.
-  , ((modMask, xK_n),
-     refresh)
+  -- , ((modMask, xK_n), refresh)
 
   -- Move focus to the next window.
-  , ((modMask, xK_j),
-     windows W.focusDown)
+  -- , ((modMask, xK_j), windows W.focusDown)
 
   -- Move focus to the previous window.
-  , ((modMask, xK_k),
-     windows W.focusUp  )
+  -- , ((modMask, xK_k), windows W.focusUp  )
 
   -- Move focus to the master window.
-  , ((modMask, xK_m),
-     windows W.focusMaster  )
+  , ((modMask, xK_m), windows W.focusMaster  )
 
   -- Swap the focused window and the master window.
-  , ((modMask, xK_Return),
-     windows W.swapMaster)
+  , ((modMask, xK_Return), windows W.swapMaster)
 
   -- Swap the focused window with the next window.
-  , ((modMask .|. shiftMask, xK_j),
-     windows W.swapDown  )
+  , ((modMask .|. shiftMask, xK_j), windows W.swapDown  )
 
   -- Swap the focused window with the previous window.
-  , ((modMask .|. shiftMask, xK_k),
-     windows W.swapUp    )
+  , ((modMask .|. shiftMask, xK_k), windows W.swapUp    )
 
   -- Shrink the master area.
   , ((modMask, xK_h), sendMessage Shrink)
@@ -982,10 +970,11 @@ myAdditionalKeys =
         , ("M-b", spawn (myBrowser ++ " www.youtube.com/c/DistroTube/"))
         , ("M-M1-h", spawn (myTerminal ++ " -e htop"))
 
-    -- Kill windows
-        , ("C-q", kill1)     -- Kill the currently focused client
-        , ("M-S-c", kill1)     -- Kill the currently focused client
+    -- Windows
+        , ("C-q", kill)     -- Kill the currently focused client
+        , ("M-S-c", kill)     -- Kill the currently focused client
         , ("M-S-a", killAll)   -- Kill all windows on current workspace
+        , ("M-n", refresh)
 
     -- Workspaces
         , ("M-.", nextScreen)  -- Switch focus to next monitor
@@ -1011,8 +1000,8 @@ myAdditionalKeys =
 
     -- Windows navigation
         , ("M-m", windows W.focusMaster)  -- Move focus to the master window
-        -- , ("M-j", windows W.focusDown)    -- Move focus to the next window
-        -- , ("M-k", windows W.focusUp)      -- Move focus to the prev window
+        , ("M-j", windows W.focusDown)    -- Move focus to the next window
+        , ("M-k", windows W.focusUp)      -- Move focus to the prev window
         , ("M-S-m", windows W.swapMaster) -- Swap the focused window and the master window
         , ("M-S-j", windows W.swapDown)   -- Swap focused window with next window
         , ("M-S-k", windows W.swapUp)     -- Swap focused window with prev window
@@ -1023,6 +1012,7 @@ myAdditionalKeys =
     -- Layouts
         , ("M-<Tab>", sendMessage NextLayout)           -- Switch to next layout
         , ("M-<Space>", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
+        , ("M-S-<Space>", setLayout $ XMonad.layoutHook conf)
 
     -- Increase/decrease windows in the master pane or the stack
         , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
@@ -1069,6 +1059,7 @@ myAdditionalKeys =
         , ("M-u <Space>", spawn "mocp --toggle-pause")
 
     -- Emacs (CTRL-e followed by a key)
+        , ("M-`", spawn "~/.emacs_anywhere/bin/run")
         -- , ("C-e e", spawn myEmacs)                 -- start emacs
         , ("C-e e", spawn (myEmacs ++ ("--eval '(dashboard-refresh-buffer)'")))   -- emacs dashboard
         , ("C-e b", spawn (myEmacs ++ ("--eval '(ibuffer)'")))   -- list buffers
