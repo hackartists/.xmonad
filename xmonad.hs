@@ -467,13 +467,13 @@ myStartupHook = do
     spawnOnce "setterm -blank 0 -powerdown 0"
     spawnOnce "xset s off"
     spawnOnce "/usr/lib/xfce4/notifyd/xfce4-notifyd &"
+    spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
 
     spawnOnce "picom &"
     spawnOnce "nm-applet &"
     spawnOnce "volumeicon &"
     spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
     spawnOnce "trayer --edge top --align center --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 --iconspacing 10&"
-    -- spawnOnce "/usr/bin/emacs --daemon &" -- emacs daemon for the emacsclient
     -- spawnOnce "kak -d -s mysession &"  -- kakoune daemon for better performance
     -- spawnOnce "urxvtd -q -o -f &"      -- urxvt daemon for better performance
 
