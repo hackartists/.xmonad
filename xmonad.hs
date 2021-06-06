@@ -84,9 +84,8 @@ import XMonad.Actions.PhysicalScreens
 
     -- Data
 import Data.Char (isSpace, toUpper)
-import Data.Maybe (fromJust)
+import Data.Maybe ( fromJust, isJust )
 import Data.Monoid
-import Data.Maybe (isJust)
 import Data.Tree
 import qualified Data.Map as M
 import Data.Default
@@ -261,7 +260,7 @@ myAppGrid = [ ("Audacity", "audacity")
                  ]
 
 layoutSelected :: [(String, X())] -> X()
-layoutSelected lst = runSelectedAction conf lst
+layoutSelected = runSelectedAction conf
   where conf = def
                    { gs_cellheight   = 40
                    , gs_cellwidth    = 200
@@ -375,8 +374,7 @@ tabs     = renamed [Replace "tabs"]
            -- I cannot add spacing to this layout because it will
            -- add spacing between window and tabs which looks bad.
            $ tabbed shrinkText myTabTheme
-tallAccordion  = renamed [Replace "tallAccordion"]
-           $ Accordion
+tallAccordion  = renamed [Replace "tallAccordion"] Accordion
 wideAccordion  = renamed [Replace "wideAccordion"]
            $ Mirror Accordion
 
@@ -459,11 +457,11 @@ wsconfig = def
     , gs_font         = myFont
   }
 
-myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:meeting","8:media","9:email"] ++ (map snd myExtraWorkspaces)
+myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:meeting","8:media","9:email"] ++ map snd myExtraWorkspaces
 myExtraWorkspaces = [("0", "0:misc")]
 myAllWorkspaces = [("1","1:emacs"),("2","2:web"),("3","3:mobile"),("4","4:testing"),("5","5:dev-misc"),("6","6:messenger"),("7","7:meeting"),("8","8:media"),("9", "9:email"),("0", "0:misc")]
 
-myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
+myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
 clickable ws = "<action=xdotool key super+"++show i++">"++ws++"</action>"
     where i = fromJust $ M.lookup ws myWorkspaceIndices
@@ -518,7 +516,7 @@ myManageHook = composeAll
      , isFullscreen -->  doFullFloat
      ] <+> namedScratchpadManageHook myScratchPads
 
-myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
+myKeys conf@XConfig {XMonad.modMask = modMask} = M.fromList
   ----------------------------------------------------------------------
   -- Custom key bindings
   --
@@ -581,7 +579,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
 
-myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList $
+myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList
   [
     -- mod-button1, Set the window to floating mode and move by dragging
     ((modMask, button1),
@@ -600,10 +598,10 @@ myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList $
 
 toggleFloat w = windows (\s -> if M.member w (W.floating s)
                             then W.sink w s
-                            else (W.float w (W.RationalRect (1/3) (1/4) (1/2) (4/5)) s))
+                            else W.float w (W.RationalRect (1/3) (1/4) (1/2) (4/5)) s)
 
 myAdditionalKeys :: [(String, X ())]
-myAdditionalKeys  = 
+myAdditionalKeys  =
         [ -- ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
         ("M-C-r", spawn "xmonad --restart")    -- Restarts xmonad
         , ("M-C-q", io exitSuccess)              -- Quits xmonad
@@ -673,12 +671,12 @@ myAdditionalKeys  =
         , ("C-<Space> a s r", sendToScreen def 2)
 
     -- Grid selection
-        , ("C-<Space> g l", runSelectedAction def myLayoutGrid) 
+        , ("C-<Space> g l", runSelectedAction def myLayoutGrid)
         , ("C-<Space> g n", spawnSelected' myAppGrid)                 -- grid select favorite apps
         , ("C-<Space> g a", goToSelected $ mygridConfig myColorizer)  -- goto selected window
         , ("C-<Space> g b a", bringSelected $ mygridConfig myColorizer) -- bring selected window
         , ("C-<Space> g b w", gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
-        , ("C-<Space> g w", gridselectWorkspace wsconfig (\ws -> W.greedyView ws))
+        , ("C-<Space> g w", gridselectWorkspace wsconfig W.greedyView)
 
     -- Layouts
         , ("C-<Space> l n", sendMessage NextLayout)           -- Switch to next layout
@@ -744,20 +742,20 @@ myAdditionalKeys  =
 
     -- Emacs (CTRL-e followed by a key)
         -- , ("C-e e", spawn myEmacs)                 -- start emacs
-        , ("C-e e", spawn (myEmacs ++ ("--eval '(dashboard-refresh-buffer)'")))   -- emacs dashboard
-        , ("C-e b", spawn (myEmacs ++ ("--eval '(ibuffer)'")))   -- list buffers
-        , ("C-e d", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
-        , ("C-e i", spawn (myEmacs ++ ("--eval '(erc)'")))       -- erc irc client
-        , ("C-e m", spawn (myEmacs ++ ("--eval '(mu4e)'")))      -- mu4e email
-        , ("C-e n", spawn (myEmacs ++ ("--eval '(elfeed)'")))    -- elfeed rss
-        , ("C-e s", spawn (myEmacs ++ ("--eval '(eshell)'")))    -- eshell
-        , ("C-e t", spawn (myEmacs ++ ("--eval '(mastodon)'")))  -- mastodon.el
+        , ("C-e e", spawn (myEmacs ++ "--eval '(dashboard-refresh-buffer)'"))   -- emacs dashboard
+        , ("C-e b", spawn (myEmacs ++ "--eval '(ibuffer)'"))   -- list buffers
+        , ("C-e d", spawn (myEmacs ++ "--eval '(dired nil)'")) -- dired
+        , ("C-e i", spawn (myEmacs ++ "--eval '(erc)'"))       -- erc irc client
+        , ("C-e m", spawn (myEmacs ++ "--eval '(mu4e)'"))      -- mu4e email
+        , ("C-e n", spawn (myEmacs ++ "--eval '(elfeed)'"))    -- elfeed rss
+        , ("C-e s", spawn (myEmacs ++ "--eval '(eshell)'"))    -- eshell
+        , ("C-e t", spawn (myEmacs ++ "--eval '(mastodon)'"))  -- mastodon.el
         -- , ("C-e v", spawn (myEmacs ++ ("--eval '(vterm nil)'"))) -- vterm if on GNU Emacs
-        , ("C-e v", spawn (myEmacs ++ ("--eval '(+vterm/here nil)'"))) -- vterm if on Doom Emacs
+        , ("C-e v", spawn (myEmacs ++ "--eval '(+vterm/here nil)'")) -- vterm if on Doom Emacs
         -- , ("C-e w", spawn (myEmacs ++ ("--eval '(eww \"distrotube.com\")'"))) -- eww browser if on GNU Emacs
-        , ("C-e w", spawn (myEmacs ++ ("--eval '(doom/window-maximize-buffer(eww \"distrotube.com\"))'"))) -- eww browser if on Doom Emacs
+        , ("C-e w", spawn (myEmacs ++ "--eval '(doom/window-maximize-buffer(eww \"distrotube.com\"))'")) -- eww browser if on Doom Emacs
         -- emms is an emacs audio player. I set it to auto start playing in a specific directory.
-        , ("C-e a", spawn (myEmacs ++ ("--eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/Non-Classical/70s-80s/\")'")))
+        , ("C-e a", spawn (myEmacs ++ "--eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/Non-Classical/70s-80s/\")'"))
 
     -- Multimedia Keys
         , ("<XF86AudioPlay>", spawn (myTerminal ++ "mocp --play"))
@@ -776,7 +774,7 @@ myAdditionalKeys  =
         -- , ("M-w", screenWorkspace 0)
         -- , ("M-e", screenWorkspace 1)
         -- , ("M-r", screenWorkspace 1)
-        ] 
+        ]
         ++
         [
           ("C-<Space> "++key, windows $ W.greedyView ws)
@@ -813,7 +811,7 @@ main = do
         , modMask            = myModMask
         , terminal           = myTerminal
         , startupHook        = myStartupHook
-        , layoutHook         = showWName' myShowWNameTheme $ myLayoutHook
+        , layoutHook         = showWName' myShowWNameTheme myLayoutHook
         , workspaces         = myWorkspaces
         , borderWidth        = myBorderWidth
         , normalBorderColor  = myNormColor
