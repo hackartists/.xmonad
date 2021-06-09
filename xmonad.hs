@@ -61,6 +61,7 @@
 
 -- Base
 -- import XMonad
+{-# OPTIONS_GHC -Wno-unused-matches #-}
 import XMonad hiding ( (|||) )
 import XMonad.Config
 -- import System.Directory
@@ -448,6 +449,10 @@ myGoToSelectedColorizer  = colorRangeFromClassName
                   (0xc0,0xa7,0x9a) -- inactive fg
                   (0xff,0xff,0xff) -- active fg
 
+-- myStringColorizer::String -> Bool -> X (String, String)
+myStringColorizer a active = if active then return ("#faff69", "black") else return ("#999999", "white")
+
+layoutGridConfig = buildDefaultGSConfig myStringColorizer
 wsconfig = def
     { gs_cellheight   = 30
     , gs_cellwidth    = 200
@@ -671,7 +676,7 @@ myAdditionalKeys  =
         , ("C-<Space> a s r", sendToScreen def 2)
 
     -- Grid selection
-        , ("C-<Space> g l", runSelectedAction def myLayoutGrid)
+        , ("C-<Space> g l", runSelectedAction layoutGridConfig myLayoutGrid)
         , ("C-<Space> g n", spawnSelected' myAppGrid)                 -- grid select favorite apps
         , ("C-<Space> g a", goToSelected $ mygridConfig myColorizer)  -- goto selected window
         , ("C-<Space> g b a", bringSelected $ mygridConfig myColorizer) -- bring selected window
