@@ -63,7 +63,7 @@
 -- import XMonad
 import XMonad hiding ( (|||) )
 import XMonad.Config
-import System.Directory
+-- import System.Directory
 import System.IO (hPutStrLn)
 import System.Exit (exitSuccess)
 import qualified XMonad.StackSet as W
@@ -88,7 +88,7 @@ import Data.Maybe ( fromJust, isJust )
 import Data.Monoid
 import Data.Tree
 import qualified Data.Map as M
-import Data.Default
+-- import Data.Default
 
     -- Hooks
 import XMonad.Hooks.DynamicLog
@@ -817,9 +817,10 @@ main = do
         , normalBorderColor  = myNormColor
         , focusedBorderColor = myFocusColor
         , keys               = myKeys
-        -- , focusFollowsMouse  = myFocusFollowsMouse
+        , focusFollowsMouse  = myFocusFollowsMouse
         , mouseBindings      = myMouseBindings
-        , logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
+        , logHook = dynamicLogWithPP xmobarPP
+        -- , logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
               -- the following variables beginning with 'pp' are settings for xmobar.
               { ppOutput = hPutStrLn xmproc0 -- \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
                               -- >> hPutStrLn xmproc1 x                          -- xmobar on monitor 2
@@ -833,5 +834,5 @@ main = do
               , ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"            -- Urgent workspace
               , ppExtras  = [windowCount]                                     -- # of windows current workspace
               , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]                    -- order of things in xmobar
-              }
+              } >> updatePointer (0.5, 0.5) (0, 0)
         } `additionalKeysP` myAdditionalKeys
