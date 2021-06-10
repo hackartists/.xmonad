@@ -449,10 +449,10 @@ myGoToSelectedColorizer  = colorRangeFromClassName
                   (0xc0,0xa7,0x9a) -- inactive fg
                   (0xff,0xff,0xff) -- active fg
 
--- myStringColorizer::String -> Bool -> X (String, String)
 myStringColorizer a active = if active then return ("#faff69", "black") else return ("#999999", "white")
-
-layoutGridConfig = buildDefaultGSConfig myStringColorizer
+layoutGridConfig = (buildDefaultGSConfig myStringColorizer) {
+  gs_navigate = myNavigation
+  }
 wsconfig = def
     { gs_cellheight   = 30
     , gs_cellwidth    = 200
@@ -461,6 +461,29 @@ wsconfig = def
     , gs_originFractY = 0.5
     , gs_font         = myFont
   }
+
+myNavigation :: TwoD a (Maybe a)
+myNavigation = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+ where navKeyMap = M.fromList [
+          ((0,xK_Escape), cancel)
+         ,((0,xK_Return), select)
+         ,((0,xK_slash) , substringSearch myNavigation)
+         ,((0,xK_Left)  , move (-1,0)  >> myNavigation)
+         ,((0,xK_h)     , move (-1,0)  >> myNavigation)
+         ,((0,xK_Right) , move (1,0)   >> myNavigation)
+         ,((0,xK_l)     , move (1,0)   >> myNavigation)
+         ,((0,xK_Down)  , move (0,1)   >> myNavigation)
+         ,((0,xK_j)     , move (0,1)   >> myNavigation)
+         ,((0,xK_Up)    , move (0,-1)  >> myNavigation)
+         ,((0,xK_k)    , move (0,-1)  >> myNavigation)
+         ,((0,xK_y)     , move (-1,-1) >> myNavigation)
+         ,((0,xK_u)     , move (1,-1)  >> myNavigation)
+         ,((0,xK_n)     , move (-1,1)  >> myNavigation)
+         ,((0,xK_m)     , move (1,1)  >> myNavigation)
+         ,((0,xK_space) , setPos (0,0) >> myNavigation)
+         ]
+       -- The navigation handler ignores unknown key symbols
+       navDefaultHandler = const myNavigation
 
 myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:meeting","8:media","9:email"] ++ map snd myExtraWorkspaces
 myExtraWorkspaces = [("0", "0:misc")]
