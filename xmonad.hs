@@ -68,6 +68,8 @@ import XMonad.Config
 import System.IO (hPutStrLn)
 import System.Exit (exitSuccess)
 import qualified XMonad.StackSet as W
+import Control.Concurrent
+import Control.Monad
 
     -- Actions
 import XMonad.Actions.CopyWindow (kill1)
@@ -455,6 +457,11 @@ myGoToSelectedColorizer  = colorRangeFromClassName
 myStringColorizer a active = if active then return ("#faff69", "black") else return ("#999999", "white")
 
 -- Layout Grid
+-- layoutIO f = do
+--   tid <- forkIO $ do threadDelay 0
+--   layoutAction
+--   killThread tid
+  
 layoutAction = runSelectedAction conf grid
   where
     grid = [
@@ -506,9 +513,9 @@ hotkeyAction = runSelectedAction conf grid
   where
     conf = (buildDefaultGSConfig myStringColorizer) {
       gs_navigate = nav
-      , gs_cellwidth = 250
+      , gs_cellwidth = 200
       }
-      where 
+      where
       nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
         where navKeyMap = M.fromList [
                 ((0,xK_Escape), cancel)
@@ -535,9 +542,9 @@ hotkeyAction = runSelectedAction conf grid
       , ("(a)pplication window", spawn "")
       , ("(g)rid selection", spawn "")
       , ("(s)creen", spawn "")
-      , ("la(y)out", runSelectedAction layoutGridConfig myLayoutGrid)
+      , ("la(y)out", layoutAction)
       , ("(SPC)show windows", spawn "rofi -show")
-      , ("(.)run", spawn  "dmenu_run -i -p \"Run: \"")
+      , ("(.)run", spawn "dmenu_run -i -p \"Run: \"")
       , ("(`)terminal", spawn myTerminal)
       ]
 
@@ -759,7 +766,7 @@ myAdditionalKeys  =
         , ("C-<Space> a s r", sendToScreen def 2)
 
     -- Grid selection
-        , ("C-<Space> g l", runSelectedAction layoutGridConfig myLayoutGrid)
+        , ("C-<Space> g l", layoutAction)
         , ("C-<Space> g n", spawnSelected' myAppGrid)                 -- grid select favorite apps
         , ("C-<Space> g a", goToSelected $ mygridConfig myColorizer)  -- goto selected window
         , ("C-<Space> g b a", bringSelected $ mygridConfig myColorizer) -- bring selected window
