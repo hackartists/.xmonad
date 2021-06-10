@@ -271,11 +271,6 @@ layoutSelected = runSelectedAction conf
                    , gs_font         = myFont
                    }
 
-myLayoutGrid = [
-  (ln, sendMessage $ JumpToLayout ln)
-  | ln <- ["tall","magnify","monocle","floats","grid","spirals","threeCol","threeRow","tabs","tallAccordion","wideAccordion"]
-               ]
-
 myScratchPads :: [NamedScratchpad]
 myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                 , NS "mocp" spawnMocp findMocp manageMocp
@@ -441,18 +436,6 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange -- $ T.toggleLayouts ta
 -- myHome = unsafePerformIO $ getEnv "HOME"
 
 -- Config
-myGoToSelectedColorizer  :: Window -> Bool -> X (String, String)
-myGoToSelectedColorizer  = colorRangeFromClassName
-                  (0x31,0x2e,0x39) -- lowest inactive bg
-                  (0x31,0x2e,0x39) -- highest inactive bg
-                  (0x78,0x3e,0x57) -- active bg
-                  (0xc0,0xa7,0x9a) -- inactive fg
-                  (0xff,0xff,0xff) -- active fg
-
-myStringColorizer a active = if active then return ("#faff69", "black") else return ("#999999", "white")
-layoutGridConfig = (buildDefaultGSConfig myStringColorizer) {
-  gs_navigate = myNavigation
-  }
 wsconfig = def
     { gs_cellheight   = 30
     , gs_cellwidth    = 200
@@ -462,29 +445,104 @@ wsconfig = def
     , gs_font         = myFont
   }
 
-myNavigation :: TwoD a (Maybe a)
-myNavigation = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
- where navKeyMap = M.fromList [
-          ((0,xK_Escape), cancel)
-         ,((0,xK_Return), select)
-         ,((0,xK_slash) , substringSearch myNavigation)
-         ,((0,xK_Left)  , move (-1,0)  >> myNavigation)
-         ,((0,xK_h)     , move (-1,0)  >> myNavigation)
-         ,((0,xK_Right) , move (1,0)   >> myNavigation)
-         ,((0,xK_l)     , move (1,0)   >> myNavigation)
-         ,((0,xK_Down)  , move (0,1)   >> myNavigation)
-         ,((0,xK_j)     , move (0,1)   >> myNavigation)
-         ,((0,xK_Up)    , move (0,-1)  >> myNavigation)
-         ,((0,xK_k)    , move (0,-1)  >> myNavigation)
-         ,((0,xK_y)     , move (-1,-1) >> myNavigation)
-         ,((0,xK_u)     , move (1,-1)  >> myNavigation)
-         ,((0,xK_n)     , move (-1,1)  >> myNavigation)
-         ,((0,xK_m)     , move (1,1)  >> myNavigation)
-         ,((0,xK_space) , setPos (0,0) >> myNavigation)
-         ]
-       -- The navigation handler ignores unknown key symbols
-       navDefaultHandler = const myNavigation
+myGoToSelectedColorizer  :: Window -> Bool -> X (String, String)
+myGoToSelectedColorizer  = colorRangeFromClassName
+                  (0x31,0x2e,0x39) -- lowest inactive bg
+                  (0x31,0x2e,0x39) -- highest inactive bg
+                  (0x78,0x3e,0x57) -- active bg
+                  (0xc0,0xa7,0x9a) -- inactive fg
+                  (0xff,0xff,0xff) -- active fg
+myStringColorizer a active = if active then return ("#faff69", "black") else return ("#999999", "white")
 
+-- Layout Grid
+layoutAction = runSelectedAction conf grid
+  where
+    grid = [
+      (ln, sendMessage $ JumpToLayout l)
+      | (ln, l) <- [("(t)all","tall"),("(m)agnify","magnify"),("mo(n)ocle","monocle"),("(f)loats","floats"),("(g)rid","grid"),("(s)pirals","spirals"),("three(C)ol","threeCol"),("three(R)ow","threeRow"),("ta(b)s","tabs"),("t(a)llAccordion","tallAccordion"),("(w)ideAccordion","wideAccordion")]
+                  ]
+
+    conf = (buildDefaultGSConfig myStringColorizer) {
+      gs_navigate = nav
+      }
+      where
+        nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+          where navKeyMap = M.fromList [
+                  ((0,xK_Escape), cancel)
+                  ,((0,xK_Return), select)
+                  ,((0,xK_slash) , substringSearch nav)
+                  ,((0,xK_Left)  , move (-1,0)  >> nav)
+                  ,((0,xK_h)     , move (-1,0)  >> nav)
+                  ,((0,xK_Right) , move (1,0)   >> nav)
+                  ,((0,xK_l)     , move (1,0)   >> nav)
+                  ,((0,xK_Down)  , move (0,1)   >> nav)
+                  ,((0,xK_j)     , move (0,1)   >> nav)
+                  ,((0,xK_Up)    , move (0,-1)  >> nav)
+                  ,((0,xK_k)     , move (0,-1)  >> nav)
+                  ,((0,xK_y)     , move (-1,-1) >> nav)
+                  ,((0,xK_u)     , move (1,-1)  >> nav)
+                  ,((0,xK_n)     , move (-1,1)  >> nav)
+                  ,((0,xK_m)     , move (1,1)   >> nav)
+                  ,((0,xK_space) , setPos (0,0) >> nav)
+                  
+                  -- hotkey for layout
+                  ,((0,xK_t), setPos(0,0) >> select)
+                  ,((0,xK_m), setPos(0,1) >> select)
+                  ,((0,xK_n), setPos(1,0) >> select)
+                  ,((0,xK_f), setPos(0,-1) >> select)
+                  ,((0,xK_g), setPos(-1,0) >> select)
+                  ,((0,xK_s), setPos(0,2) >> select)
+                  ,((shiftMask,xK_C), setPos(1,1) >> select)
+                  ,((shiftMask,xK_R), setPos(2,0) >> select)
+                  ,((0,xK_b), setPos(1,-1) >> select)
+                  ,((0,xK_a), setPos(0,-2) >> select)
+                  ,((0,xK_w), setPos(-1,-1) >> select)
+                  ]
+          -- The navigation handler ignores unknown key symbols
+                navDefaultHandler = const nav
+
+-- Hotkey Command Grid
+hotkeyAction = runSelectedAction conf grid
+  where
+    conf = (buildDefaultGSConfig myStringColorizer) {
+      gs_navigate = nav
+      , gs_cellwidth = 250
+      }
+      where 
+      nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+        where navKeyMap = M.fromList [
+                ((0,xK_Escape), cancel)
+                ,((0,xK_Return), select)
+                ,((0,xK_slash) , substringSearch nav)
+                ,((0,xK_Left)  , move (-1,0)  >> nav)
+                ,((0,xK_h)     , move (-1,0)  >> nav)
+                ,((0,xK_Right) , move (1,0)   >> nav)
+                ,((0,xK_l)     , move (1,0)   >> nav)
+                ,((0,xK_Down)  , move (0,1)   >> nav)
+                ,((0,xK_j)     , move (0,1)   >> nav)
+                ,((0,xK_Up)    , move (0,-1)  >> nav)
+                ,((0,xK_k)     , move (0,-1)  >> nav)
+
+                -- hotkey for layout
+                ,((0,xK_t), setPos(0,0) >> select)
+                ,((0,xK_w), setPos(-1,-1) >> select)
+                ]
+              -- The navigation handler ignores unknown key symbols
+              navDefaultHandler = const nav
+
+    grid = [
+      ("emacs anywhere", spawn "~/.emacs_anywhere/bin/run")
+      , ("(a)pplication window", spawn "")
+      , ("(g)rid selection", spawn "")
+      , ("(s)creen", spawn "")
+      , ("la(y)out", runSelectedAction layoutGridConfig myLayoutGrid)
+      , ("(SPC)show windows", spawn "rofi -show")
+      , ("(.)run", spawn  "dmenu_run -i -p \"Run: \"")
+      , ("(`)terminal", spawn myTerminal)
+      ]
+
+
+-- Workspaces
 myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:meeting","8:media","9:email"] ++ map snd myExtraWorkspaces
 myExtraWorkspaces = [("0", "0:misc")]
 myAllWorkspaces = [("1","1:emacs"),("2","2:web"),("3","3:mobile"),("4","4:testing"),("5","5:dev-misc"),("6","6:messenger"),("7","7:meeting"),("8","8:media"),("9", "9:email"),("0", "0:misc")]
@@ -494,6 +552,7 @@ myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..] -- (,) == \x y -> (x,y)
 clickable ws = "<action=xdotool key super+"++show i++">"++ws++"</action>"
     where i = fromJust $ M.lookup ws myWorkspaceIndices
 
+-- Manage hook
 myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
      -- 'doFloat' forces a window to float.  Useful for dialog boxes and such.
@@ -633,6 +692,7 @@ myAdditionalKeys  =
         [ -- ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
         ("M-C-r", spawn "xmonad --restart")    -- Restarts xmonad
         , ("M-C-q", io exitSuccess)              -- Quits xmonad
+        , ("M-<Return>", hotkeyAction)
 
 
     -- Other Dmenu Prompts
