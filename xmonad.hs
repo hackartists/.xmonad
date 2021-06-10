@@ -62,6 +62,9 @@
 -- Base
 -- import XMonad
 {-# OPTIONS_GHC -Wno-unused-matches #-}
+{-# LANGUAGE ParallelListComp #-}
+{-# OPTIONS_GHC -Wno-deferred-type-errors #-}
+{-# LANGUAGE DataKinds #-}
 import XMonad hiding ( (|||) )
 import XMonad.Config
 -- import System.Directory
@@ -456,21 +459,44 @@ myGoToSelectedColorizer  = colorRangeFromClassName
                   (0xff,0xff,0xff) -- active fg
 myStringColorizer a active = if active then return ("#faff69", "black") else return ("#999999", "white")
 
--- Layout Grid
--- layoutIO f = do
---   tid <- forkIO $ do threadDelay 0
---   layoutAction
---   killThread tid
-  
+-- Layout Grid Action
 layoutAction = runSelectedAction conf grid
   where
     grid = [
       (ln, sendMessage $ JumpToLayout l)
-      | (ln, l) <- [("(t)all","tall"),("(m)agnify","magnify"),("mo(n)ocle","monocle"),("(f)loats","floats"),("(g)rid","grid"),("(s)pirals","spirals"),("three(C)ol","threeCol"),("three(R)ow","threeRow"),("ta(b)s","tabs"),("t(a)llAccordion","tallAccordion"),("(w)ideAccordion","wideAccordion")]
-                  ]
+      | (ln, l) <- [
+          ("(t)all","tall")
+          , ("(m)agnify","magnify")
+          , ("mo(n)ocle","monocle")
+          , ("(f)loats","floats")
+          , ("(g)rid","grid")
+          , ("(s)pirals","spirals")
+          , ("three(C)ol","threeCol")
+          , ("three(R)ow","threeRow")
+          , ("ta(b)s","tabs")
+          , ("t(a)llAccordion","tallAccordion")
+          , ("(w)ideAccordion","wideAccordion")
+          , ("","")
+          , ("","")
+          , ("","")
+          , ("","")
+          , ("","")
+          , ("","")
+          , ("","")
+          , ("","")
+          , ("","")
+          , ("","")
+          , ("","")
+          , ("","")
+          , ("","")
+          , ("","")
+          ]
+      ]
 
     conf = (buildDefaultGSConfig myStringColorizer) {
       gs_navigate = nav
+      , gs_cellwidth = 350
+      , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
       }
       where
         nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
@@ -491,13 +517,14 @@ layoutAction = runSelectedAction conf grid
                   ,((0,xK_n)     , move (-1,1)  >> nav)
                   ,((0,xK_m)     , move (1,1)   >> nav)
                   ,((0,xK_space) , setPos (0,0) >> nav)
-                  
+
                   -- hotkey for layout
                   ,((0,xK_t), setPos(0,0) >> select)
                   ,((0,xK_m), setPos(0,1) >> select)
                   ,((0,xK_n), setPos(1,0) >> select)
                   ,((0,xK_f), setPos(0,-1) >> select)
                   ,((0,xK_g), setPos(-1,0) >> select)
+
                   ,((0,xK_s), setPos(0,2) >> select)
                   ,((shiftMask,xK_C), setPos(1,1) >> select)
                   ,((shiftMask,xK_R), setPos(2,0) >> select)
@@ -508,12 +535,13 @@ layoutAction = runSelectedAction conf grid
           -- The navigation handler ignores unknown key symbols
                 navDefaultHandler = const nav
 
--- Hotkey Command Grid
-hotkeyAction = runSelectedAction conf grid
+-- Application Send Grid Action
+appSendAction = runSelectedAction conf grid
   where
     conf = (buildDefaultGSConfig myStringColorizer) {
       gs_navigate = nav
-      , gs_cellwidth = 200
+      , gs_cellwidth = 350
+      , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
       }
       where
       nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
@@ -529,25 +557,525 @@ hotkeyAction = runSelectedAction conf grid
                 ,((0,xK_j)     , move (0,1)   >> nav)
                 ,((0,xK_Up)    , move (0,-1)  >> nav)
                 ,((0,xK_k)     , move (0,-1)  >> nav)
-
                 -- hotkey for layout
-                ,((0,xK_t), setPos(0,0) >> select)
-                ,((0,xK_w), setPos(-1,-1) >> select)
+                ,((0,xK_a), setPos(0,1) >> select)
+                ,((0,xK_s), setPos(1,0) >> select)
+                ,((0,xK_y), setPos(0,-1) >> select)
+                ,((0,xK_space), setPos(-1,0) >> select)
+                ,((0,xK_period), setPos(0,2) >> select)
+                ,((0,xK_grave), setPos(1,1) >> select)
+                -- ,((0,xK_), setPos(0,2) >> select)
+                -- ,((0,xK_), setPos(1,-1) >> select)
+                -- ,((0,xK_), setPos(-2,0) >> select)
+                -- ,((0,xK_), setPos(-1,-1) >> select)
+                -- ,((0,xK_), setPos(0,-2) >> select)
+                -- ,((0,xK_), setPos(-1,1) >> select)
+                -- ,((0,xK_), setPos(0,3) >> select)
+                -- ,((0,xK_), setPos(1,2) >> select)
+                -- ,((0,xK_), setPos(2,1) >> select)
+                -- ,((0,xK_), setPos(3,0) >> select)
+                -- ,((0,xK_), setPos(2,-1) >> select)
+                -- ,((0,xK_), setPos(1,-2) >> select)
+                -- ,((0,xK_), setPos(0,-3) >> select)
+                -- ,((0,xK_), setPos(-1,-2) >> select)
+                -- ,((0,xK_), setPos(-2,-1) >> select)
+                -- ,((0,xK_), setPos(-3,0) >> select)
+                -- ,((0,xK_), setPos(-2,1) >> select)
+                ,((0,xK_BackSpace), setPos(-1,2) >> select)
                 ]
-              -- The navigation handler ignores unknown key symbols
+               -- The navigation handler ignores unknown key symbols
               navDefaultHandler = const nav
-
     grid = [
-      ("emacs anywhere", spawn "~/.emacs_anywhere/bin/run")
-      , ("(a)pplication window", spawn "")
-      , ("(g)rid selection", spawn "")
-      , ("(s)creen", spawn "")
-      , ("la(y)out", layoutAction)
-      , ("(SPC)show windows", spawn "rofi -show")
-      , ("(.)run", spawn "dmenu_run -i -p \"Run: \"")
-      , ("(`)terminal", spawn myTerminal)
+      ("refresh", refresh)
+      , ("(.)focus master", windows W.focusMaster)
+      , ("swap (m)aster", windows W.swapMaster) -- Swap the focused window and the master window
+      , ("(j)swap down", windows W.swapDown)   -- Swap focused window with next window
+      , ("(k)swap up", windows W.swapUp)     -- Swap focused window with prev window
+      , ("(r)otate windows", spawn "dmenu_run -i -p \"Run: \"")
+      , ("(s)end window", spawn myTerminal)
+      , ("(t)oggle", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("(BSPC)back", hotkeyAction)
       ]
 
+-- Rotate Grid Action
+appRotateAction = runSelectedAction conf grid
+  where
+    conf = (buildDefaultGSConfig myStringColorizer) {
+      gs_navigate = nav
+      , gs_cellwidth = 350
+      , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
+      }
+      where
+      nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+        where navKeyMap = M.fromList [
+                ((0,xK_Escape), cancel)
+                ,((0,xK_Return), select)
+                ,((0,xK_slash) , substringSearch nav)
+                ,((0,xK_Left)  , move (-1,0)  >> nav)
+                ,((0,xK_h)     , move (-1,0)  >> nav)
+                ,((0,xK_Right) , move (1,0)   >> nav)
+                ,((0,xK_l)     , move (1,0)   >> nav)
+                ,((0,xK_Down)  , move (0,1)   >> nav)
+                ,((0,xK_j)     , move (0,1)   >> nav)
+                ,((0,xK_Up)    , move (0,-1)  >> nav)
+                ,((0,xK_k)     , move (0,-1)  >> nav)
+                -- hotkey for layout
+                ,((0,xK_e), setPos(0,1) >> select)
+                ,((0,xK_w), setPos(0,1) >> select)
+                ,((0,xK_r), setPos(1,0) >> select)
+                ,((0,xK_n), setPos(0,-1) >> select)
+                ,((0,xK_p), setPos(-1,0) >> select)
+                -- ,((0,xK_period), setPos(0,2) >> select)
+                -- ,((0,xK_grave), setPos(1,1) >> select)
+                -- ,((0,xK_), setPos(0,2) >> select)
+                -- ,((0,xK_), setPos(1,-1) >> select)
+                -- ,((0,xK_), setPos(-2,0) >> select)
+                -- ,((0,xK_), setPos(-1,-1) >> select)
+                -- ,((0,xK_), setPos(0,-2) >> select)
+                -- ,((0,xK_), setPos(-1,1) >> select)
+                -- ,((0,xK_), setPos(0,3) >> select)
+                -- ,((0,xK_), setPos(1,2) >> select)
+                -- ,((0,xK_), setPos(2,1) >> select)
+                -- ,((0,xK_), setPos(3,0) >> select)
+                -- ,((0,xK_), setPos(2,-1) >> select)
+                -- ,((0,xK_), setPos(1,-2) >> select)
+                -- ,((0,xK_), setPos(0,-3) >> select)
+                -- ,((0,xK_), setPos(-1,-2) >> select)
+                -- ,((0,xK_), setPos(-2,-1) >> select)
+                -- ,((0,xK_), setPos(-3,0) >> select)
+                -- ,((0,xK_), setPos(-2,1) >> select)
+                ,((0,xK_BackSpace), setPos(-1,2) >> select)
+                ]
+               -- The navigation handler ignores unknown key symbols
+              navDefaultHandler = const nav
+    grid = [
+      ("(e)center screen", viewScreen def  1)
+      , ("(w)left screen", viewScreen def 0)
+      , ("(r)right screen", viewScreen def 2)
+      , ("(n)ext screen", nextScreen)
+      , ("(p)revious screen", prevScreen)
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("(BSPC)back", hotkeyAction)
+      ]
+-- Application Toggle Grid Action
+appToggleAction = runSelectedAction conf grid
+  where
+    conf = (buildDefaultGSConfig myStringColorizer) {
+      gs_navigate = nav
+      , gs_cellwidth = 350
+      , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
+      }
+      where
+      nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+        where navKeyMap = M.fromList [
+                ((0,xK_Escape), cancel)
+                ,((0,xK_Return), select)
+                ,((0,xK_slash) , substringSearch nav)
+                ,((0,xK_Left)  , move (-1,0)  >> nav)
+                ,((0,xK_h)     , move (-1,0)  >> nav)
+                ,((0,xK_Right) , move (1,0)   >> nav)
+                ,((0,xK_l)     , move (1,0)   >> nav)
+                ,((0,xK_Down)  , move (0,1)   >> nav)
+                ,((0,xK_j)     , move (0,1)   >> nav)
+                ,((0,xK_Up)    , move (0,-1)  >> nav)
+                ,((0,xK_k)     , move (0,-1)  >> nav)
+                -- hotkey for layout
+                ,((0,xK_a), setPos(0,1) >> select)
+                ,((0,xK_s), setPos(1,0) >> select)
+                ,((0,xK_y), setPos(0,-1) >> select)
+                ,((0,xK_space), setPos(-1,0) >> select)
+                ,((0,xK_period), setPos(0,2) >> select)
+                ,((0,xK_grave), setPos(1,1) >> select)
+                -- ,((0,xK_), setPos(0,2) >> select)
+                -- ,((0,xK_), setPos(1,-1) >> select)
+                -- ,((0,xK_), setPos(-2,0) >> select)
+                -- ,((0,xK_), setPos(-1,-1) >> select)
+                -- ,((0,xK_), setPos(0,-2) >> select)
+                -- ,((0,xK_), setPos(-1,1) >> select)
+                -- ,((0,xK_), setPos(0,3) >> select)
+                -- ,((0,xK_), setPos(1,2) >> select)
+                -- ,((0,xK_), setPos(2,1) >> select)
+                -- ,((0,xK_), setPos(3,0) >> select)
+                -- ,((0,xK_), setPos(2,-1) >> select)
+                -- ,((0,xK_), setPos(1,-2) >> select)
+                -- ,((0,xK_), setPos(0,-3) >> select)
+                -- ,((0,xK_), setPos(-1,-2) >> select)
+                -- ,((0,xK_), setPos(-2,-1) >> select)
+                -- ,((0,xK_), setPos(-3,0) >> select)
+                -- ,((0,xK_), setPos(-2,1) >> select)
+                ,((0,xK_BackSpace), setPos(-1,2) >> select)
+                ]
+               -- The navigation handler ignores unknown key symbols
+              navDefaultHandler = const nav
+    grid = [
+      ("push a window to (t)ile", withFocused $ windows . W.sink)
+      , ("push all windows to (T)ile", sinkAll)                       -- Push ALL floating windows to tile
+      , ("", windows W.swapDown)   -- Swap focused window with next window
+      , ("", windows W.swapUp)     -- Swap focused window with prev window
+      , ("", spawn "dmenu_run -i -p \"Run: \"")
+      , ("", spawn myTerminal)
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("(BSPC)back", hotkeyAction)
+      ]
+
+-- Application Toggle Grid Action
+applicationAction = runSelectedAction conf grid
+  where
+    conf = (buildDefaultGSConfig myStringColorizer) {
+      gs_navigate = nav
+      , gs_cellwidth = 350
+      , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
+      }
+      where
+      nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+        where navKeyMap = M.fromList [
+                ((0,xK_Escape), cancel)
+                ,((0,xK_Return), select)
+                ,((0,xK_slash) , substringSearch nav)
+                ,((0,xK_Left)  , move (-1,0)  >> nav)
+                ,((0,xK_h)     , move (-1,0)  >> nav)
+                ,((0,xK_Right) , move (1,0)   >> nav)
+                ,((0,xK_l)     , move (1,0)   >> nav)
+                ,((0,xK_Down)  , move (0,1)   >> nav)
+                ,((0,xK_j)     , move (0,1)   >> nav)
+                ,((0,xK_Up)    , move (0,-1)  >> nav)
+                ,((0,xK_k)     , move (0,-1)  >> nav)
+                -- hotkey for layout
+                ,((0,xK_period), setPos(0,1) >> select)
+                ,((0,xK_m), setPos(1,0) >> select)
+                ,((0,xK_j), setPos(0,-1) >> select)
+                ,((0,xK_k), setPos(-1,0) >> select)
+                ,((0,xK_r), setPos(0,2) >> select)
+                ,((0,xK_s), setPos(1,1) >> select)
+                ,((0,xK_t), setPos(0,2) >> select)
+                -- ,((0,xK_), setPos(1,-1) >> select)
+                -- ,((0,xK_), setPos(-2,0) >> select)
+                -- ,((0,xK_), setPos(-1,-1) >> select)
+                -- ,((0,xK_), setPos(0,-2) >> select)
+                -- ,((0,xK_), setPos(-1,1) >> select)
+                -- ,((0,xK_), setPos(0,3) >> select)
+                -- ,((0,xK_), setPos(1,2) >> select)
+                -- ,((0,xK_), setPos(2,1) >> select)
+                -- ,((0,xK_), setPos(3,0) >> select)
+                -- ,((0,xK_), setPos(2,-1) >> select)
+                -- ,((0,xK_), setPos(1,-2) >> select)
+                -- ,((0,xK_), setPos(0,-3) >> select)
+                -- ,((0,xK_), setPos(-1,-2) >> select)
+                -- ,((0,xK_), setPos(-2,-1) >> select)
+                -- ,((0,xK_), setPos(-3,0) >> select)
+                -- ,((0,xK_), setPos(-2,1) >> select)
+                ,((0,xK_BackSpace), setPos(-1,2) >> select)
+                ]
+               -- The navigation handler ignores unknown key symbols
+              navDefaultHandler = const nav
+    grid = [
+      ("refresh", refresh)
+      , ("(.)focus master", windows W.focusMaster)
+      , ("swap (m)aster", windows W.swapMaster) -- Swap the focused window and the master window
+      , ("(j)swap down", windows W.swapDown)   -- Swap focused window with next window
+      , ("(k)swap up", windows W.swapUp)     -- Swap focused window with prev window
+      , ("(r)otate windows", appRotateAction)
+      , ("(s)end window", appSendAction)
+      , ("(t)oggle", appToggleAction)
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("(BSPC)back", hotkeyAction)
+      ]
+
+-- Screen Grid Action
+screenAction = runSelectedAction conf grid
+  where
+    conf = (buildDefaultGSConfig myStringColorizer) {
+      gs_navigate = nav
+      , gs_cellwidth = 350
+      , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
+      }
+      where
+      nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+        where navKeyMap = M.fromList [
+                ((0,xK_Escape), cancel)
+                ,((0,xK_Return), select)
+                ,((0,xK_slash) , substringSearch nav)
+                ,((0,xK_Left)  , move (-1,0)  >> nav)
+                ,((0,xK_h)     , move (-1,0)  >> nav)
+                ,((0,xK_Right) , move (1,0)   >> nav)
+                ,((0,xK_l)     , move (1,0)   >> nav)
+                ,((0,xK_Down)  , move (0,1)   >> nav)
+                ,((0,xK_j)     , move (0,1)   >> nav)
+                ,((0,xK_Up)    , move (0,-1)  >> nav)
+                ,((0,xK_k)     , move (0,-1)  >> nav)
+                -- hotkey for layout
+                ,((0,xK_e), setPos(0,1) >> select)
+                ,((0,xK_w), setPos(0,1) >> select)
+                ,((0,xK_r), setPos(1,0) >> select)
+                ,((0,xK_n), setPos(0,-1) >> select)
+                ,((0,xK_p), setPos(-1,0) >> select)
+                -- ,((0,xK_period), setPos(0,2) >> select)
+                -- ,((0,xK_grave), setPos(1,1) >> select)
+                -- ,((0,xK_), setPos(0,2) >> select)
+                -- ,((0,xK_), setPos(1,-1) >> select)
+                -- ,((0,xK_), setPos(-2,0) >> select)
+                -- ,((0,xK_), setPos(-1,-1) >> select)
+                -- ,((0,xK_), setPos(0,-2) >> select)
+                -- ,((0,xK_), setPos(-1,1) >> select)
+                -- ,((0,xK_), setPos(0,3) >> select)
+                -- ,((0,xK_), setPos(1,2) >> select)
+                -- ,((0,xK_), setPos(2,1) >> select)
+                -- ,((0,xK_), setPos(3,0) >> select)
+                -- ,((0,xK_), setPos(2,-1) >> select)
+                -- ,((0,xK_), setPos(1,-2) >> select)
+                -- ,((0,xK_), setPos(0,-3) >> select)
+                -- ,((0,xK_), setPos(-1,-2) >> select)
+                -- ,((0,xK_), setPos(-2,-1) >> select)
+                -- ,((0,xK_), setPos(-3,0) >> select)
+                -- ,((0,xK_), setPos(-2,1) >> select)
+                ,((0,xK_BackSpace), setPos(-1,2) >> select)
+                ]
+               -- The navigation handler ignores unknown key symbols
+              navDefaultHandler = const nav
+    grid = [
+      ("(e)center screen", viewScreen def  1)
+      , ("(w)left screen", viewScreen def 0)
+      , ("(r)right screen", viewScreen def 2)
+      , ("(n)ext screen", nextScreen)
+      , ("(p)revious screen", prevScreen)
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("", spawn "")
+      , ("(BSPC)back", hotkeyAction)
+      ]
+
+makeAction :: [(String, (KeyMask, KeySym), X())] -> X()
+makeAction lst = do
+  let l = length lst
+  let grid = take 25 [
+        if i < l then (name, cmd) else ("", spawn "") | (i, (name, key, cmd)) <- zip [0..25] lst
+        ]
+  runSelectedAction conf grid
+    where
+      conf = (buildDefaultGSConfig myStringColorizer) {
+        gs_navigate = nav
+        , gs_cellwidth = 350
+        , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
+        }
+        where
+        nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+          where navKeyMap = M.fromList $ keymap [
+                  ((0,xK_Escape), cancel)
+                  ,((0,xK_Return), select)
+                  ,((0,xK_slash) , substringSearch nav)
+                  ,((0,xK_Left)  , move (-1,0) >> nav)
+                  ,((0,xK_h)     , move (-1,0) >> nav)
+                  ,((0,xK_Right) , move (1,0)   >> nav)
+                  ,((0,xK_l)     , move (1,0)   >> nav)
+                  ,((0,xK_Down)  , move (0,1)   >> nav)
+                  ,((0,xK_j)     , move (0,1)   >> nav)
+                  ,((0,xK_Up)    , move (0,-1)  >> nav)
+                  ,((0,xK_k)     , move (0,-1)  >> nav)
+                  ] lst
+                                    -- The navigation handler ignores unknown key symbols
+                navDefaultHandler = const nav
+
+keymap ::  [((KeyMask,KeySym), TwoD a0 (Maybe a0))] -> [(String, (KeyMask, KeySym), X())]-> [((KeyMask,KeySym), TwoD a0 (Maybe a0))]
+keymap keys lst = take 25 [
+        if i < length lst then (key, setPos(x,y) >> select) else ((0,xK_asterisk), cancel)
+        | (_, key,_) <- lst
+        | i <- [0..25]
+          -- let (q,r) = i `divMod` 4,
+          -- let si = 4 * (q +1),
+          -- let (ssi,_) = si `divMod` 2
+        | (x,y) <- [ (0,0),
+                     (0,1),(1,0),(0,-1),(-1,0)
+                   , (0,2),(1,1),(2,0),(1,-1),(0,-2),(-1,-1),(-2,0),(-1,1)
+                   , (0,3),(1,2),(2,1),(3,0),(2,-1),(1,-2),(0,-3),(-1,-2),(-2,-1),(-3,0),(-2,1),(-1,2)]
+        ] ++ keys
+
+hotkeyAction = makeAction [
+     ("emacs anywhere",(0, xK_semicolon), spawn "~/.emacs_anywhere/bin/run")
+      , ("(a)pplication window", (0, xK_a), applicationAction)
+      , ("(s)creen", (0, xK_s), screenAction)
+      , ("la(y)out", (0, xK_y), layoutAction)
+      , ("(SPC)show windows", (0, xK_space), spawn "rofi -show")
+      , ("(.)run", (0, xK_period), spawn "dmenu_run -i -p \"Run: \"")
+      , ("(`)terminal", (0, xK_grave ), spawn myTerminal)
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+      , ("", (0, xK_asterisk), spawn "")
+  ]
+
+-- Hotkey Command Grid
+-- hotkeyAction = runSelectedAction conf grid
+--   where
+--     conf = (buildDefaultGSConfig myStringColorizer) {
+--       gs_navigate = nav
+--       , gs_cellwidth = 350
+--       , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
+--       }
+--       where
+--       nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+--         where navKeyMap = M.fromList [
+--                 ((0,xK_Escape), cancel)
+--                 ,((0,xK_Return), select)
+--                 ,((0,xK_slash) , substringSearch nav)
+--                 ,((0,xK_Left)  , move (-1,0)  >> nav)
+--                 ,((0,xK_h)     , move (-1,0)  >> nav)
+--                 ,((0,xK_Right) , move (1,0)   >> nav)
+--                 ,((0,xK_l)     , move (1,0)   >> nav)
+--                 ,((0,xK_Down)  , move (0,1)   >> nav)
+--                 ,((0,xK_j)     , move (0,1)   >> nav)
+--                 ,((0,xK_Up)    , move (0,-1)  >> nav)
+--                 ,((0,xK_k)     , move (0,-1)  >> nav)
+--                 -- hotkey for layout
+--                 ,((0,xK_a), setPos(0,1) >> select)
+--                 ,((0,xK_s), setPos(1,0) >> select)
+--                 ,((0,xK_y), setPos(0,-1) >> select)
+--                 ,((0,xK_space), setPos(-1,0) >> select)
+--                 ,((0,xK_period), setPos(0,2) >> select)
+--                 ,((0,xK_grave), setPos(1,1) >> select)
+--                 -- ,((0,xK_), setPos(0,2) >> select)
+--                 -- ,((0,xK_), setPos(1,-1) >> select)
+--                 -- ,((0,xK_), setPos(-2,0) >> select)
+--                 -- ,((0,xK_), setPos(-1,-1) >> select)
+--                 -- ,((0,xK_), setPos(0,-2) >> select)
+--                 -- ,((0,xK_), setPos(-1,1) >> select)
+--                 -- ,((0,xK_), setPos(0,3) >> select)
+--                 -- ,((0,xK_), setPos(1,2) >> select)
+--                 -- ,((0,xK_), setPos(2,1) >> select)
+--                 -- ,((0,xK_), setPos(3,0) >> select)
+--                 -- ,((0,xK_), setPos(2,-1) >> select)
+--                 -- ,((0,xK_), setPos(1,-2) >> select)
+--                 -- ,((0,xK_), setPos(0,-3) >> select)
+--                 -- ,((0,xK_), setPos(-1,-2) >> select)
+--                 -- ,((0,xK_), setPos(-2,-1) >> select)
+--                 -- ,((0,xK_), setPos(-3,0) >> select)
+--                 -- ,((0,xK_), setPos(-2,1) >> select)
+--                 -- ,((0,xK_), setPos(-1,2) >> select)
+--                 ]
+--                -- The navigation handler ignores unknown key symbols
+--               navDefaultHandler = const nav
+--     grid = [
+--       ("emacs anywhere", spawn "~/.emacs_anywhere/bin/run")
+--       , ("(a)pplication window", applicationAction)
+--       , ("(s)creen", screenAction)
+--       , ("la(y)out", layoutAction)
+--       , ("(SPC)show windows", spawn "rofi -show")
+--       , ("(.)run", spawn "dmenu_run -i -p \"Run: \"")
+--       , ("(`)terminal", spawn myTerminal)
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       , ("", spawn "")
+--       ]
 
 -- Workspaces
 myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:meeting","8:media","9:email"] ++ map snd myExtraWorkspaces
@@ -677,15 +1205,15 @@ myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList
   [
     -- mod-button1, Set the window to floating mode and move by dragging
     ((modMask, button1),
-     (\w -> focus w >> mouseMoveWindow w))
+     \w -> focus w >> mouseMoveWindow w)
 
     -- mod-button2, Raise the window to the top of the stack
     , ((modMask, button2),
-       (\w -> focus w >> windows W.swapMaster))
+       \w -> focus w >> windows W.swapMaster)
 
     -- mod-button3, Set the window to floating mode and resize by dragging
     , ((modMask, button3),
-       (\w -> focus w >> mouseResizeWindow w))
+       \w -> focus w >> mouseResizeWindow w)
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
   ]
 
@@ -734,10 +1262,6 @@ myAdditionalKeys  =
         , ("M-j", windows W.focusDown)    -- Move focus to the next window
         , ("M-k", windows W.focusUp)      -- Move focus to the prev window
 
-    -- Floating windows
-        , ("C-<Space> a t t", withFocused $ windows . W.sink)  -- Push floating window back to tile
-        , ("C-<Space> a t T", sinkAll)                       -- Push ALL floating windows to tile
-
     -- Increase/decrease spacing (gaps)
         , ("C-M1-j", decWindowSpacing 4)         -- Decrease window spacing
         , ("C-M1-k", incWindowSpacing 4)         -- Increase window spacing
@@ -764,6 +1288,8 @@ myAdditionalKeys  =
         , ("C-<Space> a s w", sendToScreen def 0)
         , ("C-<Space> a s e", sendToScreen def 1)
         , ("C-<Space> a s r", sendToScreen def 2)
+        , ("C-<Space> a t t", withFocused $ windows . W.sink)  -- Push floating window back to tile
+        , ("C-<Space> a t T", sinkAll)                       -- Push ALL floating windows to tile
 
     -- Grid selection
         , ("C-<Space> g l", layoutAction)
