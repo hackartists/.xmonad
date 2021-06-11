@@ -512,17 +512,18 @@ hotkeyAction = makeAction 0
                 ]
 
 -- Workspaces
-myAllWorkspaces = [("1",xK_1,"emacs"),
-                   ("2",xK_2,"web"),
-                   ("3",xK_3,"mobile"),
-                   ("4",xK_4,"testing"),
-                   ("5",xK_5,"dev-misc"),
-                   ("6",xK_6,"messenger"),
-                   ("7",xK_7,"meeting"),
-                   ("8",xK_8,"media"),
-                   ("9",xK_9,"email"),
-                   ("0",xK_0,"misc")
+myAllWorkspaces = [("1",xK_1,"emacs")
+                   , ("2",xK_2,"web")
+                   , ("3",xK_3,"mobile")
+                   , ("4",xK_4,"testing")
+                   , ("5",xK_5,"dev-misc")
+                   , ("6",xK_6,"messenger")
+                   , ("7",xK_7,"meeting")
+                   , ("8",xK_8,"media")
+                   , ("9",xK_9,"email")
+                   , ("0",xK_0,"misc")
                   ]
+
 myWorkspaces = [ num++":"++name | (num,_,name) <- myAllWorkspaces]
 
 myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..] -- (,) == \x y -> (x,y)
