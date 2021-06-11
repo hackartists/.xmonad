@@ -336,24 +336,29 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange
 
 -- workspace grid config
 wsconfig = def {
-  gs_cellheight   = 30
-  , gs_cellwidth    = 350
-  , gs_cellpadding  = 16
-  , gs_originFractX = 0.5
-  , gs_originFractY = 0.5
+  gs_cellwidth    = 350
   , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
   }
 
-myColorizer a active = if active then return ("#faff69", "black") else return ("#999999", "white")
-mygridConfig :: GSConfig Window
-mygridConfig = (buildDefaultGSConfig myColorizer)
-    { gs_cellwidth    = 350
-    , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
-    }
+myColorizer a active = if active then return ("#faff69", "black") else return ("#aaaaaa", "white")
+myColorizer1 a active = if active then return ("#faff69", "black") else return ("#888888", "white")
+myColorizer2 a active = if active then return ("#faff69", "black") else return ("#666666", "white")
+myColorizer3 a active = if active then return ("#faff69", "black") else return ("#444444", "white")
+
+mygridConfig :: Int -> GSConfig a
+mygridConfig depth = do
+  let conf
+        | depth == 0 = buildDefaultGSConfig myColorizer
+        | depth == 1 = buildDefaultGSConfig myColorizer1
+        | depth == 2 = buildDefaultGSConfig myColorizer2
+        | otherwise = buildDefaultGSConfig myColorizer3
+  conf{ gs_cellwidth    = 350
+       , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
+       }
 
 
-makeAction :: [(String, (KeyMask, KeySym), X())] -> X()
-makeAction lst = do
+makeAction :: Int -> [(String, (KeyMask, KeySym), X())] -> X()
+makeAction depth lst = do
   let l = length lst
   let grid = [
         (name, cmd)  | (name, key, cmd) <- lst
@@ -362,10 +367,8 @@ makeAction lst = do
                        ]
   runSelectedAction conf grid
     where
-      conf = (buildDefaultGSConfig myColorizer) {
+      conf = (mygridConfig depth) {
         gs_navigate = nav
-        , gs_cellwidth = 350
-        , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
         }
         where
         nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
@@ -399,7 +402,7 @@ keymap keys lst = take 25 [
                    , (0,3),(1,2),(2,1),(3,0),(2,-1),(1,-2),(0,-3),(-1,-2),(-2,-1),(-3,0),(-2,1),(-1,2)]
         ] ++ keys
 
-layoutAction = makeAction
+layoutAction = makeAction 1
                $ [
                 ("(SPC)toggle full screen", (0, xK_space), sendMessage (MT.Toggle FULL) >> sendMessage ToggleStruts)
                 , ("(TAB)next layout", (0, xK_Tab),  sendMessage NextLayout)
@@ -425,7 +428,7 @@ layoutAction = makeAction
                     ]
                 ]
 
-appFavoriteAction = makeAction [
+appFavoriteAction = makeAction 2 [
   (name, key, spawn cmd)
   | (name, key, cmd) <- [ ("(a)udacity", (0, xK_a), "audacity")
                         , ("(c)hrome", (0, xK_c), "google-chrome")
@@ -442,12 +445,12 @@ appFavoriteAction = makeAction [
                         ]
   ]
 
-appRotateAction = makeAction [
+appRotateAction = makeAction 2 [
   ("rotate (s)laves", (0, xK_s), rotSlavesDown)
   , ("rotate (a)ll windows", (0, xK_a), rotAllDown)
   ]
 
-appSendAction = makeAction [
+appSendAction = makeAction 2 [
   ("shift to (n)ext workspace", (0, xK_n), shiftTo Next nonNSP >> moveTo Next nonNSP)       -- Shifts focused window to next ws
   , ("shift to (p)rev workspace", (0, xK_p), shiftTo Prev nonNSP >> moveTo Prev nonNSP)  -- Shifts focused window to prev ws
   , ("(w)shift to leftest screen", (0, xK_w), sendToScreen def 0)
@@ -456,12 +459,12 @@ appSendAction = makeAction [
   ] where nonNSP          = WSIs (return (\ws -> W.tag ws /= "NSP"))
           nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "NSP"))
 
-appToggleAction = makeAction [
+appToggleAction = makeAction 2 [
   ("push a window to (t)ile", (0, xK_t),  withFocused $ windows . W.sink)
   , ("push all windows to (T)ile", (shiftMask, xK_T), sinkAll)                       -- Push ALL floating windows to tile
   ]
 
-appAction = makeAction
+appAction = makeAction 1
             $ [
               ("refresh", (0,xK_semicolon), refresh)
               , ("(.)focus master", (0, xK_period), windows W.focusMaster)
@@ -472,15 +475,15 @@ appAction = makeAction
               , ("(s)end window", (0, xK_s), appSendAction)
               , ("(t)oggle", (0, xK_t), appToggleAction)
               , ("(f)avorite apps", (0, xK_f), appFavoriteAction)
-              , ("(g)o to a window", (0, xK_g), goToSelected mygridConfig)
-              , ("(b)ring a window", (0, xK_b), bringSelected mygridConfig)
+              , ("(g)o to a window", (0, xK_g), goToSelected $ mygridConfig 2)
+              , ("(b)ring a window", (0, xK_b), bringSelected $ mygridConfig 2)
               ] ++ [
               ("send a window to ("++num++"):"++ws, (0,key), windows $ W.shift $ num++":"++ws)
               | (num, key, ws) <- myAllWorkspaces
               ]
 
 
-screenAction = makeAction [
+screenAction = makeAction 1 [
   ("(e)center screen", (0, xK_e), viewScreen def  1)
   , ("(w)left screen", (0, xK_w), viewScreen def 0)
   , ("(r)right screen", (0, xK_r), viewScreen def 2)
@@ -488,12 +491,12 @@ screenAction = makeAction [
   , ("(p)revious screen", (0, xK_p), prevScreen)
   ]
 
-workspaceAction = makeAction [
+workspaceAction = makeAction 1 [
   ("(g)o to workspace", (0, xK_g), gridselectWorkspace wsconfig W.greedyView)
-  , ("(b)ring all windows from workspace", (0, xK_b), gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
+  , ("(b)ring workspace", (0, xK_b), gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
   ]
 
-hotkeyAction = makeAction
+hotkeyAction = makeAction 0
                $ [
                 ("emacs anywhere",(0, xK_semicolon), spawn "~/.emacs_anywhere/bin/run")
                 , ("(a)pplication window", (0, xK_a), appAction)
