@@ -63,7 +63,6 @@
 -- import XMonad
 {-# OPTIONS_GHC -Wno-unused-matches #-}
 {-# LANGUAGE ParallelListComp #-}
-{-# OPTIONS_GHC -Wno-deferred-type-errors #-}
 {-# LANGUAGE DataKinds #-}
 import XMonad hiding ( (|||) )
 import XMonad.Config
@@ -443,37 +442,46 @@ keymap keys lst = take 25 [
                    , (0,3),(1,2),(2,1),(3,0),(2,-1),(1,-2),(0,-3),(-1,-2),(-2,-1),(-3,0),(-2,1),(-1,2)]
         ] ++ keys
 
-layoutAction = makeAction [
-  (ln, key, sendMessage $ JumpToLayout l)
-  | (ln, key, l) <- [
-      ("(t)all",(0,xK_t),"tall")
-      , ("(m)agnify",(0,xK_m),"magnify")
-      , ("mo(n)ocle",(0,xK_n),"monocle")
-      , ("(f)loats",(0,xK_f),"floats")
-      , ("(g)rid",(0,xK_g),"grid")
-      , ("(s)pirals",(0,xK_s),"spirals")
-      , ("three(C)ol",(shiftMask,xK_C),"threeCol")
-      , ("three(R)ow",(shiftMask,xK_R),"threeRow")
-      , ("ta(b)s",(0,xK_b),"tabs")
-      , ("t(a)llAccordion",(0,xK_a),"tallAccordion")
-      , ("(w)ideAccordion",(0,xK_w),"wideAccordion")
-      ]
-  ]
+layoutAction = makeAction
+               $ [
+                ("(SPC)toggle full screen", (0, xK_space), sendMessage (MT.Toggle FULL) >> sendMessage ToggleStruts)
+                , ("(TAB)next layout", (0, xK_Tab),  sendMessage NextLayout)
+                , ("(M)erge all windows", (shiftMask, xK_M), withFocused (sendMessage . MergeAll))
+                , ("(u)nmerge a window", (0, xK_u), withFocused (sendMessage . UnMerge))
+                , ("(U)nmerge all windows", (shiftMask, xK_U), withFocused (sendMessage . UnMergeAll))
+                , ("(.)focus up", (0, xK_period), onGroup W.focusUp')
+                , ("(,)focus down", (0, xK_comma), onGroup W.focusDown')
+                ] ++ [
+                (ln, key, sendMessage $ JumpToLayout l)
+                | (ln, key, l) <- [
+                    ("(t)all",(0,xK_t),"tall")
+                    , ("(m)agnify",(0,xK_m),"magnify")
+                    , ("mo(n)ocle",(0,xK_n),"monocle")
+                    , ("(f)loats",(0,xK_f),"floats")
+                    , ("(g)rid",(0,xK_g),"grid")
+                    , ("(s)pirals",(0,xK_s),"spirals")
+                    , ("three(C)ol",(shiftMask,xK_C),"threeCol")
+                    , ("three(R)ow",(shiftMask,xK_R),"threeRow")
+                    , ("ta(b)s",(0,xK_b),"tabs")
+                    , ("t(a)llAccordion",(0,xK_a),"tallAccordion")
+                    , ("(w)ideAccordion",(0,xK_w),"wideAccordion")
+                    ]
+                ]
 
 appFavoriteAction = makeAction [
   (name, key, spawn cmd)
-  | (name, key, cmd) <- [ ("(A)udacity", (0, xK_a), "audacity")
-                        , ("(C)hrome", (0, xK_c), "google-chrome")
-                        , ("(D)eadbeef", (0, xK_d), "deadbeef")
-                        , ("(E)macs", (0, xK_e), "emacsclient -c -a emacs")
-                        , ("Geany", (0, xK_1), "geany")
-                        , ("Geary", (0, xK_1), "geary")
-                        , ("Gimp", (0, xK_g), "gimp")
-                        , ("Kdenlive", (0, xK_k), "kdenlive")
-                        , ("LibreOffice Impress", (0, xK_i), "loimpress")
-                        , ("LibreOffice Writer", (0, xK_w), "lowriter")
-                        , ("OBS", (0, xK_o), "obs")
-                        , ("PCManFM", (0, xK_p), "pcmanfm")
+  | (name, key, cmd) <- [ ("(a)udacity", (0, xK_a), "audacity")
+                        , ("(c)hrome", (0, xK_c), "google-chrome")
+                        , ("(d)eadbeef", (0, xK_d), "deadbeef")
+                        , ("(e)macs", (0, xK_e), "emacsclient -c -a emacs")
+                        , ("geany", (0, xK_1), "geany")
+                        , ("geary", (0, xK_1), "geary")
+                        , ("(g)imp", (0, xK_g), "gimp")
+                        , ("(k)denlive", (0, xK_k), "kdenlive")
+                        , ("LibreOffice (i)mpress", (0, xK_i), "loimpress")
+                        , ("LibreOffice (w)riter", (0, xK_w), "lowriter")
+                        , ("(o)bs", (0, xK_o), "obs")
+                        , ("(p)cmanfm", (0, xK_p), "pcmanfm")
                         ]
   ]
 
@@ -496,19 +504,24 @@ appToggleAction = makeAction [
   , ("push all windows to (T)ile", (shiftMask, xK_T), sinkAll)                       -- Push ALL floating windows to tile
   ]
 
-appAction = makeAction [
-  ("refresh", (0,xK_semicolon), refresh)
-  , ("(.)focus master", (0, xK_period), windows W.focusMaster)
-  , ("swap (m)aster", (0, xK_m), windows W.swapMaster)
-  , ("(j)swap down", (0, xK_j), windows W.swapDown)
-  , ("(k)swap up", (0, xK_k), windows W.swapUp)
-  , ("(r)otate windows", (0, xK_r), appRotateAction)
-  , ("(s)end window", (0, xK_s), appSendAction)
-  , ("(t)oggle", (0, xK_t), appToggleAction)
-  , ("favorite apps", (0, xK_f), appFavoriteAction)
-  , ("go to a window", (0, xK_g), goToSelected mygridConfig)
-  , ("bring a window", (0, xK_b), bringSelected mygridConfig)
-  ]
+appAction = makeAction
+            $ [
+              ("refresh", (0,xK_semicolon), refresh)
+              , ("(.)focus master", (0, xK_period), windows W.focusMaster)
+              , ("swap (m)aster", (0, xK_m), windows W.swapMaster)
+              , ("(j)swap down", (0, xK_j), windows W.swapDown)
+              , ("(k)swap up", (0, xK_k), windows W.swapUp)
+              , ("(r)otate windows", (0, xK_r), appRotateAction)
+              , ("(s)end window", (0, xK_s), appSendAction)
+              , ("(t)oggle", (0, xK_t), appToggleAction)
+              , ("(f)avorite apps", (0, xK_f), appFavoriteAction)
+              , ("(g)o to a window", (0, xK_g), goToSelected mygridConfig)
+              , ("(b)ring a window", (0, xK_b), bringSelected mygridConfig)
+              ] ++ [
+              ("send a window to ("++num++"):"++ws, (0,key), windows $ W.shift ws)
+              | (num, key, ws) <- myAllWorkspaces
+              ]
+
 
 screenAction = makeAction [
   ("(e)center screen", (0, xK_e), viewScreen def  1)
@@ -518,98 +531,39 @@ screenAction = makeAction [
   , ("(p)revious screen", (0, xK_p), prevScreen)
   ]
 
-hotkeyAction = makeAction [
-  ("emacs anywhere",(0, xK_semicolon), spawn "~/.emacs_anywhere/bin/run")
-  , ("(a)pplication window", (0, xK_a), appAction)
-  , ("(s)creen", (0, xK_s), screenAction)
-  , ("la(y)out", (0, xK_y), layoutAction)
-  , ("(SPC)show windows", (0, xK_space), spawn "rofi -show")
-  , ("(.)run", (0, xK_period), spawn "dmenu_run -i -p \"Run: \"")
-  , ("(`)terminal", (0, xK_grave ), spawn myTerminal)
+workspaceAction = makeAction [
+  ("(g)o to workspace", (0, xK_g), gridselectWorkspace wsconfig W.greedyView)
+  , ("(b)ring all windows from workspace", (0, xK_b), gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
   ]
 
--- Hotkey Command Grid
--- hotkeyAction = runSelectedAction conf grid
---   where
---     conf = (buildDefaultGSConfig myStringColorizer) {
---       gs_navigate = nav
---       , gs_cellwidth = 350
---       , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
---       }
---       where
---       nav = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
---         where navKeyMap = M.fromList [
---                 ((0,xK_Escape), cancel)
---                 ,((0,xK_Return), select)
---                 ,((0,xK_slash) , substringSearch nav)
---                 ,((0,xK_Left)  , move (-1,0)  >> nav)
---                 ,((0,xK_h)     , move (-1,0)  >> nav)
---                 ,((0,xK_Right) , move (1,0)   >> nav)
---                 ,((0,xK_l)     , move (1,0)   >> nav)
---                 ,((0,xK_Down)  , move (0,1)   >> nav)
---                 ,((0,xK_j)     , move (0,1)   >> nav)
---                 ,((0,xK_Up)    , move (0,-1)  >> nav)
---                 ,((0,xK_k)     , move (0,-1)  >> nav)
---                 -- hotkey for layout
---                 ,((0,xK_a), setPos(0,1) >> select)
---                 ,((0,xK_s), setPos(1,0) >> select)
---                 ,((0,xK_y), setPos(0,-1) >> select)
---                 ,((0,xK_space), setPos(-1,0) >> select)
---                 ,((0,xK_period), setPos(0,2) >> select)
---                 ,((0,xK_grave), setPos(1,1) >> select)
---                 -- ,((0,xK_), setPos(0,2) >> select)
---                 -- ,((0,xK_), setPos(1,-1) >> select)
---                 -- ,((0,xK_), setPos(-2,0) >> select)
---                 -- ,((0,xK_), setPos(-1,-1) >> select)
---                 -- ,((0,xK_), setPos(0,-2) >> select)
---                 -- ,((0,xK_), setPos(-1,1) >> select)
---                 -- ,((0,xK_), setPos(0,3) >> select)
---                 -- ,((0,xK_), setPos(1,2) >> select)
---                 -- ,((0,xK_), setPos(2,1) >> select)
---                 -- ,((0,xK_), setPos(3,0) >> select)
---                 -- ,((0,xK_), setPos(2,-1) >> select)
---                 -- ,((0,xK_), setPos(1,-2) >> select)
---                 -- ,((0,xK_), setPos(0,-3) >> select)
---                 -- ,((0,xK_), setPos(-1,-2) >> select)
---                 -- ,((0,xK_), setPos(-2,-1) >> select)
---                 -- ,((0,xK_), setPos(-3,0) >> select)
---                 -- ,((0,xK_), setPos(-2,1) >> select)
---                 -- ,((0,xK_), setPos(-1,2) >> select)
---                 ]
---                -- The navigation handler ignores unknown key symbols
---               navDefaultHandler = const nav
---     grid = [
---       ("emacs anywhere", spawn "~/.emacs_anywhere/bin/run")
---       , ("(a)pplication window", applicationAction)
---       , ("(s)creen", screenAction)
---       , ("la(y)out", layoutAction)
---       , ("(SPC)show windows", spawn "rofi -show")
---       , ("(.)run", spawn "dmenu_run -i -p \"Run: \"")
---       , ("(`)terminal", spawn myTerminal)
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       , ("", spawn "")
---       ]
+hotkeyAction = makeAction
+               $ [
+                ("emacs anywhere",(0, xK_semicolon), spawn "~/.emacs_anywhere/bin/run")
+                , ("(a)pplication window", (0, xK_a), appAction)
+                , ("(s)creen", (0, xK_s), screenAction)
+                , ("la(y)out", (0, xK_y), layoutAction)
+                , ("(SPC)show windows", (0, xK_space), spawn "rofi -show")
+                , ("(.)run", (0, xK_period), spawn "dmenu_run -i -p \"Run: \"")
+                , ("(`)terminal", (0, xK_grave ), spawn myTerminal)
+                , ("(w)orkspace", (0, xK_w), workspaceAction)
+                ] ++ [
+                ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView ws)
+                | (num, key, ws) <- myAllWorkspaces
+                ]
 
 -- Workspaces
-myWorkspaces = ["1:emacs","2:web","3:mobile","4:testing","5:dev-misc","6:messenger","7:meeting","8:media","9:email"] ++ map snd myExtraWorkspaces
-myExtraWorkspaces = [("0", "0:misc")]
-myAllWorkspaces = [("1","1:emacs"),("2","2:web"),("3","3:mobile"),("4","4:testing"),("5","5:dev-misc"),("6","6:messenger"),("7","7:meeting"),("8","8:media"),("9", "9:email"),("0", "0:misc")]
+myAllWorkspaces = [("1",xK_1,"emacs"),
+                   ("2",xK_2,"web"),
+                   ("3",xK_3,"mobile"),
+                   ("4",xK_4,"testing"),
+                   ("5",xK_5,"dev-misc"),
+                   ("6",xK_6,"messenger"),
+                   ("7",xK_7,"meeting"),
+                   ("8",xK_8,"media"),
+                   ("9",xK_9,"email"),
+                   ("0",xK_0,"misc")
+                  ]
+myWorkspaces = [ num++":"++name | (num,_,name) <- myAllWorkspaces]
 
 myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
@@ -668,58 +622,11 @@ myManageHook = composeAll
      ] <+> namedScratchpadManageHook myScratchPads
 
 myKeys conf@XConfig {XMonad.modMask = modMask} = M.fromList
-  ----------------------------------------------------------------------
-  -- Custom key bindings
-  --
-
   -- Start a terminal.  Terminal to start is specified by myTerminal variable.
   [
-    -- ((modMask .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
-
-  -- Lock the screen using command specified by myScreensaver.
-  -- , ((modMask, xK_0), spawn myScreensaver)
-
-  -- Take a selective screenshot using the command specified by mySelectScreenshot.
-  -- , ((modMask .|. shiftMask, xK_p), spawn mySelectScreenshot)
-
-  -- Take a full screenshot using the command specified by myScreenshot.
-  -- , ((modMask .|. controlMask .|. shiftMask, xK_p), spawn myScreenshot)
-
-  -- Toggle current focus window to fullscreen
-  -- , ((modMask, xK_f), sendMessage $ Toggle FULL)
-
-  -- Mute volume.
-  -- , ((0, xF86XK_AudioMute),
-  --    spawn "amixer -q set Master toggle")
-
-  -- -- Decrease volume.
-  -- , ((0, xF86XK_AudioLowerVolume),
-  --    spawn "amixer -q set Master 5%-")
-
-  -- -- Increase volume.
-  -- , ((0, xF86XK_AudioRaiseVolume),
-  --    spawn "amixer -q set Master 5%+")
-
-  -- Audio previous.
-  -- , ((0, 0x1008FF16), spawn "")
-
-  -- -- Play/pause.
-  -- , ((0, 0x1008FF14), spawn "")
-
-  -- -- Audio next.
-  -- , ((0, 0x1008FF17), spawn "")
-
-  --------------------------------------------------------------------
-  --  Reset the layouts on the current workspace to default.
-  -- , ((modMask .|. shiftMask, xK_space), setLayout $ XMonad.layoutHook conf)
-
-  -- Resize viewed windows to the correct size.
-  -- , ((modMask, xK_n), refresh)
-
-  -- Increment the number of windows in the master area. , ((modMask, xK_comma), sendMessage (IncMasterN 1))
-
-  -- Decrement the number of windows in the master area.
-  ((modMask, xK_period), sendMessage (IncMasterN (-1)))
+    -- Increment the number of windows in the master area. , ((modMask, xK_comma), sendMessage (IncMasterN 1))
+    -- Decrement the number of windows in the master area.
+    ((modMask, xK_period), sendMessage (IncMasterN (-1)))
   ]
 
 -- ------------------------------------------------------------------------
@@ -733,17 +640,13 @@ myFocusFollowsMouse = True
 myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList
   [
     -- mod-button1, Set the window to floating mode and move by dragging
-    ((modMask, button1),
-     \w -> focus w >> mouseMoveWindow w)
+    ((modMask, button1), \w -> focus w >> mouseMoveWindow w)
 
     -- mod-button2, Raise the window to the top of the stack
-    , ((modMask, button2),
-       \w -> focus w >> windows W.swapMaster)
+    , ((modMask, button2), \w -> focus w >> windows W.swapMaster)
 
     -- mod-button3, Set the window to floating mode and resize by dragging
-    , ((modMask, button3),
-       \w -> focus w >> mouseResizeWindow w)
-    -- you may also bind events to the mouse scroll wheel (button4 and button5)
+    , ((modMask, button3), \w -> focus w >> mouseResizeWindow w)
   ]
 
 
@@ -753,11 +656,10 @@ toggleFloat w = windows (\s -> if M.member w (W.floating s)
 
 myAdditionalKeys :: [(String, X ())]
 myAdditionalKeys  =
-        [ -- ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
-        ("M-C-r", spawn "xmonad --restart")    -- Restarts xmonad
-        , ("M-C-q", io exitSuccess)              -- Quits xmonad
-        , ("M-<Return>", hotkeyAction)
-
+  [ -- ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
+    ("M-C-r", spawn "xmonad --restart")    -- Restarts xmonad
+  , ("M-C-q", io exitSuccess)              -- Quits xmonad
+  , ("C-<Space>", hotkeyAction)
 
     -- Other Dmenu Prompts
     -- In Xmonad and many tiling window managers, M-p is the default keybinding to
@@ -774,10 +676,6 @@ myAdditionalKeys  =
         -- , ("M-p q", spawn "dm-logout")    -- logout menu
         -- , ("M-p r", spawn "dm-reddit")    -- reddio (a reddit viewer)
         -- , ("M-p s", spawn "dm-websearch") -- search various search engines
-
-    -- Useful programs to have a keybinding for launch
-        -- , ("M-b", spawn (myBrowser ++ " www.youtube.com/c/DistroTube/"))
-        -- , ("M-M1-h", spawn (myTerminal ++ " -e htop"))
 
     -- Windows
         , ("C-q", kill)     -- Kill the currently focused client
@@ -798,63 +696,63 @@ myAdditionalKeys  =
         , ("C-M1-l", incScreenSpacing 4)         -- Increase screen spacing
 
     -- Run Prompt
-        , ("C-<Space> .", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
-        , ("C-<Space> <Return>", spawn "~/.emacs_anywhere/bin/run")
-        , ("C-<Space> <Space>", spawn "rofi -show")
-        , ("C-<Space> `", spawn myTerminal)
+        -- , ("C-<Space> .", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
+        -- , ("C-<Space> <Return>", spawn "~/.emacs_anywhere/bin/run")
+        -- , ("C-<Space> <Space>", spawn "rofi -show")
+        -- , ("C-<Space> `", spawn myTerminal)
 
     -- Windows (Application)
-        , ("C-<Space> a .", windows W.focusMaster)  -- Move focus to the master window
-        , ("C-<Space> a m", windows W.swapMaster) -- Swap the focused window and the master window
-        , ("C-<Space> a j", windows W.swapDown)   -- Swap focused window with next window
-        , ("C-<Space> a k", windows W.swapUp)     -- Swap focused window with prev window
-        , ("C-<Space> a p", promote)      -- Moves focused window to master, others maintain order
-        , ("C-<Space> a r s", rotSlavesDown)    -- Rotate all windows except master and keep focus in place
-        , ("C-<Space> a r a", rotAllDown)       -- Rotate all the windows in the current stack
-        , ("C-<Space> a <Return>", refresh)
-        , ("C-<Space> a s n", shiftTo Next nonNSP >> moveTo Next nonNSP)       -- Shifts focused window to next ws
-        , ("C-<Space> a s p", shiftTo Prev nonNSP >> moveTo Prev nonNSP)  -- Shifts focused window to prev ws
-        , ("C-<Space> a s w", sendToScreen def 0)
-        , ("C-<Space> a s e", sendToScreen def 1)
-        , ("C-<Space> a s r", sendToScreen def 2)
-        , ("C-<Space> a t t", withFocused $ windows . W.sink)  -- Push floating window back to tile
-        , ("C-<Space> a t T", sinkAll)                       -- Push ALL floating windows to tile
+        -- , ("C-<Space> a .", windows W.focusMaster)  -- Move focus to the master window
+        -- , ("C-<Space> a m", windows W.swapMaster) -- Swap the focused window and the master window
+        -- , ("C-<Space> a j", windows W.swapDown)   -- Swap focused window with next window
+        -- , ("C-<Space> a k", windows W.swapUp)     -- Swap focused window with prev window
+        -- , ("C-<Space> a p", promote)      -- Moves focused window to master, others maintain order
+        -- , ("C-<Space> a r s", rotSlavesDown)    -- Rotate all windows except master and keep focus in place
+        -- , ("C-<Space> a r a", rotAllDown)       -- Rotate all the windows in the current stack
+        -- , ("C-<Space> a <Return>", refresh)
+        -- , ("C-<Space> a s n", shiftTo Next nonNSP >> moveTo Next nonNSP)       -- Shifts focused window to next ws
+        -- , ("C-<Space> a s p", shiftTo Prev nonNSP >> moveTo Prev nonNSP)  -- Shifts focused window to prev ws
+        -- , ("C-<Space> a s w", sendToScreen def 0)
+        -- , ("C-<Space> a s e", sendToScreen def 1)
+        -- , ("C-<Space> a s r", sendToScreen def 2)
+        -- , ("C-<Space> a t t", withFocused $ windows . W.sink)  -- Push floating window back to tile
+        -- , ("C-<Space> a t T", sinkAll)                       -- Push ALL floating windows to tile
 
     -- Grid selection
-        , ("C-<Space> g l", layoutAction)
-        , ("C-<Space> g n", appFavoriteAction)                 -- grid select favorite apps
-        , ("C-<Space> g a", goToSelected mygridConfig)  -- goto selected window
-        , ("C-<Space> g b a", bringSelected mygridConfig) -- bring selected window
-        , ("C-<Space> g b w", gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
-        , ("C-<Space> g w", gridselectWorkspace wsconfig W.greedyView)
+        -- , ("C-<Space> g l", layoutAction)
+        -- , ("C-<Space> g n", appFavoriteAction)                 -- grid select favorite apps
+        -- , ("C-<Space> g a", goToSelected mygridConfig)  -- goto selected window
+        -- , ("C-<Space> g b a", bringSelected mygridConfig) -- bring selected window
+        -- , ("C-<Space> g b w", gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
+        -- , ("C-<Space> g w", gridselectWorkspace wsconfig W.greedyView)
 
     -- Layouts
-        , ("C-<Space> l n", sendMessage NextLayout)           -- Switch to next layout
-        , ("C-<Space> l t", sendMessage $ JumpToLayout "tall")
-        , ("C-<Space> l m", sendMessage $ JumpToLayout "magnify")
-        , ("C-<Space> l o", sendMessage $ JumpToLayout "monocle")
-        , ("C-<Space> l f", sendMessage $ JumpToLayout "floats")
-        , ("C-<Space> l g", sendMessage $ JumpToLayout "grid")
-        , ("C-<Space> l s", sendMessage $ JumpToLayout "spirals")
-        , ("C-<Space> l c", sendMessage $ JumpToLayout "threeCol")
-        , ("C-<Space> l r", sendMessage $ JumpToLayout "threeRow")
-        , ("C-<Space> l b", sendMessage $ JumpToLayout "tabs")
-        , ("C-<Space> l l", sendMessage $ JumpToLayout "tallAccordion")
-        , ("C-<Space> l w", sendMessage $ JumpToLayout "wideAccordion")
-        , ("C-<Space> l <Return>", sendMessage (MT.Toggle FULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
-        , ("C-<Space> l M", withFocused (sendMessage . MergeAll))
-        , ("C-<Space> l u", withFocused (sendMessage . UnMerge))
-        , ("C-<Space> l U", withFocused (sendMessage . UnMergeAll))
-        , ("C-<Space> l .", onGroup W.focusUp')    -- Switch focus to next tab
-        , ("C-<Space> l ,", onGroup W.focusDown')  -- Switch focus to prev tab
+        -- , ("C-<Space> l n", sendMessage NextLayout)           -- Switch to next layout
+        -- , ("C-<Space> l t", sendMessage $ JumpToLayout "tall")
+        -- , ("C-<Space> l m", sendMessage $ JumpToLayout "magnify")
+        -- , ("C-<Space> l o", sendMessage $ JumpToLayout "monocle")
+        -- , ("C-<Space> l f", sendMessage $ JumpToLayout "floats")
+        -- , ("C-<Space> l g", sendMessage $ JumpToLayout "grid")
+        -- , ("C-<Space> l s", sendMessage $ JumpToLayout "spirals")
+        -- , ("C-<Space> l c", sendMessage $ JumpToLayout "threeCol")
+        -- , ("C-<Space> l r", sendMessage $ JumpToLayout "threeRow")
+        -- , ("C-<Space> l b", sendMessage $ JumpToLayout "tabs")
+        -- , ("C-<Space> l l", sendMessage $ JumpToLayout "tallAccordion")
+        -- , ("C-<Space> l w", sendMessage $ JumpToLayout "wideAccordion")
+        -- , ("C-<Space> l <Return>", sendMessage (MT.Toggle FULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
+        -- , ("C-<Space> l M", withFocused (sendMessage . MergeAll))
+        -- , ("C-<Space> l u", withFocused (sendMessage . UnMerge))
+        -- , ("C-<Space> l U", withFocused (sendMessage . UnMergeAll))
+        -- , ("C-<Space> l .", onGroup W.focusUp')    -- Switch focus to next tab
+        -- , ("C-<Space> l ,", onGroup W.focusDown')  -- Switch focus to prev tab
         -- , ("M-S-<Space>", setLayout $ XMonad.layoutHook conf)
 
     -- Screen
-        , ("C-<Space> s n", nextScreen)  -- Switch focus to next monitor
-        , ("C-<Space> s p", prevScreen)  -- Switch focus to prev monitor
-        , ("C-<Space> s w", viewScreen def 0)
-        , ("C-<Space> s e", viewScreen def 1)
-        , ("C-<Space> s r", viewScreen def 2)
+        -- , ("C-<Space> s n", nextScreen)  -- Switch focus to next monitor
+        -- , ("C-<Space> s p", prevScreen)  -- Switch focus to prev monitor
+        -- , ("C-<Space> s w", viewScreen def 0)
+        -- , ("C-<Space> s e", viewScreen def 1)
+        -- , ("C-<Space> s r", viewScreen def 2)
 
     -- Increase/decrease windows in the master pane or the stack
         , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
@@ -925,14 +823,14 @@ myAdditionalKeys  =
         -- , ("M-e", screenWorkspace 1)
         -- , ("M-r", screenWorkspace 1)
         ]
-        ++
-        [
-          ("C-<Space> "++key, windows $ W.greedyView ws)
-          | (key, ws) <- myAllWorkspaces
-        ] ++ [
-          ("C-<Space> a "++key, windows $ W.shift ws)
-          | (key, ws) <- myAllWorkspaces
-        ]
+        -- ++
+        -- [
+        --   ("C-<Space> "++key, windows $ W.greedyView ws)
+        --   | (key, ws) <- myAllWorkspaces
+        -- ] ++ [
+        --   ("C-<Space> a "++key, windows $ W.shift ws)
+        --   | (key, ws) <- myAllWorkspaces
+        -- ]
           where nonNSP          = WSIs (return (\ws -> W.tag ws /= "NSP"))
                 nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "NSP"))
 
