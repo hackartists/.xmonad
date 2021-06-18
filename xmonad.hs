@@ -196,9 +196,9 @@ myStartupHook = do
     spawnOnce "/opt/appimages/stoplight-studio.AppImage &"
     spawnOnce "/opt/notifier/bin/notifier.AppImage &"
     spawnOnce "albert &"
-    spawnOnce "export XMODIFIERS=@im=ibus"
-    spawnOnce "export GTK_IM_MODULE=ibus"
-    spawnOnce "ibus-daemon  -drx &"
+    -- spawnOnce "export XMODIFIERS=@im=ibus"
+    -- spawnOnce "export GTK_IM_MODULE=ibus"
+    spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
     spawnOnce "(sleep 5 && copyq) &"
 
     setWMName "LG3D"
