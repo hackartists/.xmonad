@@ -179,7 +179,7 @@ myStartupHook = do
     spawnOnce "setterm -blank 0 -powerdown 0"
     spawnOnce "xset s off"
     spawnOnce "/usr/lib/xfce4/notifyd/xfce4-notifyd &"
-    spawnOnce "/usr/bin/emacs --daemon &"
+    -- spawnOnce "/usr/bin/emacs --daemon &"
     spawnOnce "picom &"
     spawnOnce "nm-applet &"
     spawnOnce "volumeicon &"
