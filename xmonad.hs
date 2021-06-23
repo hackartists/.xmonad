@@ -496,6 +496,10 @@ workspaceAction = makeAction 1 [
   , ("(b)ring workspace", (0, xK_b), gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
   ]
 
+emacsAction = makeAction 1 [
+  ("(s)cratch buffer", (0, xK_s), spawn (myEmacs ++ "--eval '(hackartist/scratch-buffer-only)'"))
+  ]
+
 hotkeyAction = makeAction 0
                $ [
                 ("emacs anywhere",(0, xK_semicolon), spawn "~/.emacs_anywhere/bin/run")
@@ -506,6 +510,7 @@ hotkeyAction = makeAction 0
                 , ("(.)run", (0, xK_period), spawn "dmenu_run -i -p \"Run: \"")
                 , ("(`)terminal", (0, xK_grave ), spawn myTerminal)
                 , ("(w)orkspace", (0, xK_w), workspaceAction)
+                , ("(e)macs", (0, xK_e), emacsAction)
                 ] ++ [
                 ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView $ num++":"++ws)
                 | (num, key, ws) <- myAllWorkspaces
