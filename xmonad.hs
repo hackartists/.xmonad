@@ -174,6 +174,7 @@ windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace
 myStartupHook :: X ()
 myStartupHook = do
     spawnOnce "lxsession &"
+    spawn "xrdb ~/.Xresources && xrdb -merge ~/.Xresources"
     spawnOnce "xset r rate 200 30"
     spawnOnce "xset -dpms"
     spawnOnce "setterm -blank 0 -powerdown 0"
