@@ -550,6 +550,7 @@ myManageHook = composeAll
      , stringProperty "_NET_WM_NAME" =? "Android Emulator - luffy:5554" --> doShift "3:mobile"
      , stringProperty "_NET_WM_NAME" =? "Android Emulator - zoro:5556" --> doShift "3:mobile"
      , className =? "Stoplight Studio"             --> doShift "4:testing"
+     , className =? "Postman"                      --> doShift "4:testing"
      , className =? "Slack"                        --> doShift "6:messenger"
      , className =? "yakyak"                       --> doShift "6:messenger"
      , className =? "Google-chrome-unstable"       --> doShift "7:meeting"
