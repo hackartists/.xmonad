@@ -499,6 +499,17 @@ workspaceAction = makeAction 1 [
 
 emacsAction = makeAction 1 [
   ("(s)cratch buffer", (0, xK_s), spawn (myEmacs ++ "--eval '(hackartist/scratch-buffer-only)'"))
+  , ("(i)buffer", (0, xK_i), spawn (myEmacs ++ "--eval '(ibuffer)'"))   -- list buffers
+  , ("(d)ired", (0, xK_d), spawn (myEmacs ++ "--eval '(dired nil)'")) -- dired
+  , ("(e)rc", (0, xK_e), spawn (myEmacs ++ "--eval '(erc)'"))       -- erc irc client
+  , ("(m)u4e", (0, xK_m), spawn (myEmacs ++ "--eval '(mu4e)'"))      -- mu4e email
+  , ("rss (f)eed", (0, xK_f), spawn (myEmacs ++ "--eval '(elfeed)'"))    -- elfeed rss
+  , ("es(h)ell", (0, xK_h), spawn (myEmacs ++ "--eval '(eshell)'"))    -- eshell
+  , ("m(a)stodon", (0, xK_a), spawn (myEmacs ++ "--eval '(mastodon)'"))  -- mastodon.el
+  , ("(v)term", (0, xK_v), spawn (myEmacs ++ ("--eval '(vterm nil)'"))) -- vterm if on GNU Emacs
+  -- emms is an emacs audio player. I set it to auto start playing in a specific directory.
+  , ("e(M)ms", (shiftMask, xK_M), spawn (myEmacs ++ "--eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/Non-Classical/70s-80s/\")'"))
+
   ]
 
 hotkeyAction = makeAction 0
@@ -664,21 +675,7 @@ myAdditionalKeys  =
 
     -- Emacs (CTRL-e followed by a key)
     -- , ("C-e e", spawn myEmacs)                 -- start emacs
-  , ("C-e e", spawn (myEmacs ++ "--eval '(dashboard-refresh-buffer)'"))   -- emacs dashboard
-  , ("C-e b", spawn (myEmacs ++ "--eval '(ibuffer)'"))   -- list buffers
-  , ("C-e d", spawn (myEmacs ++ "--eval '(dired nil)'")) -- dired
-  , ("C-e i", spawn (myEmacs ++ "--eval '(erc)'"))       -- erc irc client
-  , ("C-e m", spawn (myEmacs ++ "--eval '(mu4e)'"))      -- mu4e email
-  , ("C-e n", spawn (myEmacs ++ "--eval '(elfeed)'"))    -- elfeed rss
-  , ("C-e s", spawn (myEmacs ++ "--eval '(eshell)'"))    -- eshell
-  , ("C-e t", spawn (myEmacs ++ "--eval '(mastodon)'"))  -- mastodon.el
-    -- , ("C-e v", spawn (myEmacs ++ ("--eval '(vterm nil)'"))) -- vterm if on GNU Emacs
-  , ("C-e v", spawn (myEmacs ++ "--eval '(+vterm/here nil)'")) -- vterm if on Doom Emacs
-    -- , ("C-e w", spawn (myEmacs ++ ("--eval '(eww \"distrotube.com\")'"))) -- eww browser if on GNU Emacs
-  , ("C-e w", spawn (myEmacs ++ "--eval '(doom/window-maximize-buffer(eww \"distrotube.com\"))'")) -- eww browser if on Doom Emacs
-  -- emms is an emacs audio player. I set it to auto start playing in a specific directory.
-  , ("C-e a", spawn (myEmacs ++ "--eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/Non-Classical/70s-80s/\")'"))
-
+  
     -- Multimedia Keys
   , ("<XF86AudioPlay>", spawn (myTerminal ++ "mocp --play"))
   , ("<XF86AudioPrev>", spawn (myTerminal ++ "mocp --previous"))
