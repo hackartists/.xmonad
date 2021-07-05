@@ -206,14 +206,15 @@ myStartupHook = do
     setWMName "LG3D"
 
 myScratchPads :: [NamedScratchpad]
-myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
-                , NS "mocp" spawnMocp findMocp manageMocp
+myScratchPads = [ NS "terminal" spawnTerm findTerm manageDefault
+                , NS "mocp" spawnMocp findMocp manageDefault
                 , NS "calculator" spawnCalc findCalc manageCalc
+                , NS "emacs" spawnEmacs findEmacs manageDefault
                 ]
   where
     spawnTerm  = myTerminal ++ " -t scratchpad"
     findTerm   = title =? "scratchpad"
-    manageTerm = customFloating $ W.RationalRect l t w h
+    manageDefault = customFloating $ W.RationalRect l t w h
                where
                  h = 0.9
                  w = 0.9
@@ -221,12 +222,6 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                  l = 0.95 -w
     spawnMocp  = myTerminal ++ " -t mocp -e mocp"
     findMocp   = title =? "mocp"
-    manageMocp = customFloating $ W.RationalRect l t w h
-               where
-                 h = 0.9
-                 w = 0.9
-                 t = 0.95 -h
-                 l = 0.95 -w
     spawnCalc  = "qalculate-gtk"
     findCalc   = className =? "Qalculate-gtk"
     manageCalc = customFloating $ W.RationalRect l t w h
@@ -235,6 +230,8 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                  w = 0.4
                  t = 0.75 -h
                  l = 0.70 -w
+    spawnEmacs  = myEmacs ++ " -e '(hackartist/scratch-buffer-only)' -F '((name . \"scratchpad-emacs\"))'"
+    findEmacs   = title =? "scratchpad-emacs"
 
 mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
@@ -515,6 +512,12 @@ emacsAction = makeAction 1 [
 
   ]
 
+scratchPadAction = makeAction 0
+               $ [
+                ("(t)erminal",(0, xK_t), namedScratchpadAction myScratchPads "terminal")
+                , ("(e)macs", (0, xK_e), namedScratchpadAction myScratchPads "emacs")
+                ]
+
 hotkeyAction = makeAction 0
                $ [
                 ("emacs anywhere",(0, xK_semicolon), spawn "~/.emacs_anywhere/bin/run")
@@ -526,6 +529,7 @@ hotkeyAction = makeAction 0
                 , ("(`)terminal", (0, xK_grave ), spawn myTerminal)
                 , ("(w)orkspace", (0, xK_w), workspaceAction)
                 , ("(e)macs", (0, xK_e), emacsAction)
+                , ("s(c)ratch pads", (0, xK_c), scratchPadAction)
                 ] ++ [
                 ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView $ num++":"++ws)
                 | (num, key, ws) <- myAllWorkspaces
