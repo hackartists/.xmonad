@@ -210,6 +210,7 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageDefault
                 , NS "mocp" spawnMocp findMocp manageDefault
                 , NS "calculator" spawnCalc findCalc manageCalc
                 , NS "emacs" spawnEmacs findEmacs manageDefault
+                , NS "emacsanywhere" spawnEmacsanywhere findEmacsanywhere manageDefault
                 ]
   where
     spawnTerm  = myTerminal ++ " -t scratchpad"
@@ -232,6 +233,8 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageDefault
                  l = 0.70 -w
     spawnEmacs  = myEmacs ++ " -e '(hackartist/scratch-buffer-only)' -F '((name . \"scratchpad-emacs\"))'"
     findEmacs   = title =? "scratchpad-emacs"
+    spawnEmacsanywhere  = "EA_TITLE='scratchpad-ea' ~/.emacs_anywhere/bin/run"
+    findEmacsanywhere   = title =? "scratchpad-ea"
 
 mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
@@ -520,7 +523,7 @@ scratchPadAction = makeAction 0
 
 hotkeyAction = makeAction 0
                $ [
-                ("emacs anywhere",(0, xK_semicolon), spawn "~/.emacs_anywhere/bin/run")
+                ("emacs anywhere",(0, xK_semicolon), namedScratchpadAction myScratchPads "emacsanywhere")
                 , ("(a)pplication window", (0, xK_a), appAction)
                 , ("(s)creen", (0, xK_s), screenAction)
                 , ("la(y)out", (0, xK_y), layoutAction)
