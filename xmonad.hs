@@ -201,6 +201,7 @@ myStartupHook = do
     -- spawnOnce "export GTK_IM_MODULE=ibus"
     spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
     spawnOnce "(sleep 5 && copyq) &"
+    spawnOnce "emacs --name emacs-main"
 
     setWMName "LG3D"
 
@@ -434,7 +435,7 @@ appFavoriteAction = makeAction 2 [
   | (name, key, cmd) <- [ ("(a)udacity", (0, xK_a), "audacity")
                         , ("(c)hrome", (0, xK_c), "google-chrome")
                         , ("(d)eadbeef", (0, xK_d), "deadbeef")
-                        , ("(e)macs", (0, xK_e), "emacsclient -c -a emacs")
+                        , ("(e)macsclient", (0, xK_e), "emacsclient -c -a emacs")
                         , ("geany", (0, xK_1), "geany")
                         , ("geary", (0, xK_1), "geary")
                         , ("(g)imp", (0, xK_g), "gimp")
@@ -444,6 +445,7 @@ appFavoriteAction = makeAction 2 [
                         , ("(o)bs", (0, xK_o), "obs")
                         , ("(p)cmanfm", (0, xK_p), "pcmanfm")
                         , ("(w)ireshark", (0, xK_w), "sudo wireshark")
+                        , ("(m)ain emacs", (0, xK_m), "emacs --name emacs-main")
                         ]
   ]
 
@@ -557,7 +559,8 @@ myManageHook = composeAll
      -- I'm doing it this way because otherwise I would have to write out the full
      -- name of my workspaces and the names would be very long if using clickable workspaces.
      [
-       className =? "Google-chrome"                --> doShift "2:web"
+       stringProperty "_NET_WM_NAME" =? "emacs-main" --> doShift "1:emacs"
+     , className =? "Google-chrome"                --> doShift "2:web"
      , stringProperty "_NET_WM_NAME" =? "Emulator" --> (doShift "3:mobile" <+> doFloat)
      , stringProperty "_NET_WM_NAME" =? "Android Emulator - luffy:5554" --> doShift "3:mobile"
      , stringProperty "_NET_WM_NAME" =? "Android Emulator - zoro:5556" --> doShift "3:mobile"
