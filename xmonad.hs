@@ -189,7 +189,6 @@ myStartupHook = do
     spawnOnce "~/.fehbg &"
     spawnOnce "google-chrome &"
     spawnOnce "google-chrome-beta &"
-    spawnOnce "noisetorch &"
     spawnOnce "sudo rmmod pcspkr"
     spawnOnce "yakyak &"
     spawnOnce "slack &"
@@ -202,7 +201,6 @@ myStartupHook = do
     spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
     spawnOnce "(sleep 5 && copyq) &"
     spawnOnce "emacs --name emacs-main"
-    spawnOnce "noisetorch -i"
 
     setWMName "LG3D"
 
@@ -578,6 +576,7 @@ myManageHook = composeAll
      , className =? "yakyak"                       --> doShift "6:messenger"
      , className =? "Google-chrome-unstable"       --> doShift "7:meeting"
      , className =? "Google-chrome-beta"           --> doShift "7:meeting"
+     , className =? "zoom"       --> (doShift "7:meeting" <+> doFullFloat)
      , className =? "obs"                          --> doShift "8:media"
      , className =? "kdenlive"                     --> doShift "8:media"
      , className =? "Evolution"                    --> doShift "9:email"
