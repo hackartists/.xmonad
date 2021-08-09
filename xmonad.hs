@@ -201,6 +201,7 @@ myStartupHook = do
     spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
     spawnOnce "(sleep 5 && copyq) &"
     spawnOnce "emacs --name emacs-main"
+    spawnOnce "whatsapp-nativefier"
 
     setWMName "LG3D"
 
@@ -542,7 +543,7 @@ myAllWorkspaces = [("1",xK_1,"emacs")
                    , ("2",xK_2,"web")
                    , ("3",xK_3,"mobile")
                    , ("4",xK_4,"testing")
-                   , ("5",xK_5,"dev-misc")
+                   , ("5",xK_5,"study")
                    , ("6",xK_6,"messenger")
                    , ("7",xK_7,"meeting")
                    , ("8",xK_8,"media")
@@ -574,6 +575,7 @@ myManageHook = composeAll
      , className =? "Postman"                      --> doShift "4:testing"
      , className =? "Slack"                        --> doShift "6:messenger"
      , className =? "yakyak"                       --> doShift "6:messenger"
+     , stringProperty "_NET_WM_NAME" =? "WhatsApp" --> doShift "6:messenger"
      , className =? "Google-chrome-unstable"       --> doShift "7:meeting"
      , className =? "Google-chrome-beta"           --> doShift "7:meeting"
      , className =? "zoom"                         --> doShift "7:meeting"
