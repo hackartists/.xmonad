@@ -183,7 +183,7 @@ myStartupHook = do
     -- spawnOnce "/usr/bin/emacs --daemon &"
     spawnOnce "picom &"
     spawnOnce "nm-applet &"
-    spawnOnce "volumeicon &"
+    -- spawnOnce "volumeicon &"
     spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
     spawnOnce "trayer --edge top --align center --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 --iconspacing 10&"
     spawnOnce "~/.fehbg &"
@@ -201,7 +201,7 @@ myStartupHook = do
     spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
     spawnOnce "(sleep 5 && copyq) &"
     spawnOnce "emacs --name emacs-main"
-    spawnOnce "whatsapp-nativefier"
+    spawnOnce "whatsapp-for-linux"
 
     setWMName "LG3D"
 
@@ -576,6 +576,7 @@ myManageHook = composeAll
      , className =? "Slack"                        --> doShift "6:messenger"
      , className =? "yakyak"                       --> doShift "6:messenger"
      , stringProperty "_NET_WM_NAME" =? "WhatsApp" --> doShift "6:messenger"
+     , className =? "Whatsapp-for-linux"           --> doShift "6:messenger"
      , className =? "Google-chrome-unstable"       --> doShift "7:meeting"
      , className =? "Google-chrome-beta"           --> doShift "7:meeting"
      , className =? "zoom"                         --> doShift "7:meeting"
