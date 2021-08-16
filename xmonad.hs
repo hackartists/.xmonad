@@ -649,16 +649,16 @@ myAdditionalKeys  =
   , ("C-q", kill)     -- Kill the currently focused client
   , ("M-S-a", killAll)   -- Kill all windows on current workspace
 
-  , ("M-C-h", sendMessage Shrink)                -- Shrink horiz window width
-  , ("M-C-l", sendMessage Expand)                -- Expand horiz window width
-  , ("M-C-j", sendMessage MirrorShrink)          -- Shrink vert window width
-  , ("M-C-k", sendMessage MirrorExpand)          -- Expand vert window width
+  , ("M-C-d", sendMessage Shrink)                -- Shrink horiz window width
+  , ("M-C-n", sendMessage Expand)                -- Expand horiz window width
+  , ("M-C-h", sendMessage MirrorShrink)          -- Shrink vert window width
+  , ("M-C-t", sendMessage MirrorExpand)          -- Expand vert window width
 
     -- Increase/decrease spacing (gaps)
-  , ("C-M1-j", decWindowSpacing 4)         -- Decrease window spacing
-  , ("C-M1-k", incWindowSpacing 4)         -- Increase window spacing
-  , ("C-M1-h", decScreenSpacing 4)         -- Decrease screen spacing
-  , ("C-M1-l", incScreenSpacing 4)         -- Increase screen spacing
+  , ("C-M1-h", decWindowSpacing 4)         -- Decrease window spacing
+  , ("C-M1-t", incWindowSpacing 4)         -- Increase window spacing
+  , ("C-M1-d", decScreenSpacing 4)         -- Decrease screen spacing
+  , ("C-M1-n", incScreenSpacing 4)         -- Increase screen spacing
 
     -- Increase/decrease windows in the master pane or the stack
   , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
@@ -716,7 +716,7 @@ main = do
     -- xmproc2 <- spawnPipe "xmobar -x 2 $HOME/.config/xmobar/xmobarrc2"
     -- the xmonad, ya know...what the WM is named after!
     xmonad
-      $ additionalNav2DKeys (xK_k, xK_h, xK_j, xK_l)
+      $ additionalNav2DKeys (xK_t, xK_d, xK_h, xK_n)
                                [
                                   (mod4Mask,               windowGo  )
                                 , (mod4Mask .|. shiftMask, windowSwap)
