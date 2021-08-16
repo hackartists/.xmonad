@@ -192,7 +192,7 @@ myStartupHook = do
     spawnOnce "sudo rmmod pcspkr"
     spawnOnce "yakyak &"
     spawnOnce "slack &"
-    spawnOnce "NO_AT_BRIDGE=1 evolution &"
+    -- spawnOnce "NO_AT_BRIDGE=1 evolution &"
     spawnOnce "/opt/appimages/stoplight-studio.AppImage &"
     spawnOnce "/opt/notifier/bin/notifier.AppImage &"
     spawnOnce "albert &"
@@ -202,7 +202,7 @@ myStartupHook = do
     spawnOnce "(sleep 5 && copyq) &"
     spawnOnce "emacs --name emacs-main"
     spawnOnce "whatsapp-nativefier"
-
+    -- spawnOnce "setxkbmap dvorak"
     setWMName "LG3D"
 
 myScratchPads :: [NamedScratchpad]
@@ -569,6 +569,7 @@ myManageHook = composeAll
        stringProperty "_NET_WM_NAME" =? "emacs-main" --> doShift "1:emacs"
      , className =? "Google-chrome"                --> doShift "2:web"
      , stringProperty "_NET_WM_NAME" =? "Emulator" --> (doShift "3:mobile" <+> doFloat)
+     , className =? "scrcpy"                       --> (doShift "3:mobile" <+> doFloat)
      , stringProperty "_NET_WM_NAME" =? "Android Emulator - luffy:5554" --> doShift "3:mobile"
      , stringProperty "_NET_WM_NAME" =? "Android Emulator - zoro:5556" --> doShift "3:mobile"
      , className =? "Stoplight Studio"             --> doShift "4:testing"
