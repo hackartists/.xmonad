@@ -201,7 +201,7 @@ myStartupHook = do
     spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
     spawnOnce "(sleep 5 && copyq) &"
     spawnOnce "emacs --name emacs-main"
-    spawnOnce "whatsapp-nativefier"
+    spawnOnce "(sleep 10 && whatsapp-nativefier)"
     -- spawnOnce "setxkbmap dvorak"
     setWMName "LG3D"
 
