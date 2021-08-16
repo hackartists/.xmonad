@@ -175,6 +175,7 @@ myStartupHook :: X ()
 myStartupHook = do
     spawnOnce "lxsession &"
     spawn "xrdb ~/.Xresources && xrdb -merge ~/.Xresources"
+    spawnOnce "setxkbmap dvorak"
     spawnOnce "xset r rate 200 30"
     spawnOnce "xset -dpms"
     spawnOnce "setterm -blank 0 -powerdown 0"
@@ -183,7 +184,7 @@ myStartupHook = do
     -- spawnOnce "/usr/bin/emacs --daemon &"
     spawnOnce "picom &"
     spawnOnce "nm-applet &"
-    -- spawnOnce "volumeicon &"
+    spawnOnce "volumeicon &"
     spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
     spawnOnce "trayer --edge top --align center --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 --iconspacing 10&"
     spawnOnce "~/.fehbg &"
@@ -202,7 +203,6 @@ myStartupHook = do
     spawnOnce "(sleep 5 && copyq) &"
     spawnOnce "emacs --name emacs-main"
     spawnOnce "(sleep 10 && whatsapp-nativefier)"
-    -- spawnOnce "setxkbmap dvorak"
     setWMName "LG3D"
 
 myScratchPads :: [NamedScratchpad]
