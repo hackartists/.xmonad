@@ -73,7 +73,7 @@ import qualified XMonad.StackSet as W
 import Control.Concurrent
 import Control.Monad
 
-    -- Actions
+-- Actions
 import XMonad.Actions.CopyWindow (kill1)
 import XMonad.Actions.CycleWS (Direction1D(..), moveTo, shiftTo, WSType(..), nextScreen, prevScreen)
 import XMonad.Actions.GridSelect
@@ -87,7 +87,7 @@ import XMonad.Actions.Navigation2D
 import XMonad.Actions.UpdatePointer
 import XMonad.Actions.PhysicalScreens
 
-    -- Data
+-- Data
 import Data.Char (isSpace, toUpper)
 import Data.Maybe ( fromJust, isJust )
 import Data.Monoid
@@ -95,7 +95,7 @@ import Data.Tree
 import qualified Data.Map as M
 -- import Data.Default
 
-    -- Hooks
+-- Hooks
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops  -- for some fullscreen events, also for xcomposite in obs.
 import XMonad.Hooks.ManageDocks (avoidStruts, docksEventHook, manageDocks, ToggleStruts(..))
@@ -105,7 +105,7 @@ import XMonad.Hooks.SetWMName
 import XMonad.Hooks.WorkspaceHistory
 import XMonad.Hooks.RefocusLast
 
-    -- Layouts
+-- Layouts
 import XMonad.Layout hiding ( (|||) )
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.Accordion
@@ -121,6 +121,7 @@ import XMonad.Layout.WindowNavigation
 import XMonad.Layout.ZoomRow
 import XMonad.Layout.LayoutCombinators
 import XMonad.Layout.LayoutHints
+import XMonad.Actions.DynamicWorkspaceGroups
 
 -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
@@ -173,6 +174,13 @@ windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace
 
 myStartupHook :: X ()
 myStartupHook = do
+    addRawWSGroup "dev" [(S 0, "2:web"), (S 1, "1:emacs"), (S 2, "6:messenger")]
+    addRawWSGroup "dev-mobile" [(S 0, "2:web"), (S 1, "1:emacs"), (S 2, "3:mobile")]
+    addRawWSGroup "meeting" [(S 0, "1:emacs"), (S 1, "7:meeting"), (S 2, "6:messenger")]
+    addRawWSGroup "web" [(S 0, "1:emacs"), (S 1, "2:web"), (S 2, "6:messenger")]
+    addRawWSGroup "study-english" [(S 0, "1:emacs"), (S 1, "5:study"), (S 2, "2:web")]
+    addRawWSGroup "testing" [(S 0, "1:emacs"), (S 1, "4:testing"), (S 2, "2:web")]
+    addRawWSGroup "media" [(S 0, "1:emacs"), (S 1, "8:media"), (S 2, "2:web")]
     spawnOnce "lxsession &"
     spawn "xrdb ~/.Xresources && xrdb -merge ~/.Xresources"
     -- spawnOnce  "setxkbmap dvorak"
@@ -204,6 +212,7 @@ myStartupHook = do
     spawnOnce "emacs --name emacs-main"
     spawnOnce "(sleep 10 && whatsapp-nativefier)"
     setWMName "LG3D"
+    viewCenteredWSGroup "dev"
 
 myScratchPads :: [NamedScratchpad]
 myScratchPads = [ NS "terminal" spawnTerm findTerm manageDefault
@@ -358,6 +367,10 @@ mygridConfig depth = do
        , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
        }
 
+viewCenteredWSGroup :: String -> X()
+viewCenteredWSGroup wid = do
+  viewWSGroup wid
+  viewScreen def 1
 
 makeAction :: Int -> [(String, (KeyMask, KeySym), X())] -> X()
 makeAction depth lst = do
@@ -486,7 +499,6 @@ appAction = makeAction 1
               | (num, key, ws) <- myAllWorkspaces
               ]
 
-
 screenAction = makeAction 1 [
   ("(e)center screen", (0, xK_e), viewScreen def  1)
   , ("(w)left screen", (0, xK_w), viewScreen def 0)
@@ -495,8 +507,19 @@ screenAction = makeAction 1 [
   , ("(p)revious screen", (0, xK_p), prevScreen)
   ]
 
+workscreenAction = makeAction 2 [
+  ("(d)evelop", (0, xK_d), viewCenteredWSGroup "dev")
+  , ("(m)obile develop", (0, xK_m), viewCenteredWSGroup "dev-mobile")
+  , ("(M)eeting", (shiftMask , xK_M), viewCenteredWSGroup "meeting")
+  , ("(w)eb", (0, xK_w), viewCenteredWSGroup "web")
+  , ("(e)nglish study", (0, xK_e), viewCenteredWSGroup "study-english")
+  , ("(t)esting", (0, xK_t), viewCenteredWSGroup "testing")
+  , ("medi(a)", (0, xK_a), viewCenteredWSGroup "media")
+  ]
+
 workspaceAction = makeAction 1 [
-  ("(g)o to workspace", (0, xK_g), gridselectWorkspace wsconfig W.greedyView)
+  ("(RET)workscreen", (0, xK_semicolon), workscreenAction)
+  , ("(g)o to workspace", (0, xK_g), gridselectWorkspace wsconfig W.greedyView)
   , ("(b)ring workspace", (0, xK_b), gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
   ]
 
@@ -690,7 +713,7 @@ myAdditionalKeys  =
 
     -- Emacs (CTRL-e followed by a key)
     -- , ("C-e e", spawn myEmacs)                 -- start emacs
-  
+
     -- Multimedia Keys
   , ("<XF86AudioPlay>", spawn (myTerminal ++ "mocp --play"))
   , ("<XF86AudioPrev>", spawn (myTerminal ++ "mocp --previous"))
