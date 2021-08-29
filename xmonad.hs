@@ -148,7 +148,7 @@ myStartupHook = do
     spawnOnce "(sleep 5 && copyq) &"
     spawnOnce "emacs --name emacs-main"
     spawnOnce "(sleep 10 && whatsapp-nativefier)"
-    setWMName "LG3D"
+    -- setWMName "LG3D"
     viewCenteredWSGroup "dev"
 
 myScratchPads :: [NamedScratchpad]
@@ -493,6 +493,7 @@ hotkeyAction = makeAction 0
                 , ("(w)orkspace", (0, xK_w), workspaceAction)
                 , ("(e)macs", (0, xK_e), emacsAction)
                 , ("s(c)ratch pads", (0, xK_c), scratchPadAction)
+                , ("(q)kill", (0, xK_q), kill)
                 ] ++ [
                 ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView $ num++":"++ws)
                 | (num, key, ws) <- myAllWorkspaces
@@ -606,7 +607,7 @@ myAdditionalKeys  =
   , ("M-C-q", io exitSuccess)              -- Quits xmonad
   , ("C-<Space>", hotkeyAction)
 
-  , ("C-q", kill)     -- Kill the currently focused client
+  -- , ("C-q", kill)     -- Kill the currently focused client
   , ("M-S-a", killAll)   -- Kill all windows on current workspace
 
   , ("M-C-h", sendMessage Shrink)                -- Shrink horiz window width
@@ -621,10 +622,10 @@ myAdditionalKeys  =
   , ("C-M1-l", incScreenSpacing 4)         -- Increase screen spacing
 
     -- Increase/decrease windows in the master pane or the stack
-  , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
-  , ("M-S-<Down>", sendMessage (IncMasterN (-1))) -- Decrease # of clients master pane
-  , ("M-C-<Up>", increaseLimit)                   -- Increase # of windows
-  , ("M-C-<Down>", decreaseLimit)                 -- Decrease # of windows
+  -- , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
+  -- , ("M-S-<Down>", sendMessage (IncMasterN (-1))) -- Decrease # of clients master pane
+  -- , ("M-C-<Up>", increaseLimit)                   -- Increase # of windows
+  -- , ("M-C-<Down>", decreaseLimit)                 -- Decrease # of windows
 
 
     -- Sublayouts
@@ -638,9 +639,9 @@ myAdditionalKeys  =
     -- Toggle show/hide these programs.  They run on a hidden workspace.
     -- When you toggle them to show, it brings them to your current workspace.
     -- Toggle them to hide and it sends them back to hidden workspace (NSP).
-  , ("C-s t", namedScratchpadAction myScratchPads "terminal")
-  , ("C-s m", namedScratchpadAction myScratchPads "mocp")
-  , ("C-s c", namedScratchpadAction myScratchPads "calculator")
+  -- , ("C-s t", namedScratchpadAction myScratchPads "terminal")
+  -- , ("C-s m", namedScratchpadAction myScratchPads "mocp")
+  -- , ("C-s c", namedScratchpadAction myScratchPads "calculator")
 
     -- Set wallpaper with 'feh'. Type 'SUPER+F1' to launch sxiv in the wallpapers directory.
     -- Then in sxiv, type 'C-x w' to set the wallpaper that you choose.
