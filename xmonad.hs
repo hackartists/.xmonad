@@ -493,7 +493,9 @@ hotkeyAction = makeAction 0
                 , ("(w)orkspace", (0, xK_w), workspaceAction)
                 , ("(e)macs", (0, xK_e), emacsAction)
                 , ("s(c)ratch pads", (0, xK_c), scratchPadAction)
-                , ("(q)kill", (0, xK_q), kill)
+                , ("(Q)logout", (shiftMask , xK_Q), io exitSuccess)
+                , ("(R)estart xmonad", (shiftMask, xK_R), spawn "xmonad --restart")
+                , ("(K)ill all wapps", (shiftMask, xK_K), killAll)
                 ] ++ [
                 ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView $ num++":"++ws)
                 | (num, key, ws) <- myAllWorkspaces
@@ -603,12 +605,11 @@ toggleFloat w = windows (\s -> if M.member w (W.floating s)
 myAdditionalKeys :: [(String, X ())]
 myAdditionalKeys  =
   [ -- ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
-    ("M-C-r", spawn "xmonad --restart")    -- Restarts xmonad
-  , ("M-C-q", io exitSuccess)              -- Quits xmonad
+    ("M-C-q", kill)              -- Quits xmonad
   , ("C-<Space>", hotkeyAction)
 
   -- , ("C-q", kill)     -- Kill the currently focused client
-  , ("M-S-a", killAll)   -- Kill all windows on current workspace
+  -- , ("M-S-a", killAll)   -- Kill all windows on current workspace
 
   , ("M-C-h", sendMessage Shrink)                -- Shrink horiz window width
   , ("M-C-l", sendMessage Expand)                -- Expand horiz window width
@@ -644,10 +645,10 @@ myAdditionalKeys  =
   -- , ("C-s c", namedScratchpadAction myScratchPads "calculator")
 
     -- Set wallpaper with 'feh'. Type 'SUPER+F1' to launch sxiv in the wallpapers directory.
-    -- Then in sxiv, type 'C-x w' to set the wallpaper that you choose.
-  , ("M-<F1>", spawn "sxiv -r -q -t -o ~/wallpapers/*")
-  , ("M-<F2>", spawn "/bin/ls ~/wallpapers | shuf -n 1 | xargs xwallpaper --stretch")
-    --, ("M-<F2>", spawn "feh --randomize --bg-fill ~/wallpapers/*")
+  -- Then in sxiv, type 'C-x w' to set the wallpaper that you choose.
+  -- , ("M-<F1>", spawn "sxiv -r -q -t -o ~/wallpapers/*")
+  -- , ("M-<F2>", spawn "/bin/ls ~/wallpapers | shuf -n 1 | xargs xwallpaper --stretch")
+  --, ("M-<F2>", spawn "feh --randomize --bg-fill ~/wallpapers/*")
 
     -- Emacs (CTRL-e followed by a key)
     -- , ("C-e e", spawn myEmacs)                 -- start emacs
