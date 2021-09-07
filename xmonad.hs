@@ -137,6 +137,7 @@ myStartupHook = do
     spawnOnce "google-chrome-beta &"
     spawnOnce "sudo rmmod pcspkr"
     spawnOnce "yakyak &"
+    spawnOnce "zoom &"
     spawnOnce "slack &"
     -- spawnOnce "NO_AT_BRIDGE=1 evolution &"
     spawnOnce "/opt/appimages/stoplight-studio.AppImage &"
