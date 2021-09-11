@@ -111,13 +111,20 @@ windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace
 
 myStartupHook :: X ()
 myStartupHook = do
-    addRawWSGroup "dev" [(S 0, "2:web"), (S 1, "1:emacs"), (S 2, "6:messenger")]
-    addRawWSGroup "dev-mobile" [(S 0, "2:web"), (S 1, "1:emacs"), (S 2, "3:mobile")]
-    addRawWSGroup "meeting" [(S 0, "1:emacs"), (S 1, "7:meeting"), (S 2, "6:messenger")]
-    addRawWSGroup "web" [(S 0, "1:emacs"), (S 1, "2:web"), (S 2, "6:messenger")]
-    addRawWSGroup "study-english" [(S 0, "1:emacs"), (S 1, "5:study"), (S 2, "2:web")]
-    addRawWSGroup "testing" [(S 0, "1:emacs"), (S 1, "4:testing"), (S 2, "2:web")]
-    addRawWSGroup "media" [(S 0, "1:emacs"), (S 1, "8:media"), (S 2, "2:web")]
+    addRawWSGroup "dev"            [(S 1, "1:emacs"), (S 0, "2:web"), (S 2, "6:messenger")]
+    addRawWSGroup "dev-mobile"     [(S 1, "1:emacs"), (S 0, "2:web"), (S 2, "3:mobile")]
+    addRawWSGroup "study-homework" [(S 1, "1:emacs"), (S 0, "2:web"), (S 2, "5:study")]
+
+    addRawWSGroup "web"            [(S 1, "2:web"), (S 0, "1:emacs"), (S 2, "6:messenger")]
+
+    addRawWSGroup "testing"        [(S 1, "4:testing"), (S 0, "1:emacs"), (S 2, "2:web")]
+
+    addRawWSGroup "study-english"  [(S 1, "5:study"), (S 0, "1:emacs"), (S 2, "2:web")]
+
+    addRawWSGroup "meeting"        [(S 1, "7:meeting"), (S 0, "1:emacs"), (S 2, "6:messenger")]
+
+    addRawWSGroup "media"          [(S 1, "8:media"), (S 0, "1:emacs"), (S 2, "2:web")]
+
     spawnOnce "lxsession &"
     spawn "xrdb ~/.Xresources && xrdb -merge ~/.Xresources"
     -- spawnOnce  "setxkbmap dvorak"
@@ -451,6 +458,7 @@ workscreenAction = makeAction 2 [
   , ("(M)eeting", (shiftMask , xK_M), viewCenteredWSGroup "meeting")
   , ("(w)eb", (0, xK_w), viewCenteredWSGroup "web")
   , ("(e)nglish study", (0, xK_e), viewCenteredWSGroup "study-english")
+  , ("english (h)omework", (0, xK_h), viewCenteredWSGroup "study-homework")
   , ("(t)esting", (0, xK_t), viewCenteredWSGroup "testing")
   , ("medi(a)", (0, xK_a), viewCenteredWSGroup "media")
   ]
