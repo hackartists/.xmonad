@@ -114,6 +114,7 @@ myStartupHook = do
     addRawWSGroup "dev"            [(S 1, "1:emacs"), (S 0, "2:web"), (S 2, "6:messenger")]
     addRawWSGroup "dev-mobile"     [(S 1, "1:emacs"), (S 0, "2:web"), (S 2, "3:mobile")]
     addRawWSGroup "study-homework" [(S 1, "1:emacs"), (S 0, "2:web"), (S 2, "5:study")]
+    addRawWSGroup "meeting-dev"    [(S 1, "1:emacs"), (S 0, "7:meeting"), (S 2, "6:messenger")]
 
     addRawWSGroup "web"            [(S 1, "2:web"), (S 0, "1:emacs"), (S 2, "6:messenger")]
 
@@ -456,6 +457,7 @@ workscreenAction = makeAction 2 [
   ("(d)evelop", (0, xK_d), viewCenteredWSGroup "dev")
   , ("(m)obile develop", (0, xK_m), viewCenteredWSGroup "dev-mobile")
   , ("(M)eeting", (shiftMask , xK_M), viewCenteredWSGroup "meeting")
+  , ("(D)eeting with develop", (shiftMask , xK_D), viewCenteredWSGroup "meeting-dev")
   , ("(w)eb", (0, xK_w), viewCenteredWSGroup "web")
   , ("(e)nglish study", (0, xK_e), viewCenteredWSGroup "study-english")
   , ("english (h)omework", (0, xK_h), viewCenteredWSGroup "study-homework")
