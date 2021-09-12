@@ -460,7 +460,7 @@ workscreenAction = makeAction 2 [
   , ("(D)eeting with develop", (shiftMask , xK_D), viewCenteredWSGroup "meeting-dev")
   , ("(w)eb", (0, xK_w), viewCenteredWSGroup "web")
   , ("(e)nglish study", (0, xK_e), viewCenteredWSGroup "study-english")
-  , ("english (h)omework", (0, xK_h), viewCenteredWSGroup "study-homework")
+  , ("english (H)omework", (shiftMask , xK_H), viewCenteredWSGroup "study-homework")
   , ("(t)esting", (0, xK_t), viewCenteredWSGroup "testing")
   , ("medi(a)", (0, xK_a), viewCenteredWSGroup "media")
   ]
