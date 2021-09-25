@@ -98,33 +98,37 @@ myEmacs :: String
 myEmacs = "emacsclient -c -a 'emacs' "  -- Makes emacs keybindings easier to type
 
 myBorderWidth :: Dimension
-myBorderWidth = 2           -- Sets border width for windows
+myBorderWidth = 0           -- Sets border width for windows
 
 myNormColor :: String
 myNormColor   = "#282c34"   -- Border color of normal windows
 
 myFocusColor :: String
-myFocusColor  = "#46d9ff"   -- Border color of focused windows
+myFocusColor  = "#ff0000" -- "#46d9ff"   -- Border color of focused windows
 
 windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
+addCustomWSGroup :: WSGroupId -> WorkspaceId -> WorkspaceId  -> WorkspaceId -> X()
+addCustomWSGroup n s1 s0 s2 = addRawWSGroup n [(S 0, s0), (S 2, s2), (S 1, s1)]
+
 myStartupHook :: X ()
 myStartupHook = do
-    addRawWSGroup "dev"            [(S 1, "1:emacs"), (S 0, "2:web"), (S 2, "6:messenger")]
-    addRawWSGroup "dev-mobile"     [(S 1, "1:emacs"), (S 0, "2:web"), (S 2, "3:mobile")]
-    addRawWSGroup "study-homework" [(S 1, "1:emacs"), (S 0, "2:web"), (S 2, "5:study")]
-    addRawWSGroup "meeting-dev"    [(S 1, "1:emacs"), (S 0, "7:meeting"), (S 2, "6:messenger")]
+    addCustomWSGroup "devb" "1:emacs" "2:web"      "6:messenger"
+    addCustomWSGroup "devf" "1:emacs" "2:web"      "3:debugging"
+    addCustomWSGroup "stdh" "1:emacs" "2:web"      "5:study"
+    addCustomWSGroup "mtdv" "1:emacs" "7:meeting"  "6:messenger"
 
-    addRawWSGroup "web"            [(S 1, "2:web"), (S 0, "1:emacs"), (S 2, "6:messenger")]
+    addCustomWSGroup "webd" "2:web" "1:emacs"  "6:messenger"
+    addCustomWSGroup "mtht" "2:web" "7:meeting"  "6:messenger"
 
-    addRawWSGroup "testing"        [(S 1, "4:testing"), (S 0, "1:emacs"), (S 2, "2:web")]
+    addCustomWSGroup "test" "4:testing" "1:emacs" "2:web"
 
-    addRawWSGroup "study-english"  [(S 1, "5:study"), (S 0, "1:emacs"), (S 2, "2:web")]
+    addCustomWSGroup "stde"  "5:study" "1:emacs" "2:web"
 
-    addRawWSGroup "meeting"        [(S 1, "7:meeting"), (S 0, "1:emacs"), (S 2, "6:messenger")]
+    addCustomWSGroup "meet"  "7:meeting" "1:emacs"  "6:messenger"
 
-    addRawWSGroup "media"          [(S 1, "8:media"), (S 0, "1:emacs"), (S 2, "2:web")]
+    addCustomWSGroup "medi"  "2:web" "8:media" "1:emacs"
 
     spawnOnce "lxsession &"
     spawn "xrdb ~/.Xresources && xrdb -merge ~/.Xresources"
@@ -156,7 +160,8 @@ myStartupHook = do
     spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
     spawnOnce "(sleep 5 && copyq) &"
     spawnOnce "emacs --name emacs-main"
-    spawnOnce "(sleep 10 && whatsapp-nativefier)"
+    spawnOnce "whatsapp-for-linux"
+
     -- setWMName "LG3D"
     viewCenteredWSGroup "dev"
 
@@ -260,6 +265,7 @@ wideAccordion  = renamed [Replace "wideAccordion"]
 myTabTheme = def { fontName            = myFont
                  , activeColor         = "#46d9ff"
                  , inactiveColor       = "#313846"
+                 -- , activeBorderColor   = "#ff0000"
                  , activeBorderColor   = "#46d9ff"
                  , inactiveBorderColor = "#282c34"
                  , activeTextColor     = "#282c34"
@@ -423,7 +429,8 @@ appSendAction = makeAction 2 [
           nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "NSP"))
 
 appToggleAction = makeAction 2 [
-  ("push a window to (t)ile", (0, xK_t),  withFocused $ windows . W.sink)
+  ("toggle a (f)loating window", (0, xK_f),  withFocused toggleFloat)
+  , ("push a window to (t)ile", (0, xK_t),  withFocused pushTile)
   , ("push all windows to (T)ile", (shiftMask, xK_T), sinkAll)                       -- Push ALL floating windows to tile
   ]
 
@@ -454,15 +461,16 @@ screenAction = makeAction 1 [
   ]
 
 workscreenAction = makeAction 2 [
-  ("(d)evelop", (0, xK_d), viewCenteredWSGroup "dev")
-  , ("(m)obile develop", (0, xK_m), viewCenteredWSGroup "dev-mobile")
-  , ("(M)eeting", (shiftMask , xK_M), viewCenteredWSGroup "meeting")
-  , ("(D)eeting with develop", (shiftMask , xK_D), viewCenteredWSGroup "meeting-dev")
-  , ("(w)eb", (0, xK_w), viewCenteredWSGroup "web")
-  , ("(e)nglish study", (0, xK_e), viewCenteredWSGroup "study-english")
-  , ("english (H)omework", (shiftMask , xK_H), viewCenteredWSGroup "study-homework")
-  , ("(t)esting", (0, xK_t), viewCenteredWSGroup "testing")
-  , ("medi(a)", (0, xK_a), viewCenteredWSGroup "media")
+  ("medi(a)", (0, xK_a), viewCenteredWSGroup "medi")
+  , ("(d)evelop", (0, xK_d), viewCenteredWSGroup "devb")
+  , ("(D)eeting with develop", (shiftMask , xK_D), viewCenteredWSGroup "mtdv")
+  , ("(e)nglish study", (0, xK_e), viewCenteredWSGroup "stde")
+  , ("english (H)omework", (shiftMask , xK_H), viewCenteredWSGroup "stdh")
+  , ("(f)rontend develop", (0, xK_f), viewCenteredWSGroup "devf")
+  , ("(M)eeting", (shiftMask , xK_M), viewCenteredWSGroup "meet")
+  , ("h(o)sted meeting", (0 , xK_o), viewCenteredWSGroup "mtht")
+  , ("(t)esting", (0, xK_t), viewCenteredWSGroup "test")
+  , ("(w)eb", (0, xK_w), viewCenteredWSGroup "webd")
   ]
 
 workspaceAction = makeAction 1 [
@@ -515,7 +523,7 @@ hotkeyAction = makeAction 0
 -- Workspaces
 myAllWorkspaces = [("1",xK_1,"emacs")
                    , ("2",xK_2,"web")
-                   , ("3",xK_3,"mobile")
+                   , ("3",xK_3,"debugging")
                    , ("4",xK_4,"testing")
                    , ("5",xK_5,"study")
                    , ("6",xK_6,"messenger")
@@ -542,10 +550,10 @@ myManageHook = composeAll
      [
        stringProperty "_NET_WM_NAME" =? "emacs-main" --> doShift "1:emacs"
      , className =? "Google-chrome"                --> doShift "2:web"
-     , stringProperty "_NET_WM_NAME" =? "Emulator" --> (doShift "3:mobile" <+> doFloat)
-     , className =? "scrcpy"                       --> (doShift "3:mobile" <+> doFloat)
-     , stringProperty "_NET_WM_NAME" =? "Android Emulator - luffy:5554" --> doShift "3:mobile"
-     , stringProperty "_NET_WM_NAME" =? "Android Emulator - zoro:5556" --> doShift "3:mobile"
+     , stringProperty "_NET_WM_NAME" =? "Emulator" --> (doShift "3:debugging" <+> doFloat)
+     , stringProperty "_NET_WM_NAME" =? "Android Emulator - luffy:5554" --> doShift "3:debugging"
+     , stringProperty "_NET_WM_NAME" =? "Android Emulator - zoro:5556" --> doShift "3:debugging"
+     , className =? "Electron"                     --> doShift "3:debugging"
      , className =? "Stoplight Studio"             --> doShift "4:testing"
      , className =? "Postman"                      --> doShift "4:testing"
      , className =? "zoom"                         --> doShift "5:study"
@@ -553,12 +561,15 @@ myManageHook = composeAll
      , className =? "yakyak"                       --> doShift "6:messenger"
      , stringProperty "_NET_WM_NAME" =? "WhatsApp" --> doShift "6:messenger"
      , className =? "Whatsapp-for-linux"           --> doShift "6:messenger"
+     , className =? "qtwaw"           --> doShift "6:messenger"
      , className =? "Google-chrome-unstable"       --> doShift "7:meeting"
      , className =? "Google-chrome-beta"           --> doShift "7:meeting"
      , className =? "obs"                          --> doShift "8:media"
      , className =? "kdenlive"                     --> doShift "8:media"
+     , className =? "SimpleScreenRecorder"         --> doShift "8:media"
      , className =? "Evolution"                    --> doShift "9:email"
      , stringProperty "_NET_WM_NAME" =? "NoiseTorch" --> doShift "0:misc"
+     , className =? "scrcpy"                       --> (doShift "0:misc" <+> doFloat)
      -- , className =? "Org.gnome.Nautilus"           --> doFloat
      , className =? "Gimp-2.10"                    --> doCenterFloat
      , resource  =? "gpicview"                     --> doCenterFloat
@@ -609,6 +620,7 @@ myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList
   ]
 
 
+pushTile w = windows (\s -> W.sink w s)
 toggleFloat w = windows (\s -> if M.member w (W.floating s)
                             then W.sink w s
                             else W.float w (W.RationalRect (1/3) (1/4) (1/2) (4/5)) s)
