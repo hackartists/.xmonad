@@ -98,7 +98,7 @@ myEmacs :: String
 myEmacs = "emacsclient -c -a 'emacs' "  -- Makes emacs keybindings easier to type
 
 myBorderWidth :: Dimension
-myBorderWidth = 0           -- Sets border width for windows
+myBorderWidth = 2           -- Sets border width for windows
 
 myNormColor :: String
 myNormColor   = "#282c34"   -- Border color of normal windows
@@ -163,7 +163,7 @@ myStartupHook = do
     spawnOnce "whatsapp-for-linux"
 
     -- setWMName "LG3D"
-    viewCenteredWSGroup "dev"
+    viewCenteredWSGroup "devb"
 
 myScratchPads :: [NamedScratchpad]
 myScratchPads = [ NS "terminal" spawnTerm findTerm manageDefault
@@ -570,6 +570,7 @@ myManageHook = composeAll
      , className =? "Evolution"                    --> doShift "9:email"
      , stringProperty "_NET_WM_NAME" =? "NoiseTorch" --> doShift "0:misc"
      , className =? "scrcpy"                       --> (doShift "0:misc" <+> doFloat)
+     , className =? "libreoffice-writer"           --> doShift "0:misc"
      -- , className =? "Org.gnome.Nautilus"           --> doFloat
      , className =? "Gimp-2.10"                    --> doCenterFloat
      , resource  =? "gpicview"                     --> doCenterFloat
