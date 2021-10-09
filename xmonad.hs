@@ -53,6 +53,8 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.BinarySpacePartition as BSP
+import XMonad.Layout.ZoomRow
+
 -- import XMonad.Layout.NoFrillsDecoration
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.ZoomRow
@@ -298,6 +300,7 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange
                                  ||| threeRow
                                  ||| tallAccordion
                                  ||| wideAccordion
+                                 ||| Mirror zoomRow
 
 -- workspace grid config
 wsconfig = def {
@@ -394,6 +397,7 @@ layoutAction = makeAction 1
                     , ("ta(b)s",(0,xK_b),"tabs")
                     , ("t(a)llAccordion",(0,xK_a),"tallAccordion")
                     , ("(w)ideAccordion",(0,xK_w),"wideAccordion")
+                    , ("(z)oomRow",(0,xK_z),"zoomRow")
                     ]
                 ]
 
@@ -573,6 +577,7 @@ myManageHook = composeAll
      , stringProperty "_NET_WM_NAME" =? "NoiseTorch" --> doShift "0:misc"
      , className =? "scrcpy"                       --> (doShift "0:misc" <+> doFloat)
      , className =? "libreoffice-writer"           --> doShift "0:misc"
+     , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)
      -- , className =? "Org.gnome.Nautilus"           --> doFloat
      , className =? "Gimp-2.10"                    --> doCenterFloat
      , resource  =? "gpicview"                     --> doCenterFloat
@@ -609,6 +614,14 @@ myKeys conf@XConfig {XMonad.modMask = modMask} = M.fromList
     -- Increment the number of windows in the master area. , ((modMask, xK_comma), sendMessage (IncMasterN 1))
     -- Decrement the number of windows in the master area.
     ((modMask, xK_period), sendMessage (IncMasterN (-1)))
+  -- Increase the size occupied by the focused window
+    , ((modMask, xK_equal), sendMessage zoomIn)
+  -- Decrease the size occupied by the focused window
+    , ((modMask, xK_minus), sendMessage zoomOut)
+  -- Reset the size occupied by the focused window
+    , ((modMask, xK_0), sendMessage zoomReset)
+  -- (Un)Maximize the focused window
+    -- , ((modMask             , xK_f    ), sendMessage ToggleZoomFull)
   ]
 
 -- Mouse bindings
