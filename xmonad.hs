@@ -165,6 +165,7 @@ myStartupHook = do
     spawnOnce "whatsapp-nativefier"
     -- spawnOnce "whatsapp-for-linux"
     spawnOnce "gromit-mpx"
+    spawnOnce "autokey-gtk"
 
     -- setWMName "LG3D"
     viewCenteredWSGroup "devb"
