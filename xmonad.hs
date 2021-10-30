@@ -171,6 +171,7 @@ myStartupHook = do
     spawnOnce "autokey-gtk"
     spawnOnce "discord"
     spawnOnce "sudo virsh net-start default"
+    spawnOnce "remmina"
 
     -- setWMName "LG3D"
     viewCenteredWSGroup "devb"
