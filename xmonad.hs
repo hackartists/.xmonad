@@ -590,6 +590,7 @@ myManageHook = composeAll
      , className =? "libreoffice-writer"           --> doShift "0:misc"
      , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)
      , className =? "VirtualBox Manager"           --> doShift "0:misc"
+     , className =? "PulseUI"                      --> doShift "0:misc"
      , className =? "Virt-manager"                 --> (doShift "0:misc" <+> doFloat)
      -- , className =? "Org.gnome.Nautilus"           --> doFloat
      , className =? "Gimp-2.10"                    --> doCenterFloat
@@ -615,8 +616,6 @@ myManageHook = composeAll
      , className =? "brave-browser"   --> doShift ( myWorkspaces !! 1 )
      , className =? "qutebrowser"     --> doShift ( myWorkspaces !! 1 )
      , className =? "mpv"             --> doShift ( myWorkspaces !! 7 )
-     , className =? "Gimp"            --> doShift ( myWorkspaces !! 8 )
-     , className =? "VirtualBox Manager" --> doShift  ( myWorkspaces !! 4 )
      , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
      , isFullscreen -->  doFullFloat
      ] <+> namedScratchpadManageHook myScratchPads
