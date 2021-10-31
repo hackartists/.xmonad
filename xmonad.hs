@@ -85,6 +85,9 @@ import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
+import XMonad.Prompt
+import XMonad.Prompt.Window 
+import qualified XMonad.Prompt.Window as W
 
 myFont :: String
 myFont  = "xft:NanumGothic:size=9:regular:antialias=true:hinting=true"
@@ -459,6 +462,7 @@ appAction = makeAction 1
               , ("(f)avorite apps", (0, xK_f), appFavoriteAction)
               , ("(g)o to a window", (0, xK_g), goToSelected $ mygridConfig 2)
               , ("(b)ring a window", (0, xK_b), bringSelected $ mygridConfig 2)
+              , ("(SPC)bring to master", (0, xK_space), windowPrompt def {autoComplete = Just 500000} Bring wsWindows)
               ] ++ [
               ("send a window to ("++num++"):"++ws, (0,key), windows $ W.shift $ num++":"++ws)
               | (num, key, ws) <- myAllWorkspaces
@@ -674,6 +678,7 @@ myAdditionalKeys  =
   , ("C-M1-k", incWindowSpacing 4)         -- Increase window spacing
   , ("C-M1-h", decScreenSpacing 4)         -- Decrease screen spacing
   , ("C-M1-l", incScreenSpacing 4)         -- Increase screen spacing
+  , ("M-<Space>", windowPrompt def {autoComplete = Just 500000} Bring wsWindows)
 
     -- Increase/decrease windows in the master pane or the stack
   -- , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
