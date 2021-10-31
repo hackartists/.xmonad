@@ -57,7 +57,6 @@ import XMonad.Layout.ZoomRow
 
 -- import XMonad.Layout.NoFrillsDecoration
 import XMonad.Layout.WindowNavigation
-import XMonad.Layout.ZoomRow
 import XMonad.Layout.LayoutCombinators
 import XMonad.Layout.LayoutHints
 import XMonad.Actions.DynamicWorkspaceGroups
@@ -501,14 +500,13 @@ emacsAction = makeAction 1 [
   , ("rss (f)eed", (0, xK_f), spawn (myEmacs ++ "--eval '(elfeed)'"))    -- elfeed rss
   , ("es(h)ell", (0, xK_h), spawn (myEmacs ++ "--eval '(eshell)'"))    -- eshell
   , ("m(a)stodon", (0, xK_a), spawn (myEmacs ++ "--eval '(mastodon)'"))  -- mastodon.el
-  , ("(v)term", (0, xK_v), spawn (myEmacs ++ ("--eval '(vterm nil)'"))) -- vterm if on GNU Emacs
+  , ("(v)term", (0, xK_v), spawn (myEmacs ++ "--eval '(vterm nil)'")) -- vterm if on GNU Emacs
   -- emms is an emacs audio player. I set it to auto start playing in a specific directory.
   , ("e(M)ms", (shiftMask, xK_M), spawn (myEmacs ++ "--eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/Non-Classical/70s-80s/\")'"))
 
   ]
 
-scratchPadAction = makeAction 0
-               $ [
+scratchPadAction = makeAction 0 [
                 ("(t)erminal",(0, xK_t), namedScratchpadAction myScratchPads "terminal")
                 , ("(e)macs", (0, xK_e), namedScratchpadAction myScratchPads "emacs")
                 ]
@@ -593,6 +591,7 @@ myManageHook = composeAll
      , className =? "PulseUI"                      --> doShift "0:misc"
      , className =? "org.remmina.Remmina"          --> doShift "0:misc"
      , className =? "Virt-manager"                 --> (doShift "0:misc" <+> doFloat)
+     , title =? "Oracle VM VirtualBox Manager"     --> (doShift "0:misc" <+> doFloat)
      -- , className =? "Org.gnome.Nautilus"           --> doFloat
      , className =? "Gimp-2.10"                    --> doCenterFloat
      , resource  =? "gpicview"                     --> doCenterFloat
@@ -601,7 +600,6 @@ myManageHook = composeAll
      , className =? "systemsettings"               --> doCenterFloat
      , resource  =? "desktop_window"               --> doIgnore
      , className =? "stalonetray"                  --> doIgnore
-     , isFullscreen                                --> (doF W.focusDown <+> doFullFloat)
      , className =? "confirm"         --> doFloat
      , className =? "file_progress"   --> doFloat
      , className =? "dialog"          --> doFloat
@@ -612,13 +610,13 @@ myManageHook = composeAll
      , className =? "pinentry-gtk-2"  --> doFloat
      , className =? "splash"          --> doFloat
      , className =? "toolbar"         --> doFloat
-     , title =? "Oracle VM VirtualBox Manager"  --> doFloat
      , title =? "Mozilla Firefox"     --> doShift ( myWorkspaces !! 1 )
      , className =? "brave-browser"   --> doShift ( myWorkspaces !! 1 )
      , className =? "qutebrowser"     --> doShift ( myWorkspaces !! 1 )
      , className =? "mpv"             --> doShift ( myWorkspaces !! 7 )
      , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
-     , isFullscreen -->  doFullFloat
+     -- , isFullscreen                                --> (doF W.focusDown <+> doFullFloat)
+     -- , isFullscreen -->  doFullFloat
      ] <+> namedScratchpadManageHook myScratchPads
 
 myKeys conf@XConfig {XMonad.modMask = modMask} = M.fromList
@@ -649,7 +647,10 @@ myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList
   ]
 
 
-pushTile w = windows (\s -> W.sink w s)
+pushTile w = do
+  windows (W.float w (W.RationalRect 1 1 1 1))
+  windows (W.sink w)
+
 toggleFloat w = windows (\s -> if M.member w (W.floating s)
                             then W.sink w s
                             else W.float w (W.RationalRect (1/3) (1/4) (1/2) (4/5)) s)
