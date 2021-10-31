@@ -591,6 +591,7 @@ myManageHook = composeAll
      , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)
      , className =? "VirtualBox Manager"           --> doShift "0:misc"
      , className =? "PulseUI"                      --> doShift "0:misc"
+     , className =? "org.remmina.Remmina"          --> doShift "0:misc"
      , className =? "Virt-manager"                 --> (doShift "0:misc" <+> doFloat)
      -- , className =? "Org.gnome.Nautilus"           --> doFloat
      , className =? "Gimp-2.10"                    --> doCenterFloat
