@@ -54,6 +54,7 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.BinarySpacePartition as BSP
 import XMonad.Layout.ZoomRow
+import XMonad.Layout.Master
 
 -- import XMonad.Layout.NoFrillsDecoration
 import XMonad.Layout.WindowNavigation
@@ -223,6 +224,7 @@ tall     = renamed [Replace "tall"]
            -- $ subLayout [] (smartBorders Simplest)
            $ limitWindows 12
            $ mySpacing 0
+           -- $ mastered (3/100) (1/2)
            $ ResizableTall 1 (3/100) (1/2) []
 magnify  = renamed [Replace "magnify"]
            $ smartBorders
@@ -451,8 +453,15 @@ appToggleAction = makeAction 2 [
   , ("push all windows to (T)ile", (shiftMask, xK_T), sinkAll)                       -- Push ALL floating windows to tile
   ]
 
-appConfig = def {
-  autoComplete = Just 500000
+appConfig:: XMonad.Prompt.XPConfig
+appConfig = XMonad.Prompt.def  {
+  -- autoComplete = Just 500000
+  font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
+  , position = Top 
+  , height = 50
+  , maxComplRows = Just 10
+  , alwaysHighlight = True
+  -- , complCaseSensitivity  = CaseInsensitive
   }
 
 toMaster w = do
