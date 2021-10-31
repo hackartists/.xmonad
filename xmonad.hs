@@ -70,6 +70,7 @@ import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
 import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Named
+import XMonad.Util.NamedWindows
 import XMonad.Layout.Renamed
 import XMonad.Layout.ShowWName
 import XMonad.Layout.Simplest
@@ -88,6 +89,7 @@ import XMonad.Util.SpawnOnce
 import XMonad.Prompt
 import XMonad.Prompt.Window 
 import qualified XMonad.Prompt.Window as W
+import Data.HashMap.Strict (toList)
 
 myFont :: String
 myFont  = "xft:NanumGothic:size=9:regular:antialias=true:hinting=true"
@@ -449,6 +451,24 @@ appToggleAction = makeAction 2 [
   , ("push all windows to (T)ile", (shiftMask, xK_T), sinkAll)                       -- Push ALL floating windows to tile
   ]
 
+appConfig = def {
+  autoComplete = Just 500000
+  }
+
+toMaster w = do
+  XMonad.focus  w
+  windows W.swapMaster
+
+-- wsWindowsList :: [(String, (KeyMask, KeySym), X())]
+-- wsWindowsList = wsWindows >>= pair
+--   where
+--     pair wm = [
+--       (n, (0,xK_grave), toMaster w)
+--       | (n,w) <- wm
+--       ]
+
+-- wsMasterCandidateAction = makeAction 2 wsWindowsList
+
 appAction = makeAction 1
             $ [
               ("refresh", (0,xK_semicolon), refresh)
@@ -462,7 +482,7 @@ appAction = makeAction 1
               , ("(f)avorite apps", (0, xK_f), appFavoriteAction)
               , ("(g)o to a window", (0, xK_g), goToSelected $ mygridConfig 2)
               , ("(b)ring a window", (0, xK_b), bringSelected $ mygridConfig 2)
-              , ("(SPC)bring to master", (0, xK_space), windowPrompt def {autoComplete = Just 500000} Bring wsWindows)
+              , ("(SPC)bring to master", (0, xK_space), windowPrompt appConfig BringToMaster wsWindows)
               ] ++ [
               ("send a window to ("++num++"):"++ws, (0,key), windows $ W.shift $ num++":"++ws)
               | (num, key, ws) <- myAllWorkspaces
@@ -678,7 +698,6 @@ myAdditionalKeys  =
   , ("C-M1-k", incWindowSpacing 4)         -- Increase window spacing
   , ("C-M1-h", decScreenSpacing 4)         -- Decrease screen spacing
   , ("C-M1-l", incScreenSpacing 4)         -- Increase screen spacing
-  , ("M-<Space>", windowPrompt def {autoComplete = Just 500000} Bring wsWindows)
 
     -- Increase/decrease windows in the master pane or the stack
   -- , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
