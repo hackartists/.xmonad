@@ -626,6 +626,7 @@ myManageHook = composeAll
      , className =? "org.remmina.Remmina"          --> doShift "0:misc"
      , className =? "Virt-manager"                 --> (doShift "0:misc" <+> doFloat)
      , title =? "Oracle VM VirtualBox Manager"     --> (doShift "0:misc" <+> doFloat)
+     , className =? "org.remmina.Remmina"          --> doShift "0:misc"
      -- , className =? "Org.gnome.Nautilus"           --> doFloat
      , className =? "Gimp-2.10"                    --> doCenterFloat
      , resource  =? "gpicview"                     --> doCenterFloat
