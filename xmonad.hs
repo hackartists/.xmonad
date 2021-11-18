@@ -55,6 +55,7 @@ import XMonad.Layout.ThreeColumns
 import XMonad.Layout.BinarySpacePartition as BSP
 import XMonad.Layout.ZoomRow
 import XMonad.Layout.Master
+import XMonad.Layout.PerWorkspace
 
 -- import XMonad.Layout.NoFrillsDecoration
 import XMonad.Layout.WindowNavigation
@@ -299,8 +300,8 @@ myShowWNameTheme = def
     }
 
 -- The layout hook
-myLayoutHook = avoidStruts $ mouseResize $ windowArrange
-               $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
+myLayoutHook = avoidStruts $ layoutHints $ onWorkspace "6:messenger" (noBorders tabs) $ mouseResize $ windowArrange
+               $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout 
              where
                myDefaultLayout =     withBorder myBorderWidth tall
                                  ||| magnify
