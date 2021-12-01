@@ -178,6 +178,7 @@ myStartupHook = do
     spawnOnce "discord"
     spawnOnce "sudo virsh net-start default"
     spawnOnce "remmina"
+    spawnOnce "sleep 10 && $HOME/.local/customized_start.sh"
 
     -- setWMName "LG3D"
     viewCenteredWSGroup "devb"
