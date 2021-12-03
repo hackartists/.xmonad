@@ -12,7 +12,7 @@ import Control.Monad
 
 -- Actions
 import XMonad.Actions.CopyWindow (kill1)
-import XMonad.Actions.CycleWS (Direction1D(..), moveTo, shiftTo, WSType(..), nextScreen, prevScreen)
+import XMonad.Actions.CycleWS (Direction1D(..), moveTo, shiftTo, WSType(..), nextScreen, prevScreen, nextWS, prevWS)
 import XMonad.Actions.GridSelect
 import XMonad.Actions.MouseResize
 import XMonad.Actions.Promote
@@ -106,7 +106,7 @@ myEmacs :: String
 myEmacs = "emacsclient -c -a 'emacs' "  -- Makes emacs keybindings easier to type
 
 myBorderWidth :: Dimension
-myBorderWidth = 2           -- Sets border width for windows
+myBorderWidth = 0           -- Sets border width for windows
 
 myNormColor :: String
 myNormColor   = "#282c34"   -- Border color of normal windows
@@ -696,6 +696,11 @@ myAdditionalKeys  =
   [ -- ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
     ("M-C-q", kill)              -- Quits xmonad
   , ("C-<Space>", hotkeyAction)
+
+  -- Shortcuts for touchegg configuration
+  , ("C-M-S-n", nextWS)
+  , ("C-M-S-p", prevWS)
+  , ("C-M-S-w", spawn "rofi -show")
 
   -- , ("C-q", kill)     -- Kill the currently focused client
   -- , ("M-S-a", killAll)   -- Kill all windows on current workspace
