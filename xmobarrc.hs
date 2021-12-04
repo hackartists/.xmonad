@@ -1,3 +1,7 @@
+-- import XMonad.Core
+
+-- screenCount :: X Int
+-- screenCount = withDisplay (io.fmap length.getScreenInfo)
 
 Config {
        font = "xft:NanumGothic:size=8:bold:antialias=true"
