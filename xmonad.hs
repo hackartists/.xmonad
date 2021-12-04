@@ -1,6 +1,7 @@
 {-# OPTIONS_GHC -Wno-unused-matches #-}
 {-# LANGUAGE ParallelListComp #-}
 {-# LANGUAGE DataKinds #-}
+{-# OPTIONS_GHC -Wno-deprecations #-}
 import XMonad hiding ( (|||) )
 import XMonad.Config
 -- import System.Directory
@@ -66,7 +67,7 @@ import XMonad.Actions.DynamicWorkspaceGroups
 -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.LimitWindows (limitWindows, increaseLimit, decreaseLimit)
-import XMonad.Layout.Magnifier
+import XMonad.Layout.Magnifier hiding (magnify)
 import XMonad.Layout.MultiToggle (mkToggle, single, EOT(EOT), (??))
 -- import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
@@ -463,7 +464,7 @@ appConfig = XMonad.Prompt.def  {
   , height = 50
   , maxComplRows = Just 10
   , alwaysHighlight = True
-  -- , complCaseSensitivity  = CaseInsensitive
+  , complCaseSensitivity  = CaseInSensitive 
   }
 
 toMaster w = do

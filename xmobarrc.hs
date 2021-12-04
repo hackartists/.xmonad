@@ -1,7 +1,7 @@
 
 Config {
-       font = "xft:NanumGothic:size=11:bold:antialias=true"
-       , additionalFonts = [ "xft:Mononoki Nerd Font:pixelsize=11:antialias=true:hinting=true"
+       font = "xft:NanumGothic:size=8:bold:antialias=true"
+       , additionalFonts = [ "xft:Mononoki Nerd Font:pixelsize=8:antialias=true:hinting=true"
                            , "xft:Font Awesome 5 Free Solid:pixelsize=12"
                            , "xft:Font Awesome 5 Brands:pixelsize=12"
                            ]
