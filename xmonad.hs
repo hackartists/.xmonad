@@ -301,7 +301,7 @@ myShowWNameTheme = def
     }
 
 -- The layout hook
-myLayoutHook = avoidStruts $ layoutHints $ onWorkspace "6:messenger" (noBorders tabs) $ mouseResize $ windowArrange
+myLayoutHook = avoidStruts $ onWorkspace "6:messenger" (noBorders tabs) $ mouseResize $ windowArrange
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout 
              where
                myDefaultLayout =     withBorder myBorderWidth tall
