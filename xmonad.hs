@@ -189,6 +189,7 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageDefault
                 , NS "calculator" spawnCalc findCalc manageCalc
                 , NS "emacs" spawnEmacs findEmacs manageDefault
                 , NS "emacsanywhere" spawnEmacsanywhere findEmacsanywhere manageDefault
+                , NS "ranger" spawnRanger findRanger manageDefault
                 ]
   where
     spawnTerm  = myTerminal ++ " -t scratchpad"
@@ -213,6 +214,8 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageDefault
     findEmacs   = title =? "scratchpad-emacs"
     spawnEmacsanywhere  = "EA_TITLE='scratchpad-ea' ~/.emacs_anywhere/bin/run"
     findEmacsanywhere   = title =? "scratchpad-ea"
+    spawnRanger = "ranger"
+    findRanger = className =? "gnome-terminal-server"
 
 mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
@@ -544,6 +547,7 @@ emacsAction = makeAction 1 [
 scratchPadAction = makeAction 0 [
                 ("(t)erminal",(0, xK_t), namedScratchpadAction myScratchPads "terminal")
                 , ("(e)macs", (0, xK_e), namedScratchpadAction myScratchPads "emacs")
+                , ("(f)ile manager", (0, xK_e), namedScratchpadAction myScratchPads "ranger")
                 ]
 
 hotkeyAction = makeAction 0
@@ -561,6 +565,7 @@ hotkeyAction = makeAction 0
                 , ("(Q)logout", (shiftMask , xK_Q), io exitSuccess)
                 , ("(R)estart xmonad", (shiftMask, xK_R), spawn "xmonad --restart")
                 , ("(K)ill all wapps", (shiftMask, xK_K), killAll)
+                , ("(/)file manager", (0, xK_slash), namedScratchpadAction myScratchPads "ranger")
                 ] ++ [
                 ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView $ num++":"++ws)
                 | (num, key, ws) <- myAllWorkspaces
@@ -710,6 +715,8 @@ myAdditionalKeys  =
   , ("C-M1-h", decScreenSpacing 4)         -- Decrease screen spacing
   , ("C-M1-l", incScreenSpacing 4)         -- Increase screen spacing
 
+  , ("M-<Tab>", windows W.focusDown)
+  , ("M-S-<Tab>", windows W.focusUp)
     -- Increase/decrease windows in the master pane or the stack
   -- , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
   -- , ("M-S-<Down>", sendMessage (IncMasterN (-1))) -- Decrease # of clients master pane
