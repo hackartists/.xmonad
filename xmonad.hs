@@ -93,6 +93,7 @@ import XMonad.Prompt
 import XMonad.Prompt.Window 
 import qualified XMonad.Prompt.Window as W
 import Data.HashMap.Strict (toList)
+import Graphics.X11.Xinerama (getScreenInfo)
 
 myFont :: String
 myFont  = "xft:NanumGothic:size=9:regular:antialias=true:hinting=true"
@@ -107,7 +108,7 @@ myEmacs :: String
 myEmacs = "emacsclient -c -a 'emacs' "  -- Makes emacs keybindings easier to type
 
 myBorderWidth :: Dimension
-myBorderWidth = 0           -- Sets border width for windows
+myBorderWidth = 2           -- Sets border width for windows
 
 myNormColor :: String
 myNormColor   = "#282c34"   -- Border color of normal windows
@@ -625,6 +626,7 @@ myManageHook = composeAll
      , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)
      , className =? "VirtualBox Manager"           --> doShift "0:misc"
      , className =? "PulseUI"                      --> doShift "0:misc"
+     , className =? "Gnome-network-displays"       --> doShift "0:misc"
      , className =? "org.remmina.Remmina"          --> doShift "0:misc"
      , className =? "Virt-manager"                 --> (doShift "0:misc" <+> doFloat)
      , title =? "Oracle VM VirtualBox Manager"     --> (doShift "0:misc" <+> doFloat)
@@ -764,6 +766,9 @@ myAdditionalKeys  =
   ]
   where nonNSP          = WSIs (return (\ws -> W.tag ws /= "NSP"))
         nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "NSP"))
+
+screenCount :: X Int
+screenCount = withDisplay (io.fmap length.getScreenInfo)
 
 main :: IO ()
 main = do
