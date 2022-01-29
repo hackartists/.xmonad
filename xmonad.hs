@@ -154,7 +154,7 @@ myStartupHook = do
     spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
     spawnOnce "trayer --edge top --align center --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 --iconspacing 5"
     spawnOnce "~/.fehbg"
-    spawnOnce "google-chrome"
+    spawnOnce "google-chrome-stable"
     spawnOnce "google-chrome-beta"
     spawnOnce "sudo rmmod pcspkr"
     spawnOnce "yakyak"
