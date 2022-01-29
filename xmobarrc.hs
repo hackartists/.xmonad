@@ -7,7 +7,7 @@ Config {
        , bgColor = "#282c34"
        , fgColor = "#ff6c6b"
        -- , position = Static { xpos = 3840, ypos = 0, width = 3840, height = 30 }
-       , position = Static { xpos = 0, ypos = 0, width = 1920, height = 25 }
+       , position = Static { xpos = 0, ypos = 0, width = 2879, height = 25 }
        -- , position = Static { xpos = 0, ypos = 0, width = 3840, height = 25 }
        , lowerOnStart = True
        , hideOnStart = False
