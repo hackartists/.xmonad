@@ -150,7 +150,7 @@ myStartupHook = do
     -- spawnOnce "/usr/bin/emacs --daemon &"
     spawnOnce "picom"
     spawnOnce "nm-applet"
-    -- spawnOnce "volumeicon &"
+    spawnOnce "volumeicon"
     spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
     spawnOnce "trayer --edge top --align center --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 --iconspacing 5"
     spawnOnce "~/.fehbg"
@@ -180,6 +180,7 @@ myStartupHook = do
     spawnOnce "sudo virsh net-start default"
     spawnOnce "remmina"
     spawnOnce "sleep 10 && $HOME/.local/customized_start.sh"
+    spawnOnce "wine \"/home/hackartist/.wine/drive_c/Program Files (x86)/Kakao/KakaoTalk/KakaoTalk.exe\""
 
     -- setWMName "LG3D"
     viewCenteredWSGroup "devb"
