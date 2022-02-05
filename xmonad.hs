@@ -465,7 +465,7 @@ appConfig = XMonad.Prompt.def  {
   , height = 50
   , maxComplRows = Just 10
   , alwaysHighlight = True
-  , complCaseSensitivity  = CaseInSensitive 
+  -- , complCaseSensitivity  = CaseInSensitive 
   }
 
 toMaster w = do

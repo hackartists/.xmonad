@@ -1,5 +1,23 @@
+-- import Graphics.X11.Xlib as X11
+-- import Graphics.X11.Xinerama as X11
+-- import XMonad.StackSet (screens)
+
+-- -- | Get number of screens
+-- getScreens = do
+--   screens <- do
+--     dpy <- openDisplay ""
+--     rects <- getScreenInfo dpy
+--     closeDisplay dpy
+--     return rects
+--   -- pure $ length screens
+--   totalNumber <- length screens
+--   selectedNumber <- totalNumber `div` 2
+--   screens!!selectedNumber
+
+-- selectedScreen = getScreens
+-- selectedScreen.rect_x
 Config {
-       font = "xft:NanumGothic:size=8:bold:antialias=true"
+       font = "xft:NanumGothic:size=7:bold:antialias=true"
        , additionalFonts = [ "xft:Mononoki Nerd Font:pixelsize=8:antialias=true:hinting=true"
                            , "xft:Font Awesome 5 Free Solid:pixelsize=12"
                            , "xft:Font Awesome 5 Brands:pixelsize=12"
