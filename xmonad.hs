@@ -181,7 +181,7 @@ myStartupHook = do
     spawnOnce "sudo virsh net-start default"
     spawnOnce "remmina"
     spawnOnce "sleep 10 && $HOME/.local/customized_start.sh"
-    spawnOnce "wine \"/home/hackartist/.wine/drive_c/Program Files (x86)/Kakao/KakaoTalk/KakaoTalk.exe\""
+    -- spawnOnce "wine \"/home/hackartist/.wine/drive_c/Program Files (x86)/Kakao/KakaoTalk/KakaoTalk.exe\""
 
     -- setWMName "LG3D"
     viewCenteredWSGroup "devb"
