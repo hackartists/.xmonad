@@ -182,7 +182,7 @@ myStartupHook = do
     spawnOnce "sleep 10 && $HOME/.local/customized_start.sh"
     -- spawnOnce "wine \"/home/hackartist/.wine/drive_c/Program Files (x86)/Kakao/KakaoTalk/KakaoTalk.exe\""
 
-    -- setWMName "LG3D"
+    setWMName "LG3D"
     viewCenteredWSGroup "devb"
 
 myScratchPads :: [NamedScratchpad]
@@ -306,7 +306,8 @@ myShowWNameTheme = def
     }
 
 -- The layout hook
-myLayoutHook = avoidStruts $ onWorkspace "6:messenger" (noBorders tabs) $ mouseResize $ windowArrange
+-- myLayoutHook = avoidStruts $ onWorkspace "6:messenger" (noBorders tabs) $ mouseResize $ windowArrange
+myLayoutHook = avoidStruts $ mouseResize $ windowArrange
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout 
              where
                myDefaultLayout =     withBorder myBorderWidth tall
@@ -549,7 +550,7 @@ emacsAction = makeAction 1 [
 scratchPadAction = makeAction 0 [
                 ("(t)erminal",(0, xK_t), namedScratchpadAction myScratchPads "terminal")
                 , ("(e)macs", (0, xK_e), namedScratchpadAction myScratchPads "emacs")
-                , ("(f)ile manager", (0, xK_e), namedScratchpadAction myScratchPads "ranger")
+                , ("(f)ile manager", (0, xK_f), namedScratchpadAction myScratchPads "ranger")
                 ]
 
 hotkeyAction = makeAction 0
