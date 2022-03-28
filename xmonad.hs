@@ -819,9 +819,9 @@ main = do
                               -- >> hPutStrLn xmproc1 x                          -- xmobar on monitor 2
                               -- >> hPutStrLn xmproc2 x                          -- xmobar on monitor 3
               , ppCurrent = xmobarColor "#ff9999" "" . wrap "[" "]"           -- Current workspace
-              , ppVisible = xmobarColor "#98be65" "" . clickable              -- Visible but not current workspace
-              , ppHidden = xmobarColor "#82AAFF" "" . wrap "*" "" . clickable -- Hidden workspaces
-              , ppHiddenNoWindows = xmobarColor "#c792ea" ""  . clickable     -- Hidden workspaces (no windows)
+              , ppVisible = xmobarColor "#ff9999" "" . clickable              -- Visible but not current workspace
+              , ppHidden = xmobarColor "#c792ea" "" . wrap "" "" . clickable -- Hidden workspaces
+              , ppHiddenNoWindows = xmobarColor "#999999" ""  . clickable     -- Hidden workspaces (no windows)
               , ppTitle = xmobarColor "#b3afc2" "" . shorten 60               -- Title of active window
               , ppSep =  "<fc=#666666> <fn=1>|</fn> </fc>"                    -- Separator character
               , ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"            -- Urgent workspace
