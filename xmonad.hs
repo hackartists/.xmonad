@@ -583,7 +583,7 @@ myAllWorkspaces = [("1",xK_1,"emacs")
                    , ("6",xK_6,"messenger")
                    , ("7",xK_7,"meeting")
                    , ("8",xK_8,"media")
-                   , ("9",xK_9,"email")
+                   , ("9",xK_9,"database")
                    , ("0",xK_0,"misc")
                   ]
 
@@ -602,11 +602,11 @@ myManageHook = composeAll
      -- I'm doing it this way because otherwise I would have to write out the full
      -- name of my workspaces and the names would be very long if using clickable workspaces.
      [
-       stringProperty "_NET_WM_NAME" =? "emacs-main" --> doShift "1:emacs"
+       title =? "emacs-main" --> doShift "1:emacs"
      , className =? "Google-chrome"                --> doShift "2:web"
-     , stringProperty "_NET_WM_NAME" =? "Emulator" --> (doShift "3:debugging" <+> doFloat)
-     , stringProperty "_NET_WM_NAME" =? "Android Emulator - luffy:5554" --> doShift "3:debugging"
-     , stringProperty "_NET_WM_NAME" =? "Android Emulator - zoro:5556" --> doShift "3:debugging"
+     , title =? "Emulator" --> (doShift "3:debugging" <+> doFloat)
+     , title =? "Android Emulator - luffy:5554" --> doShift "3:debugging"
+     , title =? "Android Emulator - zoro:5556" --> doShift "3:debugging"
      , className =? "Electron"                     --> doShift "3:debugging"
      , className =? "Stoplight Studio"             --> doShift "4:testing"
      , className =? "Postman"                      --> doShift "4:testing"
@@ -616,7 +616,7 @@ myManageHook = composeAll
      , className =? "discord"                      --> doShift "6:messenger"
      , className =? "TelegramDesktop"              --> doShift "6:messenger"
      , className =? "yakyak"                       --> doShift "6:messenger"
-     , stringProperty "_NET_WM_NAME" =? "WhatsApp" --> doShift "6:messenger"
+     , title =? "WhatsApp" --> doShift "6:messenger"
      , className =? "Whatsapp-for-linux"           --> doShift "6:messenger"
      , className =? "Gitter"                       --> doShift "6:messenger"
      , className =? "qtwaw"           --> doShift "6:messenger"
@@ -625,8 +625,8 @@ myManageHook = composeAll
      , className =? "obs"                          --> doShift "8:media"
      , className =? "kdenlive"                     --> doShift "8:media"
      , className =? "SimpleScreenRecorder"         --> doShift "8:media"
-     , className =? "Evolution"                    --> doShift "9:email"
-     , stringProperty "_NET_WM_NAME" =? "NoiseTorch" --> doShift "0:misc"
+     , resource =? "mysql-workbench-bin"          --> doShift "9:database"
+     , title =? "NoiseTorch" --> doShift "0:misc"
      , className =? "scrcpy"                       --> (doShift "0:misc" <+> doFloat)
      , className =? "libreoffice-writer"           --> doShift "0:misc"
      , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)
