@@ -430,7 +430,8 @@ appFavoriteAction = makeAction 2 [
                         , ("(e)macsclient", (0, xK_e), "emacsclient -c -a emacs")
                         , ("geany", (0, xK_1), "geany")
                         , ("geary", (0, xK_1), "geary")
-                        , ("(g)imp", (0, xK_g), "gimp")
+                        , ("call(g)rind", (0, xK_g), "kcachegrind")
+                        , ("(g)imp", (0, xK_1), "gimp")
                         , ("(k)denlive", (0, xK_k), "kdenlive")
                         , ("LibreOffice (i)mpress", (0, xK_i), "loimpress")
                         , ("LibreOffice w(r)iter", (0, xK_r), "lowriter")
@@ -608,6 +609,8 @@ myManageHook = composeAll
      , title =? "Android Emulator - luffy:5554" --> doShift "3:debugging"
      , title =? "Android Emulator - zoro:5556" --> doShift "3:debugging"
      , className =? "Electron"                     --> doShift "3:debugging"
+     , className =? "kcachegrind"                  --> doShift "3:debugging"
+     , className =? "Wireshark"                    --> doShift "3:debugging"
      , className =? "Stoplight Studio"             --> doShift "4:testing"
      , className =? "Postman"                      --> doShift "4:testing"
      , className =? "zoom"                         --> doShift "5:study"
