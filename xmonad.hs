@@ -152,7 +152,7 @@ myStartupHook = do
     spawnOnce "nm-applet"
     spawnOnce "volumeicon"
     spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
-    spawnOnce "trayer --edge top --align center --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 --iconspacing 5"
+    spawnOnce "/bin/bash $HOME/.xmonad/tray.sh"
     spawnOnce "~/.fehbg"
     spawnOnce "google-chrome-stable"
     spawnOnce "google-chrome-beta"
@@ -341,7 +341,7 @@ mygridConfig depth = do
         | depth == 1 = buildDefaultGSConfig myColorizer1
         | depth == 2 = buildDefaultGSConfig myColorizer2
         | otherwise = buildDefaultGSConfig myColorizer3
-  conf{ gs_cellwidth    = 350
+  conf{ gs_cellwidth    = 260
        , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
        }
 
@@ -773,11 +773,7 @@ myAdditionalKeys  =
 
 main :: IO ()
 main = do
-    -- Launching three instances of xmobar on their monitors.
-    xmproc0 <- spawnPipe "xmobar -x 0 $HOME/.xmonad/xmobarrc.hs"
-    -- xmproc1 <- spawnPipe "xmobar -x 1 $HOME/.config/xmobar/xmobarrc1"
-    -- xmproc2 <- spawnPipe "xmobar -x 2 $HOME/.config/xmobar/xmobarrc2"
-    -- the xmonad, ya know...what the WM is named after!
+    xmproc0 <- spawnPipe "/bin/bash $HOME/.xmonad/xmobar.sh"
     xmonad
       $ additionalNav2DKeys (xK_k, xK_h, xK_j, xK_l)
                                [
@@ -807,9 +803,7 @@ main = do
         , logHook = dynamicLogWithPP xmobarPP
         -- , logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
               -- the following variables beginning with 'pp' are settings for xmobar.
-              { ppOutput = hPutStrLn xmproc0 -- \x -> hPutStrLn xmproc0 x                          -- xmobar on monitor 1
-                              -- >> hPutStrLn xmproc1 x                          -- xmobar on monitor 2
-                              -- >> hPutStrLn xmproc2 x                          -- xmobar on monitor 3
+              { ppOutput = hPutStrLn xmproc0 
               , ppCurrent = xmobarColor "#ff9999" "" . wrap "[" "]"           -- Current workspace
               , ppVisible = xmobarColor "#ff9999" "" . clickable              -- Visible but not current workspace
               , ppHidden = xmobarColor "#c792ea" "" . wrap "" "" . clickable -- Hidden workspaces

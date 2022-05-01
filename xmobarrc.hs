@@ -1,13 +1,13 @@
 
 Config {
-       font = "xft:NanumGothic:size=11:bold:antialias=true"
-       , additionalFonts = [ "xft:Mononoki Nerd Font:pixelsize=11:antialias=true:hinting=true"
+       -- font = "xft:NanumGothic:size=11:bold:antialias=true"
+       additionalFonts = [ "xft:Mononoki Nerd Font:pixelsize=11:antialias=true:hinting=true"
                            , "xft:Font Awesome 5 Free Solid:pixelsize=12"
                            , "xft:Font Awesome 5 Brands:pixelsize=12"
                            ]
        , bgColor = "#282c34"
        , fgColor = "#ff6c6b"
-       , position = Static { xpos = 3840 , ypos = 0, width = 3839, height = 25 }
+       -- , position = Static { xpos = 3840 , ypos = 0, width = 3839, height = 25 }
        , lowerOnStart = True
        , hideOnStart = False
        , allDesktops = True
