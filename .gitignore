@@ -4,3 +4,12 @@
 /xmonad.o
 /screenshots/
 /dist-newstyle/
+/.env
+/.stack-work/
+/TAGS
+/build-x86_64-linux/
+/libnvidia-allocator.so
+/libnvidia-allocator.so.1
+/prompt-history
+/stack.yaml.lock
+/xmonad.hs.rej
