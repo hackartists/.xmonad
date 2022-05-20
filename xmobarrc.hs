@@ -26,22 +26,13 @@ Config {
 	                "-l", "red"
 	                ] 10
                     , Run Network "eth0" ["-t", "<rx>kb  <fn=2>\xf0aa</fn>  <tx>kb"] 20
-                      -- Cpu usage in percent
                     , Run Cpu ["-t", "<total>%","-H","50","--high","red"] 20
-                      -- Ram used number and percent
                     , Run Memory ["-t", "<used>M"] 20
-                      -- Disk space free
                     , Run DiskU [("/", "<free>")] [] 60
-                      -- Runs custom script to check for pacman updates.
-                      -- This script is in my dotfiles repo in .local/bin.
                     , Run Com "bash" ["-c", "~/.local/bin/pacupdate"] "updates" 3600
                     , Run Com "bash" ["-c", "~/.local/bin/mouselocation"] "mouselocation" 1
-                      -- Runs a standard shell command 'uname -r' to get kernel version
                     , Run Com "uname" ["-r"] "" 3600
-                      -- Script that dynamically adjusts xmobar padding depending on number of trayer icons.
                     , Run Com "~/.config/xmobar/trayer-padding-icon.sh" [] "trayerpad" 20
-                      -- Prints out the left side items such as workspaces, layout, etc.
-                      -- The workspaces are 'clickable' in my configs.
                     , Run Com "gh" ["api", "notifications", "-q", "length"] "" 30
                     , Run Com "bash" ["-c", "~/.xmonad/bin/emacsd.sh"] "emacsd" 36000
                     , Run UnsafeStdinReader
