@@ -434,11 +434,11 @@ appFavoriteAction = makeAction 2 [
                         , ("(g)imp", (0, xK_1), "gimp")
                         , ("(k)denlive", (0, xK_k), "kdenlive")
                         , ("LibreOffice (i)mpress", (0, xK_i), "loimpress")
-                        , ("LibreOffice w(r)iter", (0, xK_r), "lowriter")
+                        , ("(m)ain emacs", (0, xK_m), "emacs --name emacs-main")
                         , ("(o)bs", (0, xK_o), "obs")
                         , ("(p)cmanfm", (0, xK_p), "pcmanfm")
+                        , ("LibreOffice w(r)iter", (0, xK_r), "lowriter")
                         , ("(w)ireshark", (0, xK_w), "sudo wireshark")
-                        , ("(m)ain emacs", (0, xK_m), "emacs --name emacs-main")
                         ]
   ]
 
