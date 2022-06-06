@@ -628,6 +628,7 @@ myManageHook = composeAll
      , className =? "obs"                          --> doShift "8:media"
      , className =? "kdenlive"                     --> doShift "8:media"
      , className =? "SimpleScreenRecorder"         --> doShift "8:media"
+     , resource =? "MongoDB Compass"   --> doShift "9:database"
      , resource =? "mysql-workbench-bin"          --> doShift "9:database"
      , title =? "NoiseTorch" --> doShift "0:misc"
      , className =? "scrcpy"                       --> (doShift "0:misc" <+> doFloat)
