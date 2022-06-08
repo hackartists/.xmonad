@@ -145,41 +145,42 @@ myStartupHook = do
     spawnOnce "xset r rate 200 30"
     spawnOnce "xset -dpms"
     spawnOnce "setterm -blank 0 -powerdown 0"
+    spawnOnce "setxkbmap -option caps:escape"
     spawnOnce "xset s off"
     spawnOnce "/usr/lib/xfce4/notifyd/xfce4-notifyd"
     -- spawnOnce "/usr/bin/emacs --daemon &"
     spawnOnce "picom"
     spawnOnce "nm-applet"
     spawnOnce "volumeicon"
-    spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
+    -- spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
     spawnOnce "/bin/bash $HOME/.xmonad/tray.sh"
-    spawnOnce "~/.fehbg"
-    spawnOnce "google-chrome-stable"
-    spawnOnce "google-chrome-beta"
+    -- spawnOnce "~/.fehbg"
+    -- spawnOnce "google-chrome-stable"
+    -- spawnOnce "google-chrome-beta"
     spawnOnce "sudo rmmod pcspkr"
-    spawnOnce "yakyak"
-    spawnOnce "zoom"
+    -- spawnOnce "yakyak"
+    -- spawnOnce "zoom"
     spawnOnce "slack"
-    spawnOnce "gitter"
-    spawnOnce "telegram-desktop"
+    -- spawnOnce "gitter"
+    -- spawnOnce "telegram-desktop"
     -- spawnOnce "NO_AT_BRIDGE=1 evolution &"
-    spawnOnce "/opt/appimages/stoplight-studio.AppImage &"
+    -- spawnOnce "/opt/appimages/stoplight-studio.AppImage &"
     spawnOnce "/opt/notifier/bin/notifier.AppImage &"
     spawnOnce "albert &"
     -- spawnOnce "export XMODIFIERS=@im=ibus"
     -- spawnOnce "export GTK_IM_MODULE=ibus"
     spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
-    spawnOnce "(sleep 5 && copyq) &"
+    spawnOnce "(sleep 5 && copyq)"
     spawnOnce "emacs --name emacs-main"
     spawnOnce "whatsdesk"
     -- spawnOnce "whatsapp-for-linux"
     -- gromit block capturing screen
     -- spawnOnce "gromit-mpx"
-    spawnOnce "autokey-gtk"
-    spawnOnce "discord"
-    spawnOnce "sudo virsh net-start default"
-    spawnOnce "remmina"
-    spawnOnce "sleep 10 && $HOME/.local/customized_start.sh"
+    -- spawnOnce "autokey-gtk"
+    -- spawnOnce "discord"
+    -- spawnOnce "sudo virsh net-start default"
+    -- spawnOnce "remmina"
+    -- spawnOnce "sleep 10 && $HOME/.local/customized_start.sh"
     -- spawnOnce "wine \"/home/hackartist/.wine/drive_c/Program Files (x86)/Kakao/KakaoTalk/KakaoTalk.exe\""
 
     setWMName "LG3D"
@@ -434,11 +435,11 @@ appFavoriteAction = makeAction 2 [
                         , ("(g)imp", (0, xK_1), "gimp")
                         , ("(k)denlive", (0, xK_k), "kdenlive")
                         , ("LibreOffice (i)mpress", (0, xK_i), "loimpress")
-                        , ("(m)ain emacs", (0, xK_m), "emacs --name emacs-main")
+                        , ("LibreOffice w(r)iter", (0, xK_r), "lowriter")
                         , ("(o)bs", (0, xK_o), "obs")
                         , ("(p)cmanfm", (0, xK_p), "pcmanfm")
-                        , ("LibreOffice w(r)iter", (0, xK_r), "lowriter")
                         , ("(w)ireshark", (0, xK_w), "sudo wireshark")
+                        , ("(m)ain emacs", (0, xK_m), "emacs --name emacs-main")
                         ]
   ]
 
@@ -628,7 +629,6 @@ myManageHook = composeAll
      , className =? "obs"                          --> doShift "8:media"
      , className =? "kdenlive"                     --> doShift "8:media"
      , className =? "SimpleScreenRecorder"         --> doShift "8:media"
-     , resource =? "MongoDB Compass"   --> doShift "9:database"
      , resource =? "mysql-workbench-bin"          --> doShift "9:database"
      , title =? "NoiseTorch" --> doShift "0:misc"
      , className =? "scrcpy"                       --> (doShift "0:misc" <+> doFloat)
