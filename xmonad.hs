@@ -152,6 +152,7 @@ myStartupHook = do
     spawnOnce "picom"
     spawnOnce "nm-applet"
     spawnOnce "volumeicon"
+    spawnOnce "blueman-manager"
     -- spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
     spawnOnce "/bin/bash $HOME/.xmonad/tray.sh"
     -- spawnOnce "~/.fehbg"
