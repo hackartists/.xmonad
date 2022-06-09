@@ -632,6 +632,7 @@ myManageHook = composeAll
      , className =? "SimpleScreenRecorder"         --> doShift "8:media"
      , resource =? "mysql-workbench-bin"          --> doShift "9:database"
      , title =? "NoiseTorch" --> doShift "0:misc"
+     , className =? "Blueman-manager"               --> doShift "0:misc"
      , className =? "scrcpy"                       --> (doShift "0:misc" <+> doFloat)
      , className =? "libreoffice-writer"           --> doShift "0:misc"
      , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)
