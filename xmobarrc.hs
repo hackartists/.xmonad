@@ -31,6 +31,7 @@ Config {
                     , Run DiskU [("/", "<free>")] [] 60
                     , Run Com "bash" ["-c", "~/.local/bin/pacupdate"] "updates" 3600
                     , Run Com "bash" ["-c", "~/.local/bin/mouselocation"] "mouselocation" 1
+                    , Run Com "bash" ["-c", "~/.local/bin/volume"] "volume" 1
                     , Run Com "uname" ["-r"] "" 3600
                     , Run Com "~/.config/xmobar/trayer-padding-icon.sh" [] "trayerpad" 20
                     , Run Com "gh" ["api", "notifications", "-q", "length"] "" 30
@@ -39,5 +40,5 @@ Config {
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " <icon=haskell_20.xpm/>   <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#666666>|</fc>   <fc=#c678dd>%mouselocation%</fc> <fc=#666666>|</fc>  <fc=#b3afc2> %battery% </fc> <fc=#666666>|</fc>   <fc=#b3afc2> <action=`xdg-open https://github.com/notifications`>G%gh%</action> </fc> <fc=#666666>|</fc>  <fc=#b3afc2> <action=`alacritty -e htop`>%uname%</action> </fc> <fc=#666666>|</fc>  <fc=#ecbe7b> <action=`alacritty -e htop`>%cpu%</action> </fc> <fc=#666666>|</fc>  <fc=#ff6c6b> <action=`alacritty -e htop`>%memory%</action> </fc> <fc=#666666>|</fc>  <fc=#51afef> <action=`alacritty -e htop`>%disku%</action> </fc> <fc=#666666>|</fc>   <fc=#c678dd> <action=`alacritty -e sudo pacman -Syu`>%updates%</action> </fc> <fc=#666666>|</fc>  <fc=#46d9ff> <action=`emacsclient -n --eval '(cfw:open-org-calendar)'`>%date%</action> </fc><fc=#666666><fn=1>|</fn></fc>"
+       , template = " <icon=haskell_20.xpm/>   <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#c678dd>%mouselocation%</fc> <fc=#b3afc2> %battery% </fc> <fc=#b3afc2> VL%volume% </fc> <fc=#b3afc2> <action=`xdg-open https://github.com/notifications`>G%gh%</action> </fc> <fc=#b3afc2> <action=`alacritty -e htop`>%uname%</action> </fc> <fc=#ecbe7b> <action=`alacritty -e htop`>%cpu%</action> </fc> <fc=#ff6c6b> <action=`alacritty -e htop`>%memory%</action> </fc> <fc=#51afef> <action=`alacritty -e htop`>%disku%</action> </fc> <fc=#c678dd> <action=`alacritty -e sudo pacman -Syu`>%updates%</action> </fc>  <fc=#46d9ff> <action=`emacsclient -n --eval '(cfw:open-org-calendar)'`>%date%</action> </fc><fc=#666666><fn=1>|</fn></fc>"
        }
