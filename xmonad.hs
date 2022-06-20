@@ -156,7 +156,7 @@ myStartupHook = do
     -- spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
     spawnOnce "/bin/bash $HOME/.xmonad/tray.sh"
     -- spawnOnce "~/.fehbg"
-    -- spawnOnce "google-chrome-stable"
+    spawnOnce "google-chrome-stable"
     -- spawnOnce "google-chrome-beta"
     spawnOnce "sudo rmmod pcspkr"
     -- spawnOnce "yakyak"
@@ -193,6 +193,7 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageDefault
                 , NS "calculator" spawnCalc findCalc manageCalc
                 , NS "emacs" spawnEmacs findEmacs manageDefault
                 , NS "emacsanywhere" spawnEmacsanywhere findEmacsanywhere manageDefault
+                , NS "whatsapp" spawnWhatsdesk findWhatsdesk manageDefault
                 , NS "ranger" spawnRanger findRanger manageDefault
                 ]
   where
@@ -217,6 +218,8 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageDefault
     spawnEmacs  = myEmacs ++ " -e '(hackartist/scratch-buffer-only)' -F '((name . \"scratchpad-emacs\"))'"
     findEmacs   = title =? "scratchpad-emacs"
     spawnEmacsanywhere  = "EA_TITLE='scratchpad-ea' ~/.emacs_anywhere/bin/run"
+    spawnWhatsdesk  = "whatsdesk"
+    findWhatsdesk  = title =? "WhatsDesk"
     findEmacsanywhere   = title =? "scratchpad-ea"
     spawnRanger = "ranger"
     findRanger = className =? "gnome-terminal-server"
@@ -343,7 +346,7 @@ mygridConfig depth = do
         | depth == 1 = buildDefaultGSConfig myColorizer1
         | depth == 2 = buildDefaultGSConfig myColorizer2
         | otherwise = buildDefaultGSConfig myColorizer3
-  conf{ gs_cellwidth    = 260
+  conf{ gs_cellwidth    = 200
        , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
        }
 
@@ -553,6 +556,7 @@ emacsAction = makeAction 1 [
 scratchPadAction = makeAction 0 [
                 ("(t)erminal",(0, xK_t), namedScratchpadAction myScratchPads "terminal")
                 , ("(e)macs", (0, xK_e), namedScratchpadAction myScratchPads "emacs")
+                , ("(w)hatsapp", (0, xK_w), namedScratchpadAction myScratchPads "whatsapp")
                 , ("(f)ile manager", (0, xK_f), namedScratchpadAction myScratchPads "ranger")
                 ]
 
