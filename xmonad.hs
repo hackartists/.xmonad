@@ -173,7 +173,8 @@ myStartupHook = do
     spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
     spawnOnce "(sleep 5 && copyq)"
     spawnOnce "emacs --name emacs-main"
-    spawnOnce "whatsdesk"
+    -- spawnOnce "whatsdesk"
+    spawnOnce "pidgin"
     -- spawnOnce "whatsapp-for-linux"
     -- gromit block capturing screen
     -- spawnOnce "gromit-mpx"
