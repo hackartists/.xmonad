@@ -171,6 +171,7 @@ myStartupHook = do
     -- spawnOnce "export XMODIFIERS=@im=ibus"
     -- spawnOnce "export GTK_IM_MODULE=ibus"
     spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
+    -- spawnOnce "nabi"
     spawnOnce "(sleep 5 && copyq)"
     spawnOnce "emacs --name emacs-main"
     -- spawnOnce "whatsdesk"

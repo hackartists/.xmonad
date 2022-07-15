@@ -1,0 +1,4 @@
+h=`GH_TOKEN= gh api notifications -q length`
+b=`GH_TOKEN= gh api notifications -q length`
+
+echo "H$h B$b"
