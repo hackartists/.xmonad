@@ -174,7 +174,7 @@ myStartupHook = do
     -- spawnOnce "nabi"
     spawnOnce "(sleep 5 && copyq)"
     spawnOnce "emacs --name emacs-main"
-    spawnOnce "whatsdesk"
+    spawnOnce "whatsdesk --force-device-scale-factor=2"
     -- spawnOnce "pidgin"
     -- spawnOnce "whatsapp-for-linux"
     -- gromit block capturing screen
