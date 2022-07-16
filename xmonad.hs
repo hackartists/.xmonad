@@ -166,7 +166,7 @@ myStartupHook = do
     -- spawnOnce "telegram-desktop"
     -- spawnOnce "NO_AT_BRIDGE=1 evolution &"
     -- spawnOnce "/opt/appimages/stoplight-studio.AppImage &"
-    -- spawnOnce "/opt/notifier/bin/notifier.AppImage &"
+    spawnOnce "/opt/notifier/bin/notifier.AppImage &"
     spawnOnce "albert &"
     -- spawnOnce "export XMODIFIERS=@im=ibus"
     -- spawnOnce "export GTK_IM_MODULE=ibus"
