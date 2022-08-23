@@ -151,6 +151,7 @@ myStartupHook = do
     -- spawnOnce "/usr/bin/emacs --daemon &"
     spawnOnce "picom"
     spawnOnce "nm-applet"
+    spawnOnce "blueman-applet"
     spawnOnce "volumeicon"
     spawnOnce "blueman-manager"
     -- spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
