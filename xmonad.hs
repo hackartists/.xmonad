@@ -156,6 +156,7 @@ myStartupHook = do
     spawnOnce "blueman-manager"
     -- spawnOnce "conky -c $HOME/.config/conky/xmonad.conkyrc"
     spawnOnce "/bin/bash $HOME/.xmonad/tray.sh"
+    spawnOnce "/bin/bash $HOME/.xmonad/startup.sh"
     -- spawnOnce "~/.fehbg"
     spawnOnce "google-chrome-stable"
     -- spawnOnce "google-chrome-beta"
@@ -589,7 +590,7 @@ myAllWorkspaces = [("1",xK_1,"emacs")
                    , ("2",xK_2,"web")
                    , ("3",xK_3,"debugging")
                    , ("4",xK_4,"testing")
-                   , ("5",xK_5,"study")
+                   , ("5",xK_5,"gamedev")
                    , ("6",xK_6,"messenger")
                    , ("7",xK_7,"meeting")
                    , ("8",xK_8,"media")
@@ -622,7 +623,8 @@ myManageHook = composeAll
      , className =? "Wireshark"                    --> doShift "3:debugging"
      , className =? "Stoplight Studio"             --> doShift "4:testing"
      , className =? "Postman"                      --> doShift "4:testing"
-     , className =? "zoom"                         --> doShift "5:study"
+     , className =? "unityhub"                      --> doShift "5:gamedev"
+     , className =? "zoom"                         --> doShift "6:messenger"
      , className =? "Slack"                        --> doShift "6:messenger"
      , className =? "whatsdesk"                    --> doShift "6:messenger"
      , className =? "discord"                      --> doShift "6:messenger"
@@ -638,6 +640,7 @@ myManageHook = composeAll
      , className =? "kdenlive"                     --> doShift "8:media"
      , className =? "SimpleScreenRecorder"         --> doShift "8:media"
      , resource =? "mysql-workbench-bin"          --> doShift "9:database"
+     , title =? "MongoDB Compass"             --> doShift "9:database"
      , title =? "NoiseTorch" --> doShift "0:misc"
      , className =? "Blueman-manager"               --> doShift "0:misc"
      , className =? "scrcpy"                       --> (doShift "0:misc" <+> doFloat)
