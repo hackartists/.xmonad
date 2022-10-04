@@ -261,9 +261,9 @@ floats   = renamed [Replace "floats"]
 grid     = renamed [Replace "grid"]
            $ smartBorders
            $ addTabs shrinkText myTabTheme
-           $ subLayout [] (smartBorders Simplest)
+           -- $ subLayout [] (smartBorders Simplest)
            $ limitWindows 12
-           $ mySpacing 8
+           $ mySpacing 2
            $ mkToggle (single MIRROR)
            $ Grid (16/10)
 spirals  = renamed [Replace "spirals"]
@@ -319,12 +319,12 @@ myShowWNameTheme = def
 myLayoutHook = avoidStruts $ mouseResize $ windowArrange
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout 
              where
-               myDefaultLayout =     withBorder myBorderWidth tall
+               myDefaultLayout =     withBorder myBorderWidth grid
                                  ||| magnify
                                  ||| noBorders monocle
                                  ||| floats
                                  ||| noBorders tabs
-                                 ||| grid
+                                 ||| tall
                                  ||| spirals
                                  ||| threeCol
                                  ||| threeRow
@@ -422,7 +422,7 @@ layoutAction = makeAction 1
                     , ("(f)loats",(0,xK_f),"floats")
                     , ("(g)rid",(0,xK_g),"grid")
                     , ("(s)pirals",(0,xK_s),"spirals")
-                    , ("three(C)ol",(shiftMask,xK_C),"threeCol")
+                    , ("three(C)ol",(shiftMask,xK_c),"threeCol")
                     , ("three(R)ow",(shiftMask,xK_R),"threeRow")
                     , ("ta(b)s",(0,xK_b),"tabs")
                     , ("t(a)llAccordion",(0,xK_a),"tallAccordion")
