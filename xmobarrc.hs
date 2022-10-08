@@ -33,7 +33,6 @@ Config {
                     , Run Com "bash" ["-c", "~/.local/bin/mouselocation"] "mouselocation" 1
                     , Run Com "bash" ["-c", "~/.local/bin/volume"] "volume" 1
                     , Run Com "uname" ["-r"] "" 3600
-                    , Run Com "~/.config/xmobar/trayer-padding-icon.sh" [] "trayerpad" 20
                     , Run Com "bash" ["-c", "~/.xmonad/gh-notify.sh"] "gh" 30
                     , Run Com "bash" ["-c", "~/.xmonad/bin/emacsd.sh"] "emacsd" 36000
                     , Run UnsafeStdinReader
