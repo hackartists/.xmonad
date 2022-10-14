@@ -408,9 +408,9 @@ layoutAction = makeAction 1
                $ [
                 ("(SPC)toggle full screen", (0, xK_space), sendMessage (MT.Toggle FULL) >> sendMessage ToggleStruts)
                 , ("(TAB)next layout", (0, xK_Tab),  sendMessage NextLayout)
-                , ("(M)erge all windows", (shiftMask, xK_M), withFocused (sendMessage . MergeAll))
+                , ("(M)erge all windows", (shiftMask, xK_m), withFocused (sendMessage . MergeAll))
                 , ("(u)nmerge a window", (0, xK_u), withFocused (sendMessage . UnMerge))
-                , ("(U)nmerge all windows", (shiftMask, xK_U), withFocused (sendMessage . UnMergeAll))
+                , ("(U)nmerge all windows", (shiftMask, xK_u), withFocused (sendMessage . UnMergeAll))
                 , ("(.)focus up", (0, xK_period), onGroup W.focusUp')
                 , ("(,)focus down", (0, xK_comma), onGroup W.focusDown')
                 ] ++ [
@@ -423,7 +423,7 @@ layoutAction = makeAction 1
                     , ("(g)rid",(0,xK_g),"grid")
                     , ("(s)pirals",(0,xK_s),"spirals")
                     , ("three(C)ol",(shiftMask,xK_c),"threeCol")
-                    , ("three(R)ow",(shiftMask,xK_R),"threeRow")
+                    , ("three(R)ow",(shiftMask,xK_r),"threeRow")
                     , ("ta(b)s",(0,xK_b),"tabs")
                     , ("t(a)llAccordion",(0,xK_a),"tallAccordion")
                     , ("(w)ideAccordion",(0,xK_w),"wideAccordion")
@@ -468,7 +468,7 @@ appSendAction = makeAction 2 [
 appToggleAction = makeAction 2 [
   ("toggle a (f)loating window", (0, xK_f),  withFocused toggleFloat)
   , ("push a window to (t)ile", (0, xK_t),  withFocused pushTile)
-  , ("push all windows to (T)ile", (shiftMask, xK_T), sinkAll)                       -- Push ALL floating windows to tile
+  , ("push all windows to (T)ile", (shiftMask, xK_t), sinkAll)                       -- Push ALL floating windows to tile
   ]
 
 appConfig:: XMonad.Prompt.XPConfig
@@ -526,11 +526,11 @@ screenAction = makeAction 1 [
 workscreenAction = makeAction 2 [
   ("medi(a)", (0, xK_a), viewCenteredWSGroup "medi")
   , ("(d)evelop", (0, xK_d), viewCenteredWSGroup "devb")
-  , ("(D)eeting with develop", (shiftMask , xK_D), viewCenteredWSGroup "mtdv")
+  , ("(D)eeting with develop", (shiftMask , xK_d), viewCenteredWSGroup "mtdv")
   , ("(e)nglish study", (0, xK_e), viewCenteredWSGroup "stde")
-  , ("english (H)omework", (shiftMask , xK_H), viewCenteredWSGroup "stdh")
+  , ("english (H)omework", (shiftMask , xK_h), viewCenteredWSGroup "stdh")
   , ("(f)rontend develop", (0, xK_f), viewCenteredWSGroup "devf")
-  , ("(M)eeting", (shiftMask , xK_M), viewCenteredWSGroup "meet")
+  , ("(M)eeting", (shiftMask , xK_m), viewCenteredWSGroup "meet")
   , ("h(o)sted meeting", (0 , xK_o), viewCenteredWSGroup "mtht")
   , ("(t)esting", (0, xK_t), viewCenteredWSGroup "test")
   , ("(w)eb", (0, xK_w), viewCenteredWSGroup "webd")
@@ -553,7 +553,7 @@ emacsAction = makeAction 1 [
   , ("m(a)stodon", (0, xK_a), spawn (myEmacs ++ "--eval '(mastodon)'"))  -- mastodon.el
   , ("(v)term", (0, xK_v), spawn (myEmacs ++ "--eval '(vterm nil)'")) -- vterm if on GNU Emacs
   -- emms is an emacs audio player. I set it to auto start playing in a specific directory.
-  , ("e(M)ms", (shiftMask, xK_M), spawn (myEmacs ++ "--eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/Non-Classical/70s-80s/\")'"))
+  , ("e(M)ms", (shiftMask, xK_m), spawn (myEmacs ++ "--eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/Non-Classical/70s-80s/\")'"))
 
   ]
 
@@ -570,15 +570,15 @@ hotkeyAction = makeAction 0
                 , ("(a)pplication window", (0, xK_a), appAction)
                 , ("(s)creen", (0, xK_s), screenAction)
                 , ("la(y)out", (0, xK_y), layoutAction)
-                , ("(SPC)show windows", (0, xK_space), spawn "rofi -show window")
+                , ("(SPC)show windows", (0, xK_space), spawn "rofi -show combi")
                 , ("(.)run", (0, xK_period), spawn "rofi -show run")
                 , ("(`)terminal", (0, xK_grave ), spawn myTerminal)
                 , ("(w)orkspace", (0, xK_w), workspaceAction)
                 , ("(e)macs", (0, xK_e), emacsAction)
                 , ("s(c)ratch pads", (0, xK_c), scratchPadAction)
-                , ("(Q)logout", (shiftMask , xK_Q), io exitSuccess)
-                , ("(R)estart xmonad", (shiftMask, xK_R), spawn "xmonad --restart")
-                , ("(K)ill all wapps", (shiftMask, xK_K), killAll)
+                , ("(Q)logout", (shiftMask , xK_q), io exitSuccess)
+                , ("(R)estart xmonad", (shiftMask, xK_r), spawn "xmonad --restart")
+                , ("(K)ill all wapps", (shiftMask, xK_k), killAll)
                 , ("(/)file manager", (0, xK_slash), namedScratchpadAction myScratchPads "ranger")
                 ] ++ [
                 ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView $ num++":"++ws)
