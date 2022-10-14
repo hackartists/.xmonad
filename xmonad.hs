@@ -175,6 +175,7 @@ myStartupHook = do
     spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
     -- spawnOnce "nabi"
     spawnOnce "(sleep 5 && copyq)"
+    spawnOnce "greenclip daemon"
     spawnOnce "emacs --name emacs-main"
     spawnOnce "whatsdesk --force-device-scale-factor=1.5"
     -- spawnOnce "pidgin"
