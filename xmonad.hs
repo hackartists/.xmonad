@@ -572,7 +572,7 @@ hotkeyAction = makeAction 0
                 , ("(s)creen", (0, xK_s), screenAction)
                 , ("la(y)out", (0, xK_y), layoutAction)
                 , ("(SPC)show windows", (0, xK_space), spawn "rofi -show combi")
-                , ("(.)run", (0, xK_period), spawn "rofi -show run")
+                , ("(.)run", (0, xK_period), spawn "rofi -show combi")
                 , ("(`)terminal", (0, xK_grave ), spawn myTerminal)
                 , ("(w)orkspace", (0, xK_w), workspaceAction)
                 , ("(e)macs", (0, xK_e), emacsAction)
