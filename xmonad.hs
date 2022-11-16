@@ -571,7 +571,7 @@ hotkeyAction = makeAction 0
                 , ("(a)pplication window", (0, xK_a), appAction)
                 , ("(s)creen", (0, xK_s), screenAction)
                 , ("la(y)out", (0, xK_y), layoutAction)
-                , ("(SPC)show windows", (0, xK_space), spawn "rofi -show combi")
+                , ("(SPC)show windows", (0, xK_space), spawn "rofi -show window")
                 , ("(.)run", (0, xK_period), spawn "rofi -show combi")
                 , ("(`)terminal", (0, xK_grave ), spawn myTerminal)
                 , ("(w)orkspace", (0, xK_w), workspaceAction)
