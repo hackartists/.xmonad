@@ -142,7 +142,7 @@ myStartupHook = do
     spawnOnce "lxsession"
     spawn "xrdb ~/.Xresources && xrdb -merge ~/.Xresources"
     -- spawnOnce  "setxkbmap dvorak"
-    spawnOnce "xset r rate 150 20"
+    spawnOnce "xset r rate 200 50"
     spawnOnce "xset -dpms"
     spawnOnce "setterm -blank 0 -powerdown 0"
     spawnOnce "setxkbmap -option caps:escape"
