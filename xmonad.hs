@@ -320,12 +320,12 @@ myShowWNameTheme = def
 myLayoutHook = avoidStruts $ mouseResize $ windowArrange
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout 
              where
-               myDefaultLayout =     withBorder myBorderWidth grid
+               myDefaultLayout =     withBorder myBorderWidth tall
                                  ||| magnify
                                  ||| noBorders monocle
                                  ||| floats
                                  ||| noBorders tabs
-                                 ||| tall
+                                 ||| grid
                                  ||| spirals
                                  ||| threeCol
                                  ||| threeRow
