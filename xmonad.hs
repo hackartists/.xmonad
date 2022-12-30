@@ -90,7 +90,7 @@ import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
 import XMonad.Prompt
-import XMonad.Prompt.Window 
+import XMonad.Prompt.Window
 import qualified XMonad.Prompt.Window as W
 import Data.HashMap.Strict (toList)
 
@@ -318,7 +318,7 @@ myShowWNameTheme = def
 -- The layout hook
 -- myLayoutHook = avoidStruts $ onWorkspace "6:messenger" (noBorders tabs) $ mouseResize $ windowArrange
 myLayoutHook = avoidStruts $ mouseResize $ windowArrange
-               $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout 
+               $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
              where
                myDefaultLayout =     withBorder myBorderWidth tall
                                  ||| magnify
@@ -339,10 +339,10 @@ wsconfig = def {
   , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
   }
 
-myColorizer a active = if active then return ("#faff69", "black") else return ("#aaaaaa", "white")
-myColorizer1 a active = if active then return ("#faff69", "black") else return ("#888888", "white")
-myColorizer2 a active = if active then return ("#faff69", "black") else return ("#666666", "white")
-myColorizer3 a active = if active then return ("#faff69", "black") else return ("#444444", "white")
+myColorizer a active = if active then return ("#faff69", "black") else return ("#888888", "white")
+myColorizer1 a active = if active then return ("#faff69", "black") else return ("#666666", "white")
+myColorizer2 a active = if active then return ("#faff69", "black") else return ("#444444", "white")
+myColorizer3 a active = if active then return ("#faff69", "black") else return ("#222222", "white")
 
 mygridConfig :: Int -> GSConfig a
 mygridConfig depth = do
@@ -476,7 +476,7 @@ appConfig:: XMonad.Prompt.XPConfig
 appConfig = XMonad.Prompt.def  {
   -- autoComplete = Just 500000
   font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
-  , position = Top 
+  , position = Top
   , height = 50
   , maxComplRows = Just 10
   , alwaysHighlight = True
@@ -704,6 +704,8 @@ myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList
     ((modMask, button1), \w -> focus w >> mouseMoveWindow w)
     , ((modMask, button2), \w -> focus w >> windows W.swapMaster)
     , ((modMask, button3), \w -> focus w >> mouseResizeWindow w)
+    , ((0, 11), \w -> spawn "rofi -show combi")
+    , ((0, 10), \w -> spawn "rofi -show window")
   ]
 
 
@@ -817,7 +819,7 @@ main = do
         , logHook = dynamicLogWithPP xmobarPP
         -- , logHook = dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP $ xmobarPP
               -- the following variables beginning with 'pp' are settings for xmobar.
-              { ppOutput = hPutStrLn xmproc0 
+              { ppOutput = hPutStrLn xmproc0
               , ppCurrent = xmobarColor "#ff9999" "" . wrap "[" "]"           -- Current workspace
               , ppVisible = xmobarColor "#ff9999" "" . clickable              -- Visible but not current workspace
               , ppHidden = xmobarColor "#c792ea" "" . wrap "" "" . clickable -- Hidden workspaces
