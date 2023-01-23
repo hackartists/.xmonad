@@ -559,11 +559,17 @@ emacsAction = makeAction 1 [
 
   ]
 
-scratchPadAction = makeAction 0 [
+scratchPadAction = makeAction 1 [
                 ("(t)erminal",(0, xK_t), namedScratchpadAction myScratchPads "terminal")
                 , ("(e)macs", (0, xK_e), namedScratchpadAction myScratchPads "emacs")
                 , ("(w)hatsapp", (0, xK_w), namedScratchpadAction myScratchPads "whatsapp")
                 , ("(f)ile manager", (0, xK_f), namedScratchpadAction myScratchPads "ranger")
+                ]
+
+systemAction = makeAction 1 [
+                ("(r)eboot",(0, xK_r), spawn "reboot")
+                , ("(s)hut down",(0, xK_s), spawn "poweroff")
+                , ("screen (b)lank", (0, xK_b), spawn "xset dpms force off")
                 ]
 
 hotkeyAction = makeAction 0
@@ -582,6 +588,7 @@ hotkeyAction = makeAction 0
                 , ("(R)estart xmonad", (shiftMask, xK_r), spawn "xmonad --restart")
                 , ("(K)ill all wapps", (shiftMask, xK_k), killAll)
                 , ("(/)file manager", (0, xK_slash), namedScratchpadAction myScratchPads "ranger")
+                , ("(S)ystem", (shiftMask, xK_s), systemAction)
                 ] ++ [
                 ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView $ num++":"++ws)
                 | (num, key, ws) <- myAllWorkspaces
