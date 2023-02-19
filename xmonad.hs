@@ -141,7 +141,6 @@ myStartupHook = do
 
     spawnOnce "lxsession"
     spawn "xrdb ~/.Xresources && xrdb -merge ~/.Xresources"
-    spawnOnce "wine '~/.wine/drive_c/Program Files (x86)/Kakao/KakaoTalk/KakaoTalk.exe'"
     -- spawnOnce  "setxkbmap dvorak"
     spawnOnce "xset r rate 150 30"
     spawn "xset s off -dpms"
