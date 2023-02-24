@@ -42,6 +42,7 @@ import XMonad.Hooks.ServerMode
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.WorkspaceHistory
 import XMonad.Hooks.RefocusLast
+import XMonad.Hooks.Focus
 
 -- Layouts
 import XMonad.Layout hiding ( (|||) )
@@ -85,7 +86,7 @@ import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
 
    -- Utilities
 import XMonad.Util.Dmenu
-import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.EZConfig
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
@@ -139,7 +140,7 @@ myStartupHook = do
 
     addCustomWSGroup "medi"  "2:web" "8:media" "1:emacs"
 
-    spawnOnce "lxsession"
+    -- spawnOnce "lxsession"
     spawn "xrdb ~/.Xresources && xrdb -merge ~/.Xresources"
     -- spawnOnce  "setxkbmap dvorak"
     spawnOnce "xset r rate 150 30"
@@ -167,7 +168,7 @@ myStartupHook = do
     -- spawnOnce "telegram-desktop"
     -- spawnOnce "NO_AT_BRIDGE=1 evolution &"
     -- spawnOnce "/opt/appimages/stoplight-studio.AppImage &"
-    spawnOnce "/opt/notifier/bin/notifier.AppImage &"
+    -- spawnOnce "/opt/notifier/bin/notifier.AppImage &"
     -- spawnOnce "albert &"
     -- spawnOnce "export XMODIFIERS=@im=ibus"
     -- spawnOnce "export GTK_IM_MODULE=ibus"
@@ -793,9 +794,48 @@ myAdditionalKeys  =
   where nonNSP          = WSIs (return (\ws -> W.tag ws /= "NSP"))
         nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "NSP"))
 
+newFocusHook :: FocusHook
+newFocusHook      = composeOne
+        -- Always switch focus to 'gmrun'.
+        [ new (className =? "Gmrun")        -?> switchFocus
+        ,  new (resource =? "xfce4-notifyd")        -?> keepFocus
+        -- And always keep focus on 'gmrun'. Note, that
+        -- another 'gmrun' will steal focus from already
+        -- running one.
+        , focused (className =? "Gmrun")    -?> keepFocus
+        -- If firefox dialog prompt (e.g. master password
+        -- prompt) is focused on current workspace and new
+        -- window appears here too, keep focus unchanged
+        -- (note, used predicates: @newOnCur <&&> focused@ is
+        -- the same as @newOnCur <&&> focusedCur@, but is
+        -- /not/ the same as just 'focusedCur' )
+        , newOnCur <&&> focused
+            ((className =? "Firefox" <||> className =? "Firefox-esr" <||> className =? "Iceweasel") <&&> isDialog)
+                                            -?> keepFocus
+        -- Default behavior for new windows: switch focus.
+        , return True                       -?> switchFocus
+        ]
+
+activateFocusHook :: FocusHook
+activateFocusHook = composeAll
+        -- If 'gmrun' is focused on workspace, on which
+        -- /activated window/ is, keep focus unchanged. But i
+        -- may still switch workspace (thus, i use 'composeAll').
+        -- See 'keepFocus' properties in the docs below.
+        [ focused (className =? "Gmrun") --> keepFocus
+        ,  new (resource =? "xfce4-notifyd")        --> keepFocus
+        -- Default behavior for activated windows: switch
+        -- workspace and focus.
+        , return True   --> switchWorkspace <> switchFocus
+        ]
+
 main :: IO ()
 main = do
     xmproc0 <- spawnPipe "/bin/bash $HOME/.xmonad/xmobar.sh"
+    let newFh :: ManageHook
+        newFh = manageFocus newFocusHook
+        acFh :: ManageHook
+        acFh = manageFocus activateFocusHook
     xmonad
       $ additionalNav2DKeys (xK_k, xK_h, xK_j, xK_l)
                                [
@@ -803,8 +843,8 @@ main = do
                                 , (mod4Mask .|. shiftMask, windowSwap)
                                ]
                                False
-      $ ewmh def
-        { manageHook         = myManageHook <+> manageDocks
+      $ setEwmhActivateHook acFh . ewmh $ def
+        { manageHook         = newFh <> myManageHook <+> manageDocks
         , handleEventHook    = docksEventHook
                                -- Uncomment this line to enable fullscreen support on things like YouTube/Netflix.
                                -- This works perfect on SINGLE monitor systems. On multi-monitor systems,
