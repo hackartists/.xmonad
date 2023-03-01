@@ -687,19 +687,9 @@ myManageHook = composeAll
      ] <+> namedScratchpadManageHook myScratchPads
 
 myKeys conf@XConfig {XMonad.modMask = modMask} = M.fromList
-  -- Start a terminal.  Terminal to start is specified by myTerminal variable.
   [
-    -- Increment the number of windows in the master area. , ((modMask, xK_comma), sendMessage (IncMasterN 1))
-    -- Decrement the number of windows in the master area.
-    ((modMask, xK_period), sendMessage (IncMasterN (-1)))
-  -- Increase the size occupied by the focused window
-    , ((modMask, xK_equal), sendMessage zoomIn)
-  -- Decrease the size occupied by the focused window
-    , ((modMask, xK_minus), sendMessage zoomOut)
-  -- Reset the size occupied by the focused window
-    , ((modMask, xK_0), sendMessage zoomReset)
-  -- (Un)Maximize the focused window
-    -- , ((modMask             , xK_f    ), sendMessage ToggleZoomFull)
+  ((modMask, key), windows $ W.greedyView $ num++":"++name)
+  | (num,key,name) <- myAllWorkspaces
   ]
 
 -- Mouse bindings
