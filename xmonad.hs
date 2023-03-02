@@ -606,7 +606,7 @@ myAllWorkspaces = [("1",xK_1,"emacs")
                    , ("0",xK_0,"misc")
                   ]
 
-myWorkspaces = [ num++":"++name | (num,_,name) <- myAllWorkspaces]
+myWorkspaces = [ num++"" | (num,_,_) <- myAllWorkspaces]
 
 myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
