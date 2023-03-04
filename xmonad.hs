@@ -512,7 +512,7 @@ appAction = makeAction 1
               , ("(b)ring a window", (0, xK_b), bringSelected $ mygridConfig 2)
               , ("(SPC)bring to master", (0, xK_space), windowPrompt appConfig BringToMaster wsWindows)
               ] ++ [
-              ("send a window to ("++num++"):"++ws, (0,key), windows $ W.shift $ num++":"++ws)
+              ("send a window to ("++num++"):"++ws, (0,key), windows $ W.shift $ num++"")
               | (num, key, ws) <- myAllWorkspaces
               ]
 
@@ -589,7 +589,7 @@ hotkeyAction = makeAction 0
                 , ("(/)file manager", (0, xK_slash), namedScratchpadAction myScratchPads "ranger")
                 , ("(S)ystem", (shiftMask, xK_s), systemAction)
                 ] ++ [
-                ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView $ num++":"++ws)
+                ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView $ num++"")
                 | (num, key, ws) <- myAllWorkspaces
                 ]
 
@@ -606,7 +606,7 @@ myAllWorkspaces = [("1",xK_1,"emacs")
                    , ("0",xK_0,"misc")
                   ]
 
-myWorkspaces = [ num++":"++name | (num,_,name) <- myAllWorkspaces]
+myWorkspaces = [ num++"" | (num,_,name) <- myAllWorkspaces]
 
 myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
@@ -621,44 +621,44 @@ myManageHook = composeAll
      -- I'm doing it this way because otherwise I would have to write out the full
      -- name of my workspaces and the names would be very long if using clickable workspaces.
      [
-       title =? "emacs-main" --> doShift "1:emacs"
-     , className =? "Google-chrome"                --> doShift "2:web"
+       title =? "emacs-main" --> doShift "1"
+     , className =? "Google-chrome"                --> doShift "2"
      , title =? "Emulator" --> (doShift "3:debugging" <+> doFloat)
-     , title =? "Android Emulator - luffy:5554" --> doShift "3:debugging"
-     , title =? "Android Emulator - zoro:5556" --> doShift "3:debugging"
-     , className =? "Electron"                     --> doShift "3:debugging"
-     , className =? "kcachegrind"                  --> doShift "3:debugging"
-     , className =? "Wireshark"                    --> doShift "3:debugging"
-     , className =? "Stoplight Studio"             --> doShift "4:testing"
-     , className =? "Postman"                      --> doShift "4:testing"
-     , className =? "unityhub"                      --> doShift "5:gamedev"
-     , className =? "zoom"                         --> doShift "6:messenger"
-     , className =? "Slack"                        --> doShift "6:messenger"
-     , className =? "whatsdesk"                    --> doShift "6:messenger"
-     , className =? "discord"                      --> doShift "6:messenger"
-     , className =? "TelegramDesktop"              --> doShift "6:messenger"
-     , className =? "yakyak"                       --> doShift "6:messenger"
-     , title =? "WhatsApp" --> doShift "6:messenger"
-     , className =? "Whatsapp-for-linux"           --> doShift "6:messenger"
-     , className =? "Gitter"                       --> doShift "6:messenger"
-     , className =? "qtwaw"           --> doShift "6:messenger"
-     , className =? "Google-chrome-unstable"       --> doShift "7:meeting"
-     , className =? "Google-chrome-beta"           --> doShift "7:meeting"
-     , className =? "obs"                          --> doShift "8:media"
-     , className =? "kdenlive"                     --> doShift "8:media"
-     , className =? "SimpleScreenRecorder"         --> doShift "8:media"
-     , resource =? "mysql-workbench-bin"          --> doShift "9:database"
-     , title =? "MongoDB Compass"             --> doShift "9:database"
+     , title =? "Android Emulator - luffy:5554" --> doShift "3"
+     , title =? "Android Emulator - zoro:5556" --> doShift "3"
+     , className =? "Electron"                     --> doShift "3"
+     , className =? "kcachegrind"                  --> doShift "3"
+     , className =? "Wireshark"                    --> doShift "3"
+     , className =? "Stoplight Studio"             --> doShift "4"
+     , className =? "Postman"                      --> doShift "4"
+     , className =? "unityhub"                      --> doShift "5"
+     , className =? "zoom"                         --> doShift "6"
+     , className =? "Slack"                        --> doShift "6"
+     , className =? "whatsdesk"                    --> doShift "6"
+     , className =? "discord"                      --> doShift "6"
+     , className =? "TelegramDesktop"              --> doShift "6"
+     , className =? "yakyak"                       --> doShift "6"
+     , title =? "WhatsApp" --> doShift "6"
+     , className =? "Whatsapp-for-linux"           --> doShift "6"
+     , className =? "Gitter"                       --> doShift "6"
+     , className =? "qtwaw"           --> doShift "6"
+     , className =? "Google-chrome-unstable"       --> doShift "7"
+     , className =? "Google-chrome-beta"           --> doShift "7"
+     , className =? "obs"                          --> doShift "8"
+     , className =? "kdenlive"                     --> doShift "8"
+     , className =? "SimpleScreenRecorder"         --> doShift "8"
+     , resource =? "mysql-workbench-bin"          --> doShift "9"
+     , title =? "MongoDB Compass"             --> doShift "9"
      , title =? "NoiseTorch" --> doShift "0:misc"
-     , className =? "Blueman-manager"               --> doShift "0:misc"
-     , className =? "scrcpy"                       --> (doShift "0:misc" <+> doFloat)
-     , className =? "libreoffice-writer"           --> doShift "0:misc"
-     , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)
-     , className =? "VirtualBox Manager"           --> doShift "0:misc"
-     , className =? "PulseUI"                      --> doShift "0:misc"
-     , className =? "org.remmina.Remmina"          --> doShift "0:misc"
-     , className =? "Virt-manager"                 --> (doShift "0:misc" <+> doFloat)
-     , title =? "Oracle VM VirtualBox Manager"     --> (doShift "0:misc" <+> doFloat)
+     , className =? "Blueman-manager"               --> doShift "0"
+     , className =? "scrcpy"                       --> (doShift "0" <+> doFloat)
+     , className =? "libreoffice-writer"           --> doShift "0"
+     , className =? "kakaotalk.exe"                --> (doShift "0" <+> doFloat)
+     , className =? "VirtualBox Manager"           --> doShift "0"
+     , className =? "PulseUI"                      --> doShift "0"
+     , className =? "org.remmina.Remmina"          --> doShift "0"
+     , className =? "Virt-manager"                 --> (doShift "0" <+> doFloat)
+     , title =? "Oracle VM VirtualBox Manager"     --> (doShift "0" <+> doFloat)
      -- , className =? "Org.gnome.Nautilus"           --> doFloat
      , className =? "Gimp-2.10"                    --> doCenterFloat
      , resource  =? "gpicview"                     --> doCenterFloat
