@@ -164,6 +164,7 @@ myStartupHook = do
     -- spawnOnce "yakyak"
     -- spawnOnce "zoom"
     spawnOnce "slack"
+    spawnOnce "dropbox"
     -- spawnOnce "gitter"
     -- spawnOnce "telegram-desktop"
     -- spawnOnce "NO_AT_BRIDGE=1 evolution &"
