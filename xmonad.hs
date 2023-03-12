@@ -171,14 +171,15 @@ myStartupHook = do
     -- spawnOnce "/opt/appimages/stoplight-studio.AppImage &"
     -- spawnOnce "/opt/notifier/bin/notifier.AppImage &"
     -- spawnOnce "albert &"
-    -- spawnOnce "export XMODIFIERS=@im=ibus"
-    -- spawnOnce "export GTK_IM_MODULE=ibus"
-    spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
+    -- spawnOnce "ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3"
+    -- spawnOnce "fcitx5"
     -- spawnOnce "nabi"
     spawnOnce "(sleep 5 && copyq)"
     spawnOnce "greenclip daemon"
     spawnOnce "emacs --name emacs-main"
     spawnOnce "whatsdesk --force-device-scale-factor=1.5"
+    spawnOnce "rclone mount biyard:/ ~/data/google-drive/biyard"
+    spawnOnce "rclone mount biyard-madapp:/ ~/data/google-drive/biyard-madapp"
     -- spawnOnce "pidgin"
     -- spawnOnce "whatsapp-for-linux"
     -- gromit block capturing screen
@@ -224,6 +225,7 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageDefault
     spawnEmacs  = myEmacs ++ " -e '(hackartist/scratch-buffer-only)' -F '((name . \"scratchpad-emacs\"))'"
     findEmacs   = title =? "scratchpad-emacs"
     spawnEmacsanywhere  = "EA_TITLE='scratchpad-ea' ~/.emacs_anywhere/bin/run"
+    -- spawnEmacsanywhere  = "emacsclient --eval '(emacs-everywhere)'"
     spawnWhatsdesk  = "whatsdesk"
     findWhatsdesk  = title =? "WhatsDesk"
     findEmacsanywhere   = title =? "scratchpad-ea"
@@ -643,6 +645,7 @@ myManageHook = composeAll
      , className =? "Whatsapp-for-linux"           --> doShift "6"
      , className =? "Gitter"                       --> doShift "6"
      , className =? "qtwaw"           --> doShift "6"
+     , title =? "win11 on QEMU/KVM" --> doShift "7"
      , className =? "Google-chrome-unstable"       --> doShift "7"
      , className =? "Google-chrome-beta"           --> doShift "7"
      , className =? "obs"                          --> doShift "8"
@@ -658,8 +661,8 @@ myManageHook = composeAll
      , className =? "VirtualBox Manager"           --> doShift "0"
      , className =? "PulseUI"                      --> doShift "0"
      , className =? "org.remmina.Remmina"          --> doShift "0"
-     , className =? "Virt-manager"                 --> (doShift "0" <+> doFloat)
-     , title =? "Oracle VM VirtualBox Manager"     --> (doShift "0" <+> doFloat)
+     , className =? "Virt-manager"                 --> doShift "0"
+     , title =? "Oracle VM VirtualBox Manager"     --> doShift "0"
      -- , className =? "Org.gnome.Nautilus"           --> doFloat
      , className =? "Gimp-2.10"                    --> doCenterFloat
      , resource  =? "gpicview"                     --> doCenterFloat
