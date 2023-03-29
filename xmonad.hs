@@ -54,6 +54,7 @@ import XMonad.Layout.Spiral
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
+import XMonad.Layout.MultiColumns
 import XMonad.Layout.BinarySpacePartition as BSP
 import XMonad.Layout.ZoomRow
 import XMonad.Layout.Master
@@ -277,12 +278,15 @@ spirals  = renamed [Replace "spirals"]
            $ subLayout [] (smartBorders Simplest)
            $ mySpacing' 8
            $ spiral (6/7)
+fourCol = renamed [Replace "fourCol"]
+           $ multiCol [1] 4 0.01 0.5
 threeCol = renamed [Replace "threeCol"]
            $ smartBorders
            $ addTabs shrinkText myTabTheme
-           $ subLayout [] (smartBorders Simplest)
-           $ limitWindows 7
-           $ ThreeCol 1 (3/100) (1/2)
+           -- $ subLayout [] (smartBorders Simplest)
+           $ limitWindows 12
+           $ mySpacing 0
+           $ ThreeColMid 1 (4/100) (1/2)
 threeRow = renamed [Replace "threeRow"]
            $ smartBorders
            $ addTabs shrinkText myTabTheme
@@ -422,6 +426,7 @@ layoutAction = makeAction 1
                 (ln, key, sendMessage $ JumpToLayout l)
                 | (ln, key, l) <- [
                     ("(t)all",(0,xK_t),"tall")
+                    , ("fourCol(M)",(shiftMask,xK_m),"fourCol")
                     , ("(m)agnify",(0,xK_m),"magnify")
                     , ("mo(n)ocle",(0,xK_n),"monocle")
                     , ("(f)loats",(0,xK_f),"floats")
