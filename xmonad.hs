@@ -46,6 +46,7 @@ import XMonad.Hooks.Focus
 
 -- Layouts
 import XMonad.Layout hiding ( (|||) )
+import XMonad.Layout.LayoutScreens
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.Accordion
 import XMonad.Layout.GridVariants (Grid(Grid))
@@ -125,20 +126,14 @@ addCustomWSGroup n s1 s0 s2 = addRawWSGroup n [(S 0, s0), (S 2, s2), (S 1, s1)]
 
 myStartupHook :: X ()
 myStartupHook = do
-    addCustomWSGroup "devb" "1:emacs" "2:web"      "6:messenger"
-    addCustomWSGroup "devf" "1:emacs" "2:web"      "3:debugging"
-    addCustomWSGroup "stdh" "1:emacs" "2:web"      "5:study"
+    addCustomWSGroup "devb" "3" "1"      "2"
+    addCustomWSGroup "devf" "2" "1"      "6"
+    addCustomWSGroup "webd" "1" "2"  "6"
     addCustomWSGroup "mtdv" "1:emacs" "7:meeting"  "6:messenger"
-
-    addCustomWSGroup "webd" "2:web" "1:emacs"  "6:messenger"
     addCustomWSGroup "mtht" "2:web" "7:meeting"  "6:messenger"
-
     addCustomWSGroup "test" "4:testing" "1:emacs" "2:web"
-
     addCustomWSGroup "stde"  "5:study" "1:emacs" "2:web"
-
     addCustomWSGroup "meet"  "7:meeting" "1:emacs"  "6:messenger"
-
     addCustomWSGroup "medi"  "2:web" "8:media" "1:emacs"
 
     spawnOnce "/bin/bash $HOME/.xmonad/tray.sh"
@@ -310,7 +305,7 @@ mygridConfig depth = do
         | depth == 1 = buildDefaultGSConfig myColorizer1
         | depth == 2 = buildDefaultGSConfig myColorizer2
         | otherwise = buildDefaultGSConfig myColorizer3
-  conf{ gs_cellwidth    = 200
+  conf{ gs_cellwidth    = 100
        , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
        }
 
@@ -366,7 +361,8 @@ keymap keys lst = take 25 [
 
 layoutAction = makeAction 1
                $ [
-                ("(SPC)toggle full screen", (0, xK_space), sendMessage (MT.Toggle FULL) >> sendMessage ToggleStruts)
+                ("split screen into three", (0, 0), layoutScreens 3 (ThreeColMid 1 (4/100) (1/2)))
+                , ("(SPC)toggle full screen", (0, xK_space), sendMessage (MT.Toggle FULL) >> sendMessage ToggleStruts)
                 , ("(TAB)next layout", (0, xK_Tab),  sendMessage NextLayout)
                 , ("(M)erge all windows", (shiftMask, xK_m), withFocused (sendMessage . MergeAll))
                 , ("(u)nmerge a window", (0, xK_u), withFocused (sendMessage . UnMerge))
@@ -484,9 +480,9 @@ screenAction = makeAction 1 [
   , ("(p)revious screen", (0, xK_p), prevScreen)
   ]
 
-workscreenAction = makeAction 2 [
-  ("medi(a)", (0, xK_a), viewCenteredWSGroup "medi")
-  , ("(d)evelop", (0, xK_d), viewCenteredWSGroup "devb")
+workspaceAction = makeAction 1 [
+  ("(d)evelop", (0, xK_d), viewCenteredWSGroup "devb")
+  , ("medi(a)", (0, xK_a), viewCenteredWSGroup "medi")
   , ("(D)eeting with develop", (shiftMask , xK_d), viewCenteredWSGroup "mtdv")
   , ("(e)nglish study", (0, xK_e), viewCenteredWSGroup "stde")
   , ("english (H)omework", (shiftMask , xK_h), viewCenteredWSGroup "stdh")
@@ -495,10 +491,6 @@ workscreenAction = makeAction 2 [
   , ("h(o)sted meeting", (0 , xK_o), viewCenteredWSGroup "mtht")
   , ("(t)esting", (0, xK_t), viewCenteredWSGroup "test")
   , ("(w)eb", (0, xK_w), viewCenteredWSGroup "webd")
-  ]
-
-workspaceAction = makeAction 1 [
-  ("(RET)workscreen", (0, xK_semicolon), workscreenAction)
   , ("(g)o to workspace", (0, xK_g), gridselectWorkspace wsconfig W.greedyView)
   , ("(b)ring workspace", (0, xK_b), gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
   ]
