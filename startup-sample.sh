@@ -38,8 +38,9 @@ QT_IM_MODULE='ibus' telegram-desktop &
 # /opt/notifier/bin/notifier.AppImage&
 # autokey-gtk &
 
-rclone mount biyard:/ ~/data/google-drive/biyard &
-rclone mount biyard-madapp:/ ~/data/google-drive/bylabs &
+mkdir -p ~/data/google-drive/biyard ~/data/google-drive/bylabs ~/data/google-drive/hackartist
+rclone mount biyard:/ ~/data/google-drive/biyard --vfs-cache-mode full &
+rclone mount biyard-madapp:/ ~/data/google-drive/bylabs --vfs-cache-mode full &
 
 
 # function google_sync {
@@ -58,6 +59,6 @@ rclone mount biyard-madapp:/ ~/data/google-drive/bylabs &
 # google_sync "bylabs:Projects/[인천광역시] 블록체인 허브도시 인천 조성 연구용역" "bylabs/ihub" &
 # google_sync "biyard:Admin & Compliance" "biyard/admin" &
 
-rclone mount hackartist:/ ~/data/google-drive/hackartist &
+rclone mount hackartist:/ ~/data/google-drive/hackartist --vfs-cache-mode full &
 # sshfs -o default_permissions server:/home/hackartist ~/data/server &
 # wine "/home/hackartist/.wine/drive_c/Program Files (x86)/Kakao/KakaoTalk/KakaoTalk.exe"
