@@ -518,8 +518,8 @@ scratchPadAction = makeAction 1 [
                 ]
 
 systemAction = makeAction 1 [
-                ("(r)eboot",(0, xK_r), spawn "reboot")
-                , ("(s)hut down",(0, xK_s), spawn "poweroff")
+                ("(r)eboot",(0, xK_r), spawn "shutdown -r now")
+                , ("(s)hut down",(0, xK_s), spawn "shutdown -h now")
                 , ("screen (b)lank", (0, xK_b), spawn "xset dpms force off")
                 ]
 
