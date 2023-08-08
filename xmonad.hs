@@ -121,20 +121,24 @@ myFocusColor  = "#ff0000" -- "#46d9ff"   -- Border color of focused windows
 windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
-addCustomWSGroup :: WSGroupId -> WorkspaceId -> WorkspaceId  -> WorkspaceId -> X()
-addCustomWSGroup n s1 s0 s2 = addRawWSGroup n [(S 0, s0), (S 2, s2), (S 1, s1)]
+-- addCustomWSGroup :: WSGroupId -> WorkspaceId -> WorkspaceId  -> WorkspaceId -> X()
+-- addCustomWSGroup n s1 s0 s2 = addRawWSGroup n [(S 0, s0), (S 2, s2), (S 1, s1)]
+
+addCustomWSGroup :: WSGroupId -> WorkspaceId -> WorkspaceId  -> X()
+addCustomWSGroup n s0 s1 = addRawWSGroup n [(S 0, s0), (S 2, s1)]
 
 myStartupHook :: X ()
 myStartupHook = do
-    addCustomWSGroup "devb" "3" "1"      "2"
-    addCustomWSGroup "devf" "2" "1"      "6"
-    addCustomWSGroup "webd" "1" "2"  "6"
-    addCustomWSGroup "mtdv" "1:emacs" "7:meeting"  "6:messenger"
-    addCustomWSGroup "mtht" "2:web" "7:meeting"  "6:messenger"
-    addCustomWSGroup "test" "4:testing" "1:emacs" "2:web"
-    addCustomWSGroup "stde"  "5:study" "1:emacs" "2:web"
-    addCustomWSGroup "meet"  "7:meeting" "1:emacs"  "6:messenger"
-    addCustomWSGroup "medi"  "2:web" "8:media" "1:emacs"
+    addCustomWSGroup "dev" "1" "2" --      "2"
+    addCustomWSGroup "vir" "1" "5" --  "6"
+    addCustomWSGroup "web-vir" "2" "5" --  "6"
+    addCustomWSGroup "chat" "1" "6" --  "6"
+    -- addCustomWSGroup "mtdv" "1:emacs" "7:meeting"  "6:messenger"
+    -- addCustomWSGroup "mtht" "2:web" "7:meeting"  "6:messenger"
+    -- addCustomWSGroup "test" "4:testing" "1:emacs" "2:web"
+    -- addCustomWSGroup "stde"  "5:study" "1:emacs" "2:web"
+    -- addCustomWSGroup "meet"  "7:meeting" "1:emacs"  "6:messenger"
+    -- addCustomWSGroup "medi"  "2:web" "8:media" "1:emacs"
 
     spawnOnce "/bin/bash $HOME/.xmonad/tray.sh"
     spawnOnce "/bin/bash $HOME/.xmonad/startup.sh"
@@ -481,16 +485,9 @@ screenAction = makeAction 1 [
   ]
 
 workspaceAction = makeAction 1 [
-  ("(d)evelop", (0, xK_d), viewCenteredWSGroup "devb")
-  , ("medi(a)", (0, xK_a), viewCenteredWSGroup "medi")
-  , ("(D)eeting with develop", (shiftMask , xK_d), viewCenteredWSGroup "mtdv")
-  , ("(e)nglish study", (0, xK_e), viewCenteredWSGroup "stde")
-  , ("english (H)omework", (shiftMask , xK_h), viewCenteredWSGroup "stdh")
-  , ("(f)rontend develop", (0, xK_f), viewCenteredWSGroup "devf")
-  , ("(M)eeting", (shiftMask , xK_m), viewCenteredWSGroup "meet")
-  , ("h(o)sted meeting", (0 , xK_o), viewCenteredWSGroup "mtht")
-  , ("(t)esting", (0, xK_t), viewCenteredWSGroup "test")
-  , ("(w)eb", (0, xK_w), viewCenteredWSGroup "webd")
+  ("(d)evelop", (0, xK_d), viewCenteredWSGroup "dev")
+  , ("(v)irtual-machine", (0, xK_v), viewCenteredWSGroup "vir")
+  , ("(w)eb-virtual", (0, xK_w), viewCenteredWSGroup "web-vir")
   , ("(g)o to workspace", (0, xK_g), gridselectWorkspace wsconfig W.greedyView)
   , ("(b)ring workspace", (0, xK_b), gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
   ]
@@ -583,7 +580,9 @@ myManageHook = composeAll
      , className =? "Wireshark"                    --> doShift "3"
      , className =? "Stoplight Studio"             --> doShift "4"
      , className =? "Postman"                      --> doShift "4"
-     , className =? "unityhub"                      --> doShift "5"
+     , className =? "unityhub"                     --> doShift "5"
+     , className =? "vmware"                       --> doShift "5"
+     , className =? "Vmware"                       --> doShift "5"
      , className =? "zoom"                         --> doShift "6"
      , className =? "Slack"                        --> doShift "6"
      , className =? "whatsdesk"                    --> doShift "6"
