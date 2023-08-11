@@ -13,6 +13,7 @@ sudo rmmod pcspkr
 xrdb ~/.Xresources && xrdb -merge ~/.Xresources
 
 ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3 &
+gsettings set org.freedesktop.ibus.engine.hangul use-event-forwarding false
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
 picom &
 nm-applet &

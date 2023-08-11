@@ -580,6 +580,7 @@ myManageHook = composeAll
      , className =? "Wireshark"                    --> doShift "3"
      , className =? "Stoplight Studio"             --> doShift "4"
      , className =? "Postman"                      --> doShift "4"
+     , className =? "libreoffice"                  --> doShift "4"
      , className =? "unityhub"                     --> doShift "5"
      , className =? "vmware"                       --> doShift "5"
      , className =? "Vmware"                       --> doShift "5"
