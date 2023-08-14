@@ -125,7 +125,7 @@ windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace
 -- addCustomWSGroup n s1 s0 s2 = addRawWSGroup n [(S 0, s0), (S 2, s2), (S 1, s1)]
 
 addCustomWSGroup :: WSGroupId -> WorkspaceId -> WorkspaceId  -> X()
-addCustomWSGroup n s0 s1 = addRawWSGroup n [(S 0, s0), (S 2, s1)]
+addCustomWSGroup n s0 s1 = addRawWSGroup n [(S 0, s0), (S 1, s1)]
 
 myStartupHook :: X ()
 myStartupHook = do
