@@ -39,27 +39,33 @@ QT_IM_MODULE='ibus' telegram-desktop &
 # /opt/notifier/bin/notifier.AppImage&
 # autokey-gtk &
 
-mkdir -p ~/data/google-drive/biyard ~/data/google-drive/bylabs ~/data/google-drive/hackartist
-rclone mount biyard:/ ~/data/google-drive/biyard --vfs-cache-mode full &
-rclone mount biyard-madapp:/ ~/data/google-drive/bylabs --vfs-cache-mode full &
+mkdir -p ~/data/google-drive/biyard-admin ~/data/google-drive/biyard ~/data/google-drive/bylabs ~/data/google-drive/hackartist
 
+function google_mount {
+    account=$1
+    dir=$2
 
-# function google_sync {
-#     remote=$1
-#     local="$HOME/data/$2"
-#     # dir="$HOME/data/$(echo $remote | tr ":" "/")"
-#     mkdir -p "$local"
-#     echo Starting syncing ${remote} into ${local}
-#     while true
-#     do
-#         rclone -v bisync "$remote" "${local}" --exclude=/참고자료/** --drive-allow-import-name-change --resync 
-#         sleep 300
-#     done
-# }
+    while true
+    do
+        rclone mount "$account:/" "$dir" --vfs-cache-mode full
+    done
+}
+google_mount biyard ~/data/google-drive/biyard &
+google_mount biyard-admin ~/data/google-drive/biyard-admin &
+google_mount biyard-madapp ~/data/google-drive/bylabs &
+google_mount hackartist ~/data/google-drive/hackartist &
 
-# google_sync "bylabs:Projects/[인천광역시] 블록체인 허브도시 인천 조성 연구용역" "bylabs/ihub" &
-# google_sync "biyard:Admin & Compliance" "biyard/admin" &
+function google_sync {
+    remote=$1
+    local="$HOME/data/$2"
+    # dir="$HOME/data/$(echo $remote | tr ":" "/")"
+    mkdir -p "$local"
+    echo Starting syncing ${remote} into ${local}
+    while true
+    do
+        rclone -v bisync "$remote" "${local}" --drive-allow-import-name-change --resync 
+        # rclone -v bisync "$remote" "${local}" --exclude=/참고자료/** --drive-allow-import-name-change --resync 
+        sleep 300
+    done
+}
 
-rclone mount hackartist:/ ~/data/google-drive/hackartist --vfs-cache-mode full &
-# sshfs -o default_permissions server:/home/hackartist ~/data/server &
-# wine "/home/hackartist/.wine/drive_c/Program Files (x86)/Kakao/KakaoTalk/KakaoTalk.exe"
