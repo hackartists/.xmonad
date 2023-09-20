@@ -575,6 +575,7 @@ myManageHook = composeAll
      , title =? "Emulator" --> (doShift "3" <+> doFloat)
      , title =? "Android Emulator - luffy:5554" --> doShift "3"
      , title =? "Android Emulator - zoro:5556" --> doShift "3"
+     , className =? "chatall"                     --> doShift "3"
      , className =? "Electron"                     --> doShift "3"
      , className =? "kcachegrind"                  --> doShift "3"
      , className =? "Wireshark"                    --> doShift "3"
