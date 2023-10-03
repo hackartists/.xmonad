@@ -4,6 +4,7 @@
 {-# OPTIONS_GHC -Wno-deprecations #-}
 import XMonad hiding ( (|||) )
 import XMonad.Config
+
 -- import System.Directory
 import System.IO (hPutStrLn)
 import System.Exit (exitSuccess)
@@ -787,14 +788,12 @@ main = do
                                 , (mod4Mask .|. shiftMask, windowSwap)
                                ]
                                False
-      $ setEwmhActivateHook acFh . ewmh $ def
+      $ setEwmhActivateHook acFh
+      $ ewmhFullscreen . ewmh
+      $ def
+      -- $ def
         { manageHook         = newFh <> myManageHook <+> manageDocks
         , handleEventHook    = docksEventHook
-                               -- Uncomment this line to enable fullscreen support on things like YouTube/Netflix.
-                               -- This works perfect on SINGLE monitor systems. On multi-monitor systems,
-                               -- it adds a border around the window if screen does not have focus. So, my solution
-                               -- is to use a keybinding to toggle fullscreen noborders instead.  (M-<Space>)
-                               -- <+> fullscreenEventHook
         , modMask            = myModMask
         , terminal           = myTerminal
         , startupHook        = myStartupHook
