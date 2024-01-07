@@ -130,10 +130,10 @@ addCustomWSGroup n s0 s1 = addRawWSGroup n [(S 0, s0), (S 1, s1)]
 
 myStartupHook :: X ()
 myStartupHook = do
-    addCustomWSGroup "dev" "1" "2" --      "2"
-    addCustomWSGroup "vir" "1" "5" --  "6"
-    addCustomWSGroup "web-vir" "2" "5" --  "6"
-    addCustomWSGroup "chat" "1" "6" --  "6"
+    addCustomWSGroup "dev" ( head myWorkspaces ) ( myWorkspaces !! 1 ) --      "2"
+    addCustomWSGroup "vir" ( myWorkspaces !! 10 ) ( myWorkspaces !! 4 ) --  "6"
+    addCustomWSGroup "meet" ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 ) --  "6"
+    addCustomWSGroup "chat" ( myWorkspaces !! 1 ) ( myWorkspaces !! 5 ) --  "6"
     -- addCustomWSGroup "mtdv" "1:emacs" "7:meeting"  "6:messenger"
     -- addCustomWSGroup "mtht" "2:web" "7:meeting"  "6:messenger"
     -- addCustomWSGroup "test" "4:testing" "1:emacs" "2:web"
@@ -488,7 +488,8 @@ screenAction = makeAction 1 [
 workspaceAction = makeAction 1 [
   ("(d)evelop", (0, xK_d), viewCenteredWSGroup "dev")
   , ("(v)irtual-machine", (0, xK_v), viewCenteredWSGroup "vir")
-  , ("(w)eb-virtual", (0, xK_w), viewCenteredWSGroup "web-vir")
+  , ("(m)eet", (0, xK_m), viewCenteredWSGroup "meet")
+  , ("(c)hat", (0, xK_c), viewCenteredWSGroup "chat")
   , ("(g)o to workspace", (0, xK_g), gridselectWorkspace wsconfig W.greedyView)
   , ("(b)ring workspace", (0, xK_b), gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
   ]
@@ -539,24 +540,26 @@ hotkeyAction = makeAction 0
                 , ("(/)file manager", (0, xK_slash), namedScratchpadAction myScratchPads "ranger")
                 , ("(S)ystem", (shiftMask, xK_s), systemAction)
                 ] ++ [
-                ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView $ num++"")
+                ("("++num++"):"++ws++" workspace", (0, key), windows $ W.greedyView $ num++":"++ws)
                 | (num, key, ws) <- myAllWorkspaces
                 ]
 
 -- Workspaces
 myAllWorkspaces = [("1",xK_1,"emacs")
                    , ("2",xK_2,"web")
-                   , ("3",xK_3,"debugging")
-                   , ("4",xK_4,"testing")
-                   , ("5",xK_5,"gamedev")
-                   , ("6",xK_6,"messenger")
-                   , ("7",xK_7,"meeting")
+                   , ("3",xK_3,"dbg")
+                   , ("4",xK_4,"test")
+                   , ("5",xK_5,"vm")
+                   , ("6",xK_6,"msg")
+                   , ("7",xK_7,"meet")
                    , ("8",xK_8,"media")
-                   , ("9",xK_9,"database")
+                   , ("9",xK_9,"db")
                    , ("0",xK_0,"misc")
+                   -- no hotkey
+                   , ("",0,"vm-ext")
                   ]
 
-myWorkspaces = [ num++"" | (num,_,name) <- myAllWorkspaces]
+myWorkspaces = [ num++":"++name | (num,_,name) <- myAllWorkspaces]
 
 myWorkspaceIndices = M.fromList $ zip myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
@@ -571,49 +574,52 @@ myManageHook = composeAll
      -- I'm doing it this way because otherwise I would have to write out the full
      -- name of my workspaces and the names would be very long if using clickable workspaces.
      [
-       title =? "emacs-main" --> doShift "1"
-     , className =? "Google-chrome"                --> doShift "2"
-     , title =? "Emulator" --> (doShift "3" <+> doFloat)
-     , title =? "Android Emulator - luffy:5554" --> doShift "3"
-     , title =? "Android Emulator - zoro:5556" --> doShift "3"
-     , className =? "chatall"                     --> doShift "3"
-     , className =? "Electron"                     --> doShift "3"
-     , className =? "kcachegrind"                  --> doShift "3"
-     , className =? "Wireshark"                    --> doShift "3"
-     , className =? "Stoplight Studio"             --> doShift "4"
-     , className =? "Postman"                      --> doShift "4"
-     , className =? "libreoffice"                  --> doShift "4"
-     , className =? "unityhub"                     --> doShift "5"
-     , className =? "vmware"                       --> doShift "5"
-     , className =? "Vmware"                       --> doShift "5"
-     , className =? "zoom"                         --> doShift "6"
-     , className =? "Slack"                        --> doShift "6"
-     , className =? "whatsdesk"                    --> doShift "6"
-     , className =? "discord"                      --> doShift "6"
-     , className =? "TelegramDesktop"              --> doShift "6"
-     , className =? "yakyak"                       --> doShift "6"
-     , title =? "WhatsApp" --> doShift "6"
-     , className =? "Whatsapp-for-linux"           --> doShift "6"
-     , className =? "Gitter"                       --> doShift "6"
-     , className =? "qtwaw"           --> doShift "6"
+       title =? "emacs-main" --> doShift ( head myWorkspaces )
+     , className =? "Google-chrome"                --> doShift ( myWorkspaces !! 1 )
+     , title =? "Emulator" --> (doShift ( myWorkspaces !! 2 ) <+> doFloat)
+     , title =? "Android Emulator - luffy:5554" --> doShift ( myWorkspaces !! 2 )
+     , title =? "Android Emulator - zoro:5556" --> doShift ( myWorkspaces !! 2 )
+     , className =? "chatall"                     --> doShift ( myWorkspaces !! 2 )
+     , className =? "Electron"                     --> doShift ( myWorkspaces !! 2 )
+     , className =? "kcachegrind"                  --> doShift ( myWorkspaces !! 2 )
+     , className =? "Wireshark"                    --> doShift ( myWorkspaces !! 2 )
+     , className =? "Stoplight Studio"             --> doShift "4:test"
+     , className =? "Postman"                      --> doShift "4:test"
+     , className =? "libreoffice"                  --> doShift "4:test"
+     , className =? "dolphin"                  --> doShift "4:test"
+     , className =? "unityhub"                     --> doShift "5:vm"
+     , className =? "vmware"                       --> (doShift "5:vm" <+> doFloat)
+     , className =? "Vmware"                       --> (doShift "5:vm" <+> doFloat)
+     , className =? "zoom"                         --> doShift "6:msg"
+     , className =? "Slack"                        --> doShift "6:msg"
+     , className =? "whatsdesk"                    --> doShift "6:msg"
+     , className =? "discord"                      --> doShift "6:msg"
+     , className =? "TelegramDesktop"              --> doShift "6:msg"
+     , className =? "yakyak"                       --> doShift "6:msg"
+     , title =? "WhatsApp" --> doShift "6:msg"
+     , className =? "Whatsapp-for-linux"           --> doShift "6:msg"
+     , className =? "Gitter"                       --> doShift "6:msg"
+     , className =? "qtwaw"           --> doShift "6:msg"
      , title =? "win11 on QEMU/KVM" --> doShift "7"
-     , className =? "Google-chrome-unstable"       --> doShift "7"
-     , className =? "Google-chrome-beta"           --> doShift "7"
-     , className =? "obs"                          --> doShift "8"
-     , className =? "kdenlive"                     --> doShift "8"
-     , className =? "SimpleScreenRecorder"         --> doShift "8"
-     , resource =? "mysql-workbench-bin"          --> doShift "9"
-     , title =? "MongoDB Compass"             --> doShift "9"
+     , className =? "google-chrome-unstable"       --> doShift "7:meet"
+     , className =? "Google-chrome-unstable"       --> doShift "7:meet"
+     , className =? "google-chrome-beta"           --> doShift "7:meet"
+     , className =? "Google-chrome-beta"           --> doShift "7:meet"
+     , className =? "obs"                          --> doShift "8:media"
+     , className =? "kdenlive"                     --> doShift "8:media"
+     , className =? "SimpleScreenRecorder"         --> doShift "8:media"
+     , resource =? "mysql-workbench-bin"          --> doShift "9:db"
+     , title =? "MongoDB Compass"             --> doShift "9:db"
      , title =? "NoiseTorch" --> doShift "0:misc"
-     , className =? "Blueman-manager"               --> doShift "0"
-     -- , className =? "scrcpy"                       --> (doShift "0" <+> doFloat)
-     , className =? "libreoffice-writer"           --> doShift "0"
-     -- , className =? "kakaotalk.exe"                --> (doShift "0" <+> doFloat)
-     , className =? "VirtualBox Manager"           --> doShift "0"
-     , className =? "PulseUI"                      --> doShift "0"
-     , className =? "org.remmina.Remmina"          --> doShift "0"
-     , className =? "Virt-manager"                 --> doShift "0"
-     , title =? "Oracle VM VirtualBox Manager"     --> doShift "0"
+     , className =? "Blueman-manager"               --> doShift "0:misc"
+     -- , className =? "scrcpy"                       --> (doShift "0:misc" <+> doFloat)
+     , className =? "libreoffice-writer"           --> doShift "0:misc"
+     -- , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)
+     , className =? "VirtualBox Manager"           --> doShift "0:misc"
+     , className =? "PulseUI"                      --> doShift "0:misc"
+     , className =? "org.remmina.Remmina"          --> doShift "0:misc"
+     , className =? "Virt-manager"                 --> doShift "0:misc"
+     , title =? "Oracle VM VirtualBox Manager"     --> doShift "0:misc"
      -- , className =? "Org.gnome.Nautilus"           --> doFloat
      , className =? "Gimp-2.10"                    --> doCenterFloat
      , resource  =? "gpicview"                     --> doCenterFloat
@@ -671,70 +677,33 @@ toggleFloat w = windows (\s -> if M.member w (W.floating s)
 
 myAdditionalKeys :: [(String, X ())]
 myAdditionalKeys  =
-  [ -- ("M-C-r", spawn "xmonad --recompile")  -- Recompiles xmonad
-    ("M-C-q", kill)              -- Quits xmonad
+  [
+    ("M-C-q", kill)
   , ("C-<Space>", hotkeyAction)
 
-  -- , ("C-q", kill)     -- Kill the currently focused client
-  -- , ("M-S-a", killAll)   -- Kill all windows on current workspace
+  , ("M-C-h", sendMessage Shrink)
+  , ("M-C-l", sendMessage Expand)
+  , ("M-C-j", sendMessage MirrorShrink)
+  , ("M-C-k", sendMessage MirrorExpand)
 
-  , ("M-C-h", sendMessage Shrink)                -- Shrink horiz window width
-  , ("M-C-l", sendMessage Expand)                -- Expand horiz window width
-  , ("M-C-j", sendMessage MirrorShrink)          -- Shrink vert window width
-  , ("M-C-k", sendMessage MirrorExpand)          -- Expand vert window width
-
-    -- Increase/decrease spacing (gaps)
-  , ("C-M1-j", decWindowSpacing 4)         -- Decrease window spacing
-  , ("C-M1-k", incWindowSpacing 4)         -- Increase window spacing
-  , ("C-M1-h", decScreenSpacing 4)         -- Decrease screen spacing
-  , ("C-M1-l", incScreenSpacing 4)         -- Increase screen spacing
+  , ("C-M1-j", decWindowSpacing 4)
+  , ("C-M1-k", incWindowSpacing 4)
+  , ("C-M1-h", decScreenSpacing 4)
+  , ("C-M1-l", incScreenSpacing 4)
 
   , ("M-<Tab>", windows W.focusDown)
   , ("M-S-<Tab>", windows W.focusUp)
-    -- Increase/decrease windows in the master pane or the stack
-  -- , ("M-S-<Up>", sendMessage (IncMasterN 1))      -- Increase # of clients master pane
-  -- , ("M-S-<Down>", sendMessage (IncMasterN (-1))) -- Decrease # of clients master pane
-  -- , ("M-C-<Up>", increaseLimit)                   -- Increase # of windows
-  -- , ("M-C-<Down>", decreaseLimit)                 -- Decrease # of windows
 
-
-    -- Sublayouts
-    -- This is used to push windows to tabbed sublayouts, or pull them out of it.
-    -- , ("M-C-h", sendMessage $ pullGroup L)
-    -- , ("M-C-l", sendMessage $ pullGroup R)
-    -- , ("M-C-k", sendMessage $ pullGroup U)
-    -- , ("M-C-j", sendMessage $ pullGroup D)
-
-    -- Scratchpads
-    -- Toggle show/hide these programs.  They run on a hidden workspace.
-    -- When you toggle them to show, it brings them to your current workspace.
-    -- Toggle them to hide and it sends them back to hidden workspace (NSP).
-  -- , ("C-s t", namedScratchpadAction myScratchPads "terminal")
-  -- , ("C-s m", namedScratchpadAction myScratchPads "mocp")
-  -- , ("C-s c", namedScratchpadAction myScratchPads "calculator")
-
-    -- Set wallpaper with 'feh'. Type 'SUPER+F1' to launch sxiv in the wallpapers directory.
-  -- Then in sxiv, type 'C-x w' to set the wallpaper that you choose.
-  -- , ("M-<F1>", spawn "sxiv -r -q -t -o ~/wallpapers/*")
-  -- , ("M-<F2>", spawn "/bin/ls ~/wallpapers | shuf -n 1 | xargs xwallpaper --stretch")
-  --, ("M-<F2>", spawn "feh --randomize --bg-fill ~/wallpapers/*")
-
-    -- Emacs (CTRL-e followed by a key)
-    -- , ("C-e e", spawn myEmacs)                 -- start emacs
-
-    -- Multimedia Keys
-  , ("<XF86AudioPlay>", spawn (myTerminal ++ "mocp --play"))
-  , ("<XF86AudioPrev>", spawn (myTerminal ++ "mocp --previous"))
-  , ("<XF86AudioNext>", spawn (myTerminal ++ "mocp --next"))
-  , ("<XF86AudioMute>", spawn "amixer set Master toggle")
-  , ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
-  , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
-  , ("<XF86HomePage>", spawn "qutebrowser https://www.youtube.com/c/DistroTube")
-  , ("<XF86Search>", spawn "dmsearch")
-  , ("<XF86Mail>", runOrRaise "thunderbird" (resource =? "thunderbird"))
-  , ("<XF86Calculator>", runOrRaise "qalculate-gtk" (resource =? "qalculate-gtk"))
-  , ("<XF86Eject>", spawn "toggleeject")
-  , ("<Print>", spawn "dmscrot")
+  , ("C-M1-S-1", windows $ W.greedyView (head myWorkspaces))
+  , ("C-M1-S-2", windows $ W.greedyView (myWorkspaces !! 1))
+  , ("C-M1-S-3", windows $ W.greedyView (myWorkspaces !! 2))
+  , ("C-M1-S-4", windows $ W.greedyView (myWorkspaces !! 3))
+  , ("C-M1-S-5", windows $ W.greedyView (myWorkspaces !! 4))
+  , ("C-M1-S-6", windows $ W.greedyView (myWorkspaces !! 5))
+  , ("C-M1-S-7", windows $ W.greedyView (myWorkspaces !! 6))
+  , ("C-M1-S-8", windows $ W.greedyView (myWorkspaces !! 7))
+  , ("C-M1-S-9", windows $ W.greedyView (myWorkspaces !! 8))
+  , ("C-M1-S-0", windows $ W.greedyView (myWorkspaces !! 9))
   ]
   where nonNSP          = WSIs (return (\ws -> W.tag ws /= "NSP"))
         nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "NSP"))

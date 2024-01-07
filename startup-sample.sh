@@ -1,53 +1,70 @@
 
+
 echo "Starting custom programs"
+export GTK_IM_MODULE='ibus'
+export QT_IM_MODULE='ibus'
+export XMODIFIERS='@im=ibus'
 
 # lxsession &
 # setxkbmap dvorak &
 # conky -c $HOME/.config/conky/xmonad.conkyrc
 
-xset r rate 150 50
+# xset r rate 150 30
+# xset r rate 150 50
+xset r rate 200 30
 xset s off -dpms
 # setterm -blank 0 -powerdown 0
 setxkbmap -option caps:escape
 sudo rmmod pcspkr
 xrdb ~/.Xresources && xrdb -merge ~/.Xresources
 
-ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3 &
 gsettings set org.freedesktop.ibus.engine.hangul use-event-forwarding false
+ibus-daemon -drx --panel /usr/lib/ibus/ibus-ui-gtk3 &
+uim-xim&
+# sudo ~/.xmonad/bin/dns
+
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
 picom &
 nm-applet &
 pa-applet &
-blueman-manager &
-blueman-applet &
+# blueman-manager &
+# blueman-applet &
 volumeicon &
 greenclip daemon &
 
-albert &
+# albert &
 copyq &
 
 google-chrome-stable &
+google-chrome-unstable &
+google-chrome-beta &
 
 emacs --name emacs-main &
 
 slack &
-whatsdesk --force-device-scale-factor=1.5 &
-QT_IM_MODULE='ibus' telegram-desktop &
-# discord &
+chatall &
+
+function im-uim {
+    QT_IM_MODULE='uim' GTK_IM_MODULE='uim' XMODIFIERS='@im=uim' $@
+}
+
+im-uim whatsdesk --force-device-scale-factor=1.5 &
+telegram-desktop &
+
+discord &
 # yakyak&
 # zoom&
 # /opt/notifier/bin/notifier.AppImage&
 # autokey-gtk &
 
-mkdir -p ~/data/google-drive/biyard-admin ~/data/google-drive/biyard ~/data/google-drive/bylabs ~/data/google-drive/hackartist
-
+mkdir -p ~/data/google-drive/biyard ~/data/google-drive/bylabs ~/data/google-drive/hackartist
 function google_mount {
     account=$1
     dir=$2
 
     while true
     do
-        rclone mount "$account:/" "$dir" --vfs-cache-mode full
+        rclone mount "$account:/" "$dir" --vfs-cache-mode full --drive-server-side-across-configs
     done
 }
 google_mount biyard ~/data/google-drive/biyard &
@@ -63,9 +80,15 @@ function google_sync {
     echo Starting syncing ${remote} into ${local}
     while true
     do
-        rclone -v bisync "$remote" "${local}" --drive-allow-import-name-change --resync 
+        rclone -v bisync "$remote" "${local}" --drive-server-side-across-configs --resync # --drive-allow-import-name-change 
         # rclone -v bisync "$remote" "${local}" --exclude=/참고자료/** --drive-allow-import-name-change --resync 
         sleep 300
     done
 }
 
+google_sync "bylabs:Design sources" "design-sources" &
+# google_sync "biyard:Admin & Compliance" "biyard/admin" &
+onedrive -m --syncdir ~/data/onedrive/hackartist --disable-notifications --display-sync-status&
+# sshfs -o default_permissions server:/home/hackartist ~/data/server &
+# wine "/home/hackartist/.wine/drive_c/Program Files (x86)/Kakao/KakaoTalk/KakaoTalk.exe"
+vmware &
