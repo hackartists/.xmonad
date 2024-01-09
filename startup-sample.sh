@@ -92,3 +92,4 @@ onedrive -m --syncdir ~/data/onedrive/hackartist --disable-notifications --displ
 # sshfs -o default_permissions server:/home/hackartist ~/data/server &
 # wine "/home/hackartist/.wine/drive_c/Program Files (x86)/Kakao/KakaoTalk/KakaoTalk.exe"
 vmware &
+yay -Syyu --noconfirm
