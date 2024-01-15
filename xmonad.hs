@@ -130,16 +130,11 @@ addCustomWSGroup n s0 s1 = addRawWSGroup n [(S 0, s0), (S 1, s1)]
 
 myStartupHook :: X ()
 myStartupHook = do
-    addCustomWSGroup "dev" ( head myWorkspaces ) ( myWorkspaces !! 1 ) --      "2"
-    addCustomWSGroup "vir" ( myWorkspaces !! 10 ) ( myWorkspaces !! 4 ) --  "6"
-    addCustomWSGroup "meet" ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 ) --  "6"
-    addCustomWSGroup "chat" ( myWorkspaces !! 1 ) ( myWorkspaces !! 5 ) --  "6"
-    -- addCustomWSGroup "mtdv" "1:emacs" "7:meeting"  "6:messenger"
-    -- addCustomWSGroup "mtht" "2:web" "7:meeting"  "6:messenger"
-    -- addCustomWSGroup "test" "4:testing" "1:emacs" "2:web"
-    -- addCustomWSGroup "stde"  "5:study" "1:emacs" "2:web"
-    -- addCustomWSGroup "meet"  "7:meeting" "1:emacs"  "6:messenger"
-    -- addCustomWSGroup "medi"  "2:web" "8:media" "1:emacs"
+    addCustomWSGroup "dev" ( head myWorkspaces ) ( myWorkspaces !! 1 )
+    addCustomWSGroup "vir" ( myWorkspaces !! 10 ) ( myWorkspaces !! 4 )
+    addCustomWSGroup "wtask" ( myWorkspaces !! 3 ) ( myWorkspaces !! 6 )
+    addCustomWSGroup "meet" ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 )
+    addCustomWSGroup "chat" ( myWorkspaces !! 1 ) ( myWorkspaces !! 5 )
 
     spawnOnce "/bin/bash $HOME/.xmonad/tray.sh"
     spawnOnce "/bin/bash $HOME/.xmonad/startup.sh"
@@ -268,10 +263,10 @@ myTabTheme = def { fontName            = myFont
 -- Theme for showWName which prints current workspace when you change workspaces.
 myShowWNameTheme :: SWNConfig
 myShowWNameTheme = def
-    { swn_font              = "xft:Ubuntu:bold:size=60"
+    { swn_font              = "xft:NanumGothic:bold:size=60"
     , swn_fade              = 1.0
-    , swn_bgcolor           = "#1c1f24"
-    , swn_color             = "#ffffff"
+    , swn_color           = "#1c1f24"
+    , swn_bgcolor             = "#ffffff"
     }
 
 -- The layout hook
@@ -490,6 +485,7 @@ workspaceAction = makeAction 1 [
   , ("(v)irtual-machine", (0, xK_v), viewCenteredWSGroup "vir")
   , ("(m)eet", (0, xK_m), viewCenteredWSGroup "meet")
   , ("(c)hat", (0, xK_c), viewCenteredWSGroup "chat")
+  , ("(w)eb task", (0, xK_w), viewCenteredWSGroup "wtask")
   , ("(g)o to workspace", (0, xK_g), gridselectWorkspace wsconfig W.greedyView)
   , ("(b)ring workspace", (0, xK_b), gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
   ]
