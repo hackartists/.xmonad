@@ -414,8 +414,8 @@ appRotateAction = makeAction 2 [
   ]
 
 appSendAction = makeAction 2 [
-  ("shift to (n)ext workspace", (0, xK_n), shiftTo Next nonNSP >> moveTo Next nonNSP)       -- Shifts focused window to next ws
-  , ("shift to (p)rev workspace", (0, xK_p), shiftTo Prev nonNSP >> moveTo Prev nonNSP)  -- Shifts focused window to prev ws
+  ("shift to (n)ext workspace", (0, xK_n), shiftTo Next nonNSP >> moveTo Next nonNSP)
+  , ("shift to (p)rev workspace", (0, xK_p), shiftTo Prev nonNSP >> moveTo Prev nonNSP)
   , ("(w)shift to leftest screen", (0, xK_w), sendToScreen def 0)
   , ("(e)shift to center screen", (0, xK_e), sendToScreen def 1)
   , ("(r)shift to rightest screen", (0, xK_r), sendToScreen def 2)
@@ -468,7 +468,7 @@ appAction = makeAction 1
               , ("(b)ring a window", (0, xK_b), bringSelected $ mygridConfig 2)
               , ("(SPC)bring to master", (0, xK_space), windowPrompt appConfig BringToMaster wsWindows)
               ] ++ [
-              ("send a window to ("++num++"):"++ws, (0,key), windows $ W.shift $ num++"")
+              ("send a window to ("++num++"):"++ws, (0,key), windows $ W.shift $ myWorkspaces !! read num)
               | (num, key, ws) <- myAllWorkspaces
               ]
 
