@@ -468,7 +468,7 @@ appAction = makeAction 1
               , ("(b)ring a window", (0, xK_b), bringSelected $ mygridConfig 2)
               , ("(SPC)bring to master", (0, xK_space), windowPrompt appConfig BringToMaster wsWindows)
               ] ++ [
-              ("send a window to ("++num++"):"++ws, (0,key), windows $ W.shift $ myWorkspaces !! read num)
+              ("send a window to ("++num++"):"++ws, (0,key), windows $ W.shift $ myWorkspaces !! ((read num - 1) `mod` 10) )
               | (num, key, ws) <- myAllWorkspaces
               ]
 
