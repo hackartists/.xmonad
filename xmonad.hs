@@ -392,7 +392,8 @@ appFavoriteAction = makeAction 2 [
   (name, key, spawn cmd)
   | (name, key, cmd) <- [ ("(a)udacity", (0, xK_a), "audacity")
                         -- Figma only supports font helper for window and Mac OS
-                        , ("(c)hrome", (0, xK_c), "google-chrome-stable --user-agent=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36\"")
+                        , ("(c)hrome", (0, xK_c), "google-chrome-stable")
+                        , ("(f)igma", (0, xK_f), "google-chrome-unstable --user-agent=\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36\" https://www.figma.com/")
                         , ("(d)eadbeef", (0, xK_d), "deadbeef")
                         , ("(e)macsclient", (0, xK_e), "emacsclient -c -a emacs")
                         , ("geany", (0, xK_1), "geany")
