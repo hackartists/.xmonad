@@ -405,7 +405,8 @@ appFavoriteAction = makeAction 2 [
                         , ("LibreOffice w(r)iter", (0, xK_r), "lowriter")
                         , ("(o)bs", (0, xK_o), "obs")
                         , ("(p)cmanfm", (0, xK_p), "pcmanfm")
-                        , ("(w)ireshark", (0, xK_w), "sudo wireshark")
+                        , ("(w)hatapps", (0, xK_w), "QT_IM_MODULE='uim' GTK_IM_MODULE='uim' XMODIFIERS='@im=uim' whatsdesk")
+                        , ("wire(s)hark", (0, xK_s), "sudo wireshark")
                         , ("(m)ain emacs", (0, xK_m), "emacs --name emacs-main")
                         ]
   ]
