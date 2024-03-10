@@ -4,6 +4,7 @@
 {-# OPTIONS_GHC -Wno-deprecations #-}
 import XMonad hiding ( (|||) )
 import XMonad.Config
+import XMonad.Config.Kde
 
 -- import System.Directory
 import System.IO (hPutStrLn)
@@ -31,6 +32,7 @@ import Data.Char (isSpace, toUpper)
 import Data.Maybe ( fromJust, isJust )
 import Data.Monoid
 import Data.Tree
+import Data.Ratio
 import qualified Data.Map as M
 -- import Data.Default
 
@@ -585,10 +587,10 @@ myManageHook = composeAll
      , className =? "Stoplight Studio"             --> doShift "4:test"
      , className =? "Postman"                      --> doShift "4:test"
      , className =? "libreoffice"                  --> doShift "4:test"
-     , className =? "dolphin"                  --> doShift "4:test"
      , className =? "unityhub"                     --> doShift "5:vm"
      , className =? "vmware"                       --> doShift "5:vm"
      , className =? "Vmware"                       --> doShift "5:vm"
+     , className =? "org.remmina.Remmina"          --> doShift "5:vm"
      , className =? "zoom"                         --> doShift "6:msg"
      , className =? "Slack"                        --> doShift "6:msg"
      , className =? "whatsdesk"                    --> doShift "6:msg"
@@ -616,7 +618,7 @@ myManageHook = composeAll
      -- , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)
      , className =? "VirtualBox Manager"           --> doShift "0:misc"
      , className =? "PulseUI"                      --> doShift "0:misc"
-     , className =? "org.remmina.Remmina"          --> doShift "0:misc"
+     -- , className =? "org.remmina.Remmina"          --> doShift "0:misc"
      , className =? "Virt-manager"                 --> doShift "0:misc"
      , title =? "Oracle VM VirtualBox Manager"     --> doShift "0:misc"
      -- , className =? "Org.gnome.Nautilus"           --> doFloat
@@ -625,6 +627,8 @@ myManageHook = composeAll
      , className =? "MPlayer"                      --> doCenterFloat
      , className =? "Pavucontrol"                  --> doCenterFloat
      , className =? "systemsettings"               --> doCenterFloat
+     , title =? "ranger"                      --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
+     , className =? "dolphin"                  --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , resource  =? "desktop_window"               --> doIgnore
      , className =? "stalonetray"                  --> doIgnore
      , className =? "confirm"         --> doFloat
@@ -762,7 +766,7 @@ main = do
         newFh = manageFocus newFocusHook
         acFh :: ManageHook
         acFh = manageFocus activateFocusHook
-    xmonad
+    xmonad 
       $ additionalNav2DKeys (xK_k, xK_h, xK_j, xK_l)
                                [
                                   (mod4Mask,               windowGo  )
@@ -771,9 +775,9 @@ main = do
                                False
       $ setEwmhActivateHook acFh
       $ ewmhFullscreen . ewmh
-      $ def
       -- $ def
-        { manageHook         = newFh <> myManageHook <+> manageDocks
+      $ kdeConfig
+        { manageHook         = newFh <> manageHook kdeConfig <+> myManageHook <+> manageDocks
         , handleEventHook    = docksEventHook
         , modMask            = myModMask
         , terminal           = myTerminal
