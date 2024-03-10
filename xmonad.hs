@@ -392,7 +392,8 @@ layoutAction = makeAction 1
 
 appFavoriteAction = makeAction 2 [
   (name, key, spawn cmd)
-  | (name, key, cmd) <- [ ("(a)udacity", (0, xK_a), "audacity")
+  | (name, key, cmd) <- [ ("ranger", (0, xK_1), "urxvt -e ranger")
+                        ,  ("(a)udacity", (0, xK_a), "audacity")
                         -- Figma only supports font helper for window and Mac OS
                         , ("(c)hrome", (0, xK_c), "google-chrome-stable")
                         , ("(f)igma", (0, xK_f), "google-chrome-unstable --user-agent=\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36\" https://www.figma.com/")
