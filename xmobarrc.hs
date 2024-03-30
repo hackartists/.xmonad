@@ -29,12 +29,11 @@ Config {
                     , Run Cpu ["-t", "<total>%","-H","50","--high","red"] 20
                     , Run Memory ["-t", "<used>M"] 20
                     , Run DiskU [("/", "<free>")] [] 60
-                    , Run Com "bash" ["-c", "~/.local/bin/pacupdate"] "updates" 3600
-                    , Run Com "bash" ["-c", "~/.local/bin/mouselocation"] "mouselocation" 1
-                    , Run Com "bash" ["-c", "~/.local/bin/volume"] "volume" 1
+                    , Run Com "bash" ["-c", "~/.xmonad/bin/pacupdate"] "updates" 3600
+                    , Run Com "bash" ["-c", "~/.xmonad/bin/mouselocation"] "mouselocation" 1
+                    , Run Com "bash" ["-c", "~/.xmonad/bin/volume"] "volume" 1
                     , Run Com "uname" ["-r"] "" 3600
                     , Run Com "bash" ["-c", "~/.xmonad/gh-notify.sh"] "gh" 30
-                    , Run Com "bash" ["-c", "~/.xmonad/bin/emacsd.sh"] "emacsd" 36000
                     , Run UnsafeStdinReader
                     ]
        , sepChar = "%"

@@ -393,23 +393,16 @@ layoutAction = makeAction 1
 appFavoriteAction = makeAction 2 [
   (name, key, spawn cmd)
   | (name, key, cmd) <- [ ("ranger", (0, xK_1), "urxvt -e ranger")
-                        ,  ("(a)udacity", (0, xK_a), "audacity")
-                        -- Figma only supports font helper for window and Mac OS
                         , ("(c)hrome", (0, xK_c), "google-chrome-stable")
-                        , ("(f)igma", (0, xK_f), "google-chrome-unstable --user-agent=\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36\" https://www.figma.com/")
-                        , ("(d)eadbeef", (0, xK_d), "deadbeef")
-                        , ("(e)macsclient", (0, xK_e), "emacsclient -c -a emacs")
-                        , ("geany", (0, xK_1), "geany")
-                        , ("geary", (0, xK_1), "geary")
+                        , ("(d)iscord", (0, xK_d), "discord")
                         , ("call(g)rind", (0, xK_g), "kcachegrind")
                         , ("(g)imp", (0, xK_1), "gimp")
                         , ("(k)denlive", (0, xK_k), "kdenlive")
-                        , ("LibreOffice (i)mpress", (0, xK_i), "loimpress")
-                        , ("LibreOffice w(r)iter", (0, xK_r), "lowriter")
                         , ("(o)bs", (0, xK_o), "obs")
                         , ("(p)cmanfm", (0, xK_p), "pcmanfm")
+                        , ("sc(r)cpy", (0, xK_r), "scrcpy -K")
+                        , ("(s)lack", (0, xK_s), "slack")
                         , ("(w)hatapps", (0, xK_w), "QT_IM_MODULE='uim' GTK_IM_MODULE='uim' XMODIFIERS='@im=uim' whatsdesk")
-                        , ("wire(s)hark", (0, xK_s), "sudo wireshark")
                         , ("(m)ain emacs", (0, xK_m), "emacs --name emacs-main")
                         ]
   ]
@@ -593,9 +586,7 @@ myManageHook = composeAll
      , className =? "Vmware"                       --> doShift "5:vm"
      , className =? "org.remmina.Remmina"          --> doShift "5:vm"
      , className =? "zoom"                         --> doShift "6:msg"
-     , className =? "Slack"                        --> doShift "6:msg"
      , className =? "whatsdesk"                    --> doShift "6:msg"
-     , className =? "discord"                      --> doShift "6:msg"
      , className =? "TelegramDesktop"              --> doShift "6:msg"
      , className =? "yakyak"                       --> doShift "6:msg"
      , title =? "WhatsApp" --> doShift "6:msg"
@@ -614,7 +605,6 @@ myManageHook = composeAll
      , title =? "MongoDB Compass"             --> doShift "9:db"
      , title =? "NoiseTorch" --> doShift "0:misc"
      , className =? "Blueman-manager"               --> doShift "0:misc"
-     -- , className =? "scrcpy"                       --> (doShift "0:misc" <+> doFloat)
      , className =? "libreoffice-writer"           --> doShift "0:misc"
      -- , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)
      , className =? "VirtualBox Manager"           --> doShift "0:misc"
@@ -630,8 +620,11 @@ myManageHook = composeAll
      , className =? "systemsettings"               --> doCenterFloat
      , title =? "ranger"                      --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , className =? "dolphin"                  --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
+     , className =? "Slack"                        --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
+     , className =? "discord"                      --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , resource  =? "desktop_window"               --> doIgnore
      , className =? "stalonetray"                  --> doIgnore
+     , className =? "scrcpy"          --> doFloat
      , className =? "confirm"         --> doFloat
      , className =? "file_progress"   --> doFloat
      , className =? "dialog"          --> doFloat
@@ -650,6 +643,9 @@ myManageHook = composeAll
      -- , isFullscreen                                --> (doF W.focusDown <+> doFullFloat)
      -- , isFullscreen -->  doFullFloat
      ] <+> namedScratchpadManageHook myScratchPads
+  where chatApps = [
+          "discord", "slack"
+          ]
 
 myKeys conf@XConfig {XMonad.modMask = modMask} = M.fromList
   [
@@ -776,9 +772,10 @@ main = do
                                False
       $ setEwmhActivateHook acFh
       $ ewmhFullscreen . ewmh
-      -- $ def
-      $ kdeConfig
-        { manageHook         = newFh <> manageHook kdeConfig <+> myManageHook <+> manageDocks
+      $ def
+      -- $ kdeConfig
+        -- { manageHook         = newFh <> manageHook kdeConfig <+> myManageHook <+> manageDocks
+        { manageHook         = newFh <+> myManageHook <+> manageDocks
         , handleEventHook    = docksEventHook
         , modMask            = myModMask
         , terminal           = myTerminal
