@@ -772,9 +772,8 @@ main = do
                                False
       $ setEwmhActivateHook acFh
       $ ewmhFullscreen . ewmh
-      $ def
-      -- $ kdeConfig
-        -- { manageHook         = newFh <> manageHook kdeConfig <+> myManageHook <+> manageDocks
+      $ def -- $ kde4Config
+        -- { manageHook         = newFh <> manageHook kde4Config <+> myManageHook <+> manageDocks
         { manageHook         = newFh <+> myManageHook <+> manageDocks
         , handleEventHook    = docksEventHook
         , modMask            = myModMask

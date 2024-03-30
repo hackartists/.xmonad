@@ -14,6 +14,7 @@ CMD_SCRCPY="scrcpy: mirror mobile screen"
 CMD_COLOR="color: color picker"
 CMD_DICT="dict: dictionary"
 CMD_UC="unicode: unicode symbols"
+CMD_PASS="pass: standard password manager"
 
 if [[ -z "$1" ]]; then
     echo $CMD_CALC
@@ -31,6 +32,7 @@ if [[ -z "$1" ]]; then
     # translate-shell package
     echo $CMD_DICT
     echo $CMD_UC
+    echo $CMD_PASS
 fi
 
 case $1 in
@@ -91,4 +93,7 @@ case $1 in
         kill `pidof rofi`
         echo $(rofi -modi "emoji:rofimoji" -show emoji)
         ;;
+    "$CMD_PASS")
+        kill `pidof rofi`
+        ROFI_PASS_BACKEND=wtype ROFI_PASS_CLIPBOARD_BACKEND=wl-clipboard rofi-pass
 esac
