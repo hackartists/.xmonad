@@ -33,7 +33,7 @@ Config {
                     , Run Com "bash" ["-c", "~/.xmonad/bin/mouselocation"] "mouselocation" 1
                     , Run Com "bash" ["-c", "~/.xmonad/bin/volume"] "volume" 1
                     , Run Com "uname" ["-r"] "" 3600
-                    , Run Com "bash" ["-c", "~/.xmonad/gh-notify.sh"] "gh" 30
+                    , Run Com "bash" ["-c", "~/.xmonad/gh-notify.sh"] "gh" 300
                     , Run UnsafeStdinReader
                     ]
        , sepChar = "%"

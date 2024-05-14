@@ -4,7 +4,7 @@
 {-# OPTIONS_GHC -Wno-deprecations #-}
 import XMonad hiding ( (|||) )
 import XMonad.Config
-import XMonad.Config.Kde
+-- import XMonad.Config.Kde
 
 -- import System.Directory
 import System.IO (hPutStrLn)
@@ -95,6 +95,7 @@ import XMonad.Util.EZConfig
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
+import XMonad.Util.Themes
 import XMonad.Prompt
 import XMonad.Prompt.Window
 import qualified XMonad.Prompt.Window as W
@@ -132,8 +133,8 @@ addCustomWSGroup n s0 s1 = addRawWSGroup n [(S 0, s0), (S 1, s1)]
 
 myStartupHook :: X ()
 myStartupHook = do
-    addCustomWSGroup "dev" ( head myWorkspaces ) ( myWorkspaces !! 1 )
-    addCustomWSGroup "vir" ( myWorkspaces !! 10 ) ( myWorkspaces !! 4 )
+    addCustomWSGroup "dev" ( myWorkspaces !! 1 ) ( head myWorkspaces ) 
+    addCustomWSGroup "vir"  ( myWorkspaces !! 4 ) ( myWorkspaces !! 10 )
     addCustomWSGroup "wtask" ( myWorkspaces !! 3 ) ( myWorkspaces !! 6 )
     addCustomWSGroup "meet" ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 )
     addCustomWSGroup "chat" ( myWorkspaces !! 1 ) ( myWorkspaces !! 5 )
@@ -253,13 +254,17 @@ wideAccordion  = renamed [Replace "wideAccordion"]
            $ Mirror Accordion
 
 myTabTheme = def { fontName            = myFont
-                 , activeColor         = "#46d9ff"
-                 , inactiveColor       = "#313846"
-                 -- , activeBorderColor   = "#ff0000"
-                 , activeBorderColor   = "#46d9ff"
-                 , inactiveBorderColor = "#282c34"
-                 , activeTextColor     = "#282c34"
-                 , inactiveTextColor   = "#d0d0d0"
+                 , activeColor         = "#dfdcd8"
+                 , inactiveColor       = "#f6f5f4"
+                 , urgentColor         = "#3584e4"
+                 , activeBorderColor   = "#bfb8b1"
+                 , inactiveBorderColor = "#cdc7c2"
+                 , urgentBorderColor   = "#1658a7"
+                 , activeTextColor     = "#2e3436"
+                 , inactiveTextColor   = "#929595"
+                 , urgentTextColor     = "#ffffff"
+                 , decoWidth           = 400
+                 , decoHeight          = 35
                  }
 
 -- Theme for showWName which prints current workspace when you change workspaces.
@@ -620,6 +625,8 @@ myManageHook = composeAll
      , className =? "systemsettings"               --> doCenterFloat
      , title =? "ranger"                      --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , className =? "dolphin"                  --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
+     , className =? "thunar"                  --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
+     , className =? "Thunar"                  --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , className =? "Slack"                        --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , className =? "discord"                      --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , resource  =? "desktop_window"               --> doIgnore
@@ -680,6 +687,7 @@ myAdditionalKeys  =
   [
     ("M-C-q", kill)
   , ("C-<Space>", hotkeyAction)
+  , ("M1-<Space>", spawn "rofi -show combi")
 
   , ("M-C-h", sendMessage Shrink)
   , ("M-C-l", sendMessage Expand)

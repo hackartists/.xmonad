@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+D=eDP-1
+S=DP-1
+H=HDMI-1
 OPT1="OdysseyG9: 3-screens and bottom"
 OPT2="OdysseyG9: full-screen and bottom"
 OPT3="OdysseyG9: full-screen and off"
@@ -11,11 +14,11 @@ OPT8="Extend: HDMI"
 OPT9="OdysseyG9: One on DP"
 
 get_options() {
-    echo "$OPT9"
-    echo "$OPT3"
-    echo "$OPT2"
+    # echo "$OPT9"
+    # echo "$OPT3"
+    # echo "$OPT2"
     echo "$OPT4"
-    echo "$OPT1"
+    # echo "$OPT1"
     echo "$OPT5"
     echo "$OPT6"
     echo "$OPT7"
@@ -48,27 +51,27 @@ main() {
             xrandr --output HDMI-0 --mode 5120x1440 --output DP-4 --off
             ;;
         "$OPT4")
-            xrandr --output DP-4 --auto
-            xrandr --output DP-0 --same-as DP-4 --auto
+            xrandr --output $D --auto
+            xrandr --output $S --same-as DP-4 --auto
             ;;
         "$OPT5")
-            xrandr --output DP-4 --auto
-            xrandr --output DP-0 --auto --right-of DP-4
+            xrandr --output $D --auto
+            xrandr --output $S --auto --right-of $D
             ;;
         "$OPT6")
-            xrandr --output DP-4 --auto
-            xrandr --output HDMI-0 --off
-            xrandr --output DP-0 --off
+            xrandr --output $D --auto
+            xrandr --output $H --off
+            xrandr --output $S --off
             ;;
         "$OPT7")
-            xrandr --output HDMI-0 --same-as DP-4 --auto
+            xrandr --output $H --same-as $D --auto
             ;;
         "$OPT8")
-            xrandr --output DP-4 --auto
-            xrandr --output HDMI-0 --auto --right-of DP-4
+            xrandr --output $D --auto
+            xrandr --output $H --auto --right-of $D
             ;;
         "$OPT9")
-            xrandr --output DP-4 --mode 5120x1440 --output HDMI-0 --off
+            xrandr --output $D --mode 5120x1440 --output $H --off
             ;;
     esac
 }
