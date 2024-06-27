@@ -1,5 +1,12 @@
 * xmonad-config
 
+** Requiremnets
++ Google chrome uses Dbus
+
+#+begin_src sh
+  yay -S python-pydbus # For ranger Dbus
+#+end_src
+
 ** Setup
 + Clone this repository in =$HOME/.xmonad=.
 
