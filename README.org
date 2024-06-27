@@ -13,6 +13,7 @@
 
   export DE='kde'
   export XDG_CURRENT_DESKTOP=KDE
+  export KDE_SESSION_VERSION=5
 
   exec xmonad &> ~/xmonad.log
 #+end_src
