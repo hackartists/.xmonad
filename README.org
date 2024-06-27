@@ -14,8 +14,17 @@
   export DE='kde'
   export XDG_CURRENT_DESKTOP=KDE
   export KDE_SESSION_VERSION=5
+  export XDG_MENU_PREFIX=plasma-
+  export XDG_CONFIG_DIRS=/home/hackartist/.config/kdedefaults:/etc/xdg
 
   exec xmonad &> ~/xmonad.log
+#+end_src
+
+*** Starting X11
++ Guarantee stopping =xdg-desktop-portal=
+  + Execute the below command if you are trying to run X11 twice or more.
+#+begin_src sh
+  systemctl stop --user xdg-desktop-portal.service
 #+end_src
 
 ** Link ranger kdialog
