@@ -609,6 +609,7 @@ myManageHook = composeAll
      , resource =? "mysql-workbench-bin"          --> doShift "9:db"
      , title =? "MongoDB Compass"             --> doShift "9:db"
      , title =? "NoiseTorch" --> doShift "0:misc"
+     , className =? "RustDesk"               --> doShift "0:misc"
      , className =? "Blueman-manager"               --> doShift "0:misc"
      , className =? "libreoffice-writer"           --> doShift "0:misc"
      -- , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)

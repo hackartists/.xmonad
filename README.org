@@ -1,3 +1,24 @@
 * xmonad-config
-  
-xmonad-config
+
+** Setup
++ Clone this repository in =$HOME/.xmonad=.
+
+** Setting XDG Desktop Portal
+*** Configure XDE Desktop
++ Setting =$HOME/.xinitrc= file
+
+#+begin_src conf
+  export GTK_THEME=Adwaita:dark
+  export XDG_SESSION_TYPE=x11
+
+  export DE='kde'
+  export XDG_CURRENT_DESKTOP=KDE
+
+  exec xmonad &> ~/xmonad.log
+#+end_src
+
+** Link ranger kdialog
+#+begin_src sh
+  sudo ln -s /usr/local/bin/kdialog $(pwd)/bin/ranger-kdialog
+#+end_src
+

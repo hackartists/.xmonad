@@ -1,0 +1,71 @@
+#!/bin/sh
+
+## NOTE: I have stopped developing this script, focusing instead on the `nnn` variant.
+
+## Instructions
+# - Place this file as /usr/local/bin/kdialog
+# - Set XDG_CURRENT_DESKTOP=KDE
+
+# To pick a directory in ranger, press q.
+
+## Debugging
+#args="$@"
+#notify-send "kdialog $args"
+#echo "kdialog $args" >> $HOME/kdialog-log
+
+# $1 is the window title
+
+if [ "$TERMINAL" = "" ]
+then
+   TERMINAL=urxvt
+fi
+
+getopenfilename() {
+    $TERMINAL -t "$1" -e ranger --choosefile=/tmp/fileselect
+    cat /tmp/fileselect
+    rm /tmp/fileselect
+}
+
+getexistingdirectory() {
+    $TERMINAL -t "$1" -e ranger --choosedir=/tmp/fileselect
+    cat /tmp/fileselect
+    rm /tmp/fileselect
+}
+
+getsavefilename() {
+    echo "$(getexistingdirectory "$1")/"$2""
+}
+
+version() {
+    # impersonate the latest version
+    echo "kdialog 21.12.1"
+}
+
+
+## Parse options
+for (( i=1; i<=$#; i++ ));
+do
+    case ${!i} in
+    --getopenfilename | --getexistingdirectory | --version )
+        # get rid of the leading dashes
+        fun=${!i##--}
+        ;;
+    --getsavefilename )
+        fun=${!i##--}
+        (( i++ ))
+        save_path="${!i}"
+        save_file="${save_path##/*/}"
+        ;;
+    --title )
+        (( i++ ))
+        title=${!i}
+        ;;
+    esac
+done 2> /dev/null;
+
+title=${title:-ranger-kdialog}
+
+## Epic functional programming trick
+if ! [ -z "$fun" ]; then
+    echo "$($fun "$title" "$save_file")"
+fi
