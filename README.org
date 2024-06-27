@@ -20,6 +20,6 @@
 
 ** Link ranger kdialog
 #+begin_src sh
-  sudo ln -s /usr/local/bin/kdialog $(pwd)/bin/ranger-kdialog
+  sudo ln -s $HOME/.xmonad/bin/ranger-kdialog /usr/local/bin/kdialog
 #+end_src
 

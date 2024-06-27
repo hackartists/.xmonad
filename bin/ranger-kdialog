@@ -11,10 +11,9 @@
 ## Debugging
 #args="$@"
 #notify-send "kdialog $args"
-#echo "kdialog $args" >> $HOME/kdialog-log
+echo "$@" >> $HOME/ranger-kdialog.log
 
 # $1 is the window title
-
 if [ "$TERMINAL" = "" ]
 then
    TERMINAL=urxvt
@@ -23,21 +22,26 @@ fi
 getopenfilename() {
     $TERMINAL -t "$1" -e ranger --choosefile=/tmp/fileselect
     cat /tmp/fileselect
+    echo "getopenfilename $(cat /tmp/fileselect)" >> $HOME/ranger-kdialog.log
     rm /tmp/fileselect
 }
 
 getexistingdirectory() {
     $TERMINAL -t "$1" -e ranger --choosedir=/tmp/fileselect
     cat /tmp/fileselect
+    echo "getexisitingdirectory $(cat /tmp/fileselect)" >> $HOME/ranger-kdialog.log
     rm /tmp/fileselect
 }
 
 getsavefilename() {
     echo "$(getexistingdirectory "$1")/"$2""
+    echo "getsavefilename $1/$2" >> $HOME/ranger-kdialog.log
+    notify-send 'Ranger' "$2" --icon=dialog-information
 }
 
 version() {
     # impersonate the latest version
+    echo "kdialog 21.12.1" >> ~/kdialog-log
     echo "kdialog 21.12.1"
 }
 
