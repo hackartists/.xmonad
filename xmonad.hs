@@ -576,7 +576,7 @@ myManageHook = composeAll
      [
        title =? "emacs-main" --> doShift ( head myWorkspaces )
      , className =? "Google-chrome"                --> doShift ( myWorkspaces !! 1 )
-     , title =? "Emulator" --> (doShift ( myWorkspaces !! 2 ) <+> doFloat)
+     , title =? "Emulator" --> (doShift ( myWorkspaces !! 2 ))
      , title =? "Android Emulator - luffy:5554" --> doShift ( myWorkspaces !! 2 )
      , title =? "Android Emulator - zoro:5556" --> doShift ( myWorkspaces !! 2 )
      , className =? "chatall"                     --> doShift ( myWorkspaces !! 2 )
@@ -597,6 +597,7 @@ myManageHook = composeAll
      , title =? "WhatsApp" --> doShift "6:msg"
      , className =? "Whatsapp-for-linux"           --> doShift "6:msg"
      , className =? "Gitter"                       --> doShift "6:msg"
+     , className =? "google-chat-linux"            --> doShift "6:msg"
      , className =? "qtwaw"           --> doShift "6:msg"
      , title =? "win11 on QEMU/KVM" --> doShift "7"
      , className =? "google-chrome-unstable"       --> doShift "7:meet"
