@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-D=eDP-1
-S=DP-1
+D=DP-4
+S=DP-0
 H=HDMI-1
 OPT1="OdysseyG9: 3-screens and bottom"
 OPT2="OdysseyG9: full-screen and bottom"
