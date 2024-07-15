@@ -4,7 +4,7 @@
 {-# OPTIONS_GHC -Wno-deprecations #-}
 import XMonad hiding ( (|||) )
 import XMonad.Config
--- import XMonad.Config.Kde
+import XMonad.Config.Kde
 
 -- import System.Directory
 import System.IO (hPutStrLn)
@@ -253,19 +253,21 @@ tallAccordion  = renamed [Replace "tallAccordion"] Accordion
 wideAccordion  = renamed [Replace "wideAccordion"]
            $ Mirror Accordion
 
-myTabTheme = def { fontName            = myFont
-                 , activeColor         = "#dfdcd8"
-                 , inactiveColor       = "#f6f5f4"
-                 , urgentColor         = "#3584e4"
-                 , activeBorderColor   = "#bfb8b1"
-                 , inactiveBorderColor = "#cdc7c2"
-                 , urgentBorderColor   = "#1658a7"
-                 , activeTextColor     = "#2e3436"
-                 , inactiveTextColor   = "#929595"
-                 , urgentTextColor     = "#ffffff"
-                 , decoWidth           = 400
-                 , decoHeight          = 35
-                 }
+myTabTheme =
+  def
+    { fontName = myFont,
+      activeColor = "#2d2d2d",
+      inactiveColor = "#353535",
+      urgentColor = "#15539e",
+      activeBorderColor = "#070707",
+      inactiveBorderColor = "#1c1c1c",
+      urgentBorderColor = "#030c17",
+      activeTextColor = "#eeeeec",
+      inactiveTextColor = "#929291",
+      urgentTextColor = "#ffffff",
+      decoWidth = 400,
+      decoHeight = 35
+    }
 
 -- Theme for showWName which prints current workspace when you change workspaces.
 myShowWNameTheme :: SWNConfig
@@ -613,7 +615,7 @@ myManageHook = composeAll
      , className =? "RustDesk"               --> doShift "0:misc"
      , className =? "Blueman-manager"               --> doShift "0:misc"
      , className =? "libreoffice-writer"           --> doShift "0:misc"
-     -- , className =? "kakaotalk.exe"                --> (doShift "0:misc" <+> doFloat)
+     , className =? "kakaotalk.exe"                --> doFloat
      , className =? "VirtualBox Manager"           --> doShift "0:misc"
      , className =? "PulseUI"                      --> doShift "0:misc"
      -- , className =? "org.remmina.Remmina"          --> doShift "0:misc"
@@ -626,6 +628,7 @@ myManageHook = composeAll
      , className =? "Pavucontrol"                  --> doCenterFloat
      , className =? "systemsettings"               --> doCenterFloat
      , title =? "ranger"                      --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
+     , className =? "kitty"                      --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , className =? "dolphin"                  --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , className =? "thunar"                  --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , className =? "Thunar"                  --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
@@ -782,8 +785,9 @@ main = do
                                False
       $ setEwmhActivateHook acFh
       $ ewmhFullscreen . ewmh
-      $ def -- $ kde4Config
-        -- { manageHook         = newFh <> manageHook kde4Config <+> myManageHook <+> manageDocks
+      $ def
+      -- $ kdeConfig
+        -- { manageHook         = newFh <> manageHook kdeConfig <+> myManageHook <+> manageDocks
         { manageHook         = newFh <+> myManageHook <+> manageDocks
         , handleEventHook    = docksEventHook
         , modMask            = myModMask
