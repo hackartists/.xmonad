@@ -10,8 +10,45 @@
 ** Setup
 + Clone this repository in =$HOME/.xmonad=.
 
-** Setting XDG Desktop Portal
-*** Configure XDE Desktop
+** Ranger to FileChooser and FileManger
+*** On XFCE
+#+begin_src shell
+  yay -S xdg-desktop-portal xdg-desktop-portal-xapp xdg-desktop-portal-termfilechooser-git kitty
+#+end_src
+
+**** Create xdg-desktop-portal config
++ $HOME/.config/xdg-desktop-portal/portals.conf
+#+begin_src conf
+  [preferred]
+  default=xapp
+  org.freedesktop.impl.portal.FileChooser=termfilechooser;xapp;
+  org.freedesktop.FileManager1=xapp;
+#+end_src
+
+**** Create termfilechooser config
++ $HOME/.config/xdg-desktop-portal-termfilechooser/config
+
+#+begin_src conf
+  [filechooser]
+  cmd=/usr/share/xdg-desktop-portal-termfilechooser/ranger-wrapper.sh
+#+end_src
+
+**** Running xdg-termfilechooser config
++ Manually start xdg-deskto-portal-termfilechooser by the command below
+  + You can start it by systemd
+
+#+begin_src shell
+  /usr/lib/xdg-desktop-portal-termfilechooser -c $HOME/.config/xdg-desktop-portal-termfilechooser/config -l DEBUG
+  # systemctl --user enable --now xdg-desktop-portal-termfilechooser
+#+end_src
+
+**** Change FileManger
+#+begin_src shell
+  PYTHONPATH=$HOME/.xmonad/py python -m ranger-dbus.py &
+#+end_src
+
+
+*** Configure KDE Desktop
 + Setting =$HOME/.xinitrc= file
 
 #+begin_src conf
