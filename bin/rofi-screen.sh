@@ -15,7 +15,7 @@ OPT9="OdysseyG9: One on DP"
 
 get_options() {
     # echo "$OPT9"
-    # echo "$OPT3"
+    echo "$OPT3"
     # echo "$OPT2"
     echo "$OPT4"
     # echo "$OPT1"
@@ -48,7 +48,7 @@ main() {
             xrandr --output DP-4 --mode 1920x1080 --pos 1600x1440
             ;;
         "$OPT3")
-            xrandr --output HDMI-0 --mode 5120x1440 --output DP-4 --off
+            xrandr --output HDMI-0 --mode 5120x1440 --output DP-4 --off  --output DP-0 --off
             ;;
         "$OPT4")
             xrandr --output $D --auto
