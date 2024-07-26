@@ -711,6 +711,8 @@ myAdditionalKeys  =
   , ("<XF86AudioPrev>", spawn (myTerminal ++ "mocp --previous"))
   , ("<XF86AudioNext>", spawn (myTerminal ++ "mocp --next"))
   , ("<XF86AudioMute>", spawn "amixer set Master toggle")
+  , ("<XF86MonBrightnessUp>", spawn "brightnessctl s +10")
+  , ("<XF86MonBrightnessDown>", spawn "brightnessctl s 10-")
   , ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
   , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
   , ("<XF86HomePage>", spawn "qutebrowser https://www.youtube.com/c/DistroTube")
