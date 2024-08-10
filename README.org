@@ -1,22 +1,19 @@
-* xmonad-config
+#+title: Xmonad Config
+
+* Setup
++ Clone this repository in =$HOME/.xmonad=.
+
+* Ranger File manager
 
 ** Requiremnets
 + Google chrome uses Dbus
 
 #+begin_src sh
-  yay -S python-pydbus # For ranger Dbus
+  yay -S xdg-desktop-portal xdg-desktop-portal-xapp xdg-desktop-portal-termfilechooser-git kitty python-pydbus --noconfirm
 #+end_src
 
-** Setup
-+ Clone this repository in =$HOME/.xmonad=.
-
-** Ranger to FileChooser and FileManger
-*** On XFCE
-#+begin_src shell
-  yay -S xdg-desktop-portal xdg-desktop-portal-xapp xdg-desktop-portal-termfilechooser-git kitty
-#+end_src
-
-**** Create xdg-desktop-portal config
+** Configure XDG Desktop Portal
+*** Create xdg-desktop-portal config
 + $HOME/.config/xdg-desktop-portal/portals.conf
 #+begin_src conf
   [preferred]
@@ -25,7 +22,7 @@
   org.freedesktop.FileManager1=xapp;
 #+end_src
 
-**** Create termfilechooser config
+*** Create termfilechooser config
 + $HOME/.config/xdg-desktop-portal-termfilechooser/config
 
 #+begin_src conf
@@ -33,21 +30,26 @@
   cmd=/usr/share/xdg-desktop-portal-termfilechooser/ranger-wrapper.sh
 #+end_src
 
+
+*** Xmonad Startup Setup
 **** Running xdg-termfilechooser config
 + Manually start xdg-deskto-portal-termfilechooser by the command below
   + You can start it by systemd
-
++ =FileChooser= dbus
 #+begin_src shell
   /usr/lib/xdg-desktop-portal-termfilechooser -c $HOME/.config/xdg-desktop-portal-termfilechooser/config -l DEBUG
   # systemctl --user enable --now xdg-desktop-portal-termfilechooser
 #+end_src
 
 **** Change FileManger
++ =FileManager1= dbus
+
 #+begin_src shell
   PYTHONPATH=$HOME/.xmonad/py python -m ranger-dbus.py &
 #+end_src
 
 
+* KDE Desktop Setup
 *** Configure KDE Desktop
 + Setting =$HOME/.xinitrc= file
 

@@ -64,7 +64,7 @@ function google_mount {
 
     while true
     do
-        rclone mount "$account:/" "$dir" --vfs-cache-mode full --drive-server-side-across-configs
+        rclone mount "$account:/" "$dir" --vfs-cache-mode full --vfs-cache-max-size=500G --vfs-cache-max-age=3600h --vfs-refresh --vfs-fast-fingerprint --drive-server-side-across-configs
     done
 }
 google_mount biyard ~/data/google-drive/biyard &

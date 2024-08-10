@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-D=DP-4
-S=DP-0
+D=eDP-1 ## Default laptop monitor
+S=DP-1 ## USB-C Monitor
 H=HDMI-1
 OPT1="OdysseyG9: 3-screens and bottom"
 OPT2="OdysseyG9: full-screen and bottom"
