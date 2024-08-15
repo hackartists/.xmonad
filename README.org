@@ -48,6 +48,20 @@
   PYTHONPATH=$HOME/.xmonad/py python -m ranger-dbus.py &
 #+end_src
 
+** Configure Environments
++ =~/.xinitrc= setup.
+
+#+begin_src sh
+  export DE='xfce'
+  export GTK_THEME=Adwaita:dark
+  export XDG_SESSION_TYPE=x11
+  export GTK_IM_MODULE='ibus'
+  export QT_IM_MODULE='ibus'
+  export XMODIFIERS='@im=ibus'
+  export GLFW_IM_MODULE=ibus
+  exec xmonad &> ~/xmonad.log
+#+end_src
+
 
 * KDE Desktop Setup
 *** Configure KDE Desktop
