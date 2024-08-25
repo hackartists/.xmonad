@@ -62,6 +62,12 @@
   exec xmonad &> ~/xmonad.log
 #+end_src
 
+* Emacs Anywhere
++ Refer to the emacs anywhere github
+#+begin_src sh
+  yay -S xclip xdotool xorg-xwininfo
+  curl -fsSL https://raw.github.com/zachcurry/emacs-anywhere/master/install | bash
+#+end_src
 
 * KDE Desktop Setup
 *** Configure KDE Desktop
