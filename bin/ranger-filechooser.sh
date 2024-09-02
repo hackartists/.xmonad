@@ -24,35 +24,35 @@ directory="$2"
 save="$3"
 path="$4"
 out="$5"
-
+echo "multiple:$1 directory:$2 save:$3 path:$4 out:$5"
 echo "multiple:$1 directory:$2 save:$3 path:$4 out:$5" >> /tmp/ranger-wrapper.log
-
 cmd="/usr/bin/ranger"
 termcmd="${TERMCMD:-/usr/bin/kitty}"
+# termcmd="${TERMCMD:-/usr/bin/urxvt}"
 
 if [ "$save" = "1" ]; then
-    set -- --choosefile="$out" --cmd='echo Select save path (see tutorial in preview pane; try pressing zv or zp if no preview)' "$path"
-    printf '%s' 'xdg-desktop-portal-termfilechooser saving files tutorial
+    set -- --choosefile="$out" --cmd='echo Select save path (see tutorial in preview pane; try pressing zv or zp if no preview)' --selectfile="$path"
+#     printf '%s' 'xdg-desktop-portal-termfilechooser saving files tutorial
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!                 === WARNING! ===                 !!!
-!!! The contents of *whatever* file you open last in !!!
-!!! ranger will be *overwritten*!                    !!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!                 === WARNING! ===                 !!!
+# !!! The contents of *whatever* file you open last in !!!
+# !!! ranger will be *overwritten*!                    !!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-Instructions:
-1) Move this file wherever you want.
-2) Rename the file if needed.
-3) Confirm your selection by opening the file, for
-   example by pressing <Enter>.
+# Instructions:
+# 1) Move this file wherever you want.
+# 2) Rename the file if needed.
+# 3) Confirm your selection by opening the file, for
+#    example by pressing <Enter>.
 
-Notes:
-1) This file is provided for your convenience. You
-   could delete it and choose another file to overwrite
-   that, for example.
-2) If you quit ranger without opening a file, this file
-   will be removed and the save operation aborted.
-' > "$path"
+# Notes:
+# 1) This file is provided for your convenience. You
+#    could delete it and choose another file to overwrite
+#    that, for example.
+# 2) If you quit ranger without opening a file, this file
+#    will be removed and the save operation aborted.
+# ' > "$path"
 # elif [ "$directory" = "1" ]; then
 #     set -- --choosedir="$out" --show-only-dirs --cmd="echo Select directory (quit in dir to select it)"
 elif [ "$multiple" = "1" ]; then

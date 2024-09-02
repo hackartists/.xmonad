@@ -62,6 +62,18 @@
   exec xmonad &> ~/xmonad.log
 #+end_src
 
+** Drag and drop
++ Install drag and drop tool.
+#+begin_src sh
+  yay -S dragon-drop --noconfirm
+#+end_src
+
++ Add the below line to the end of  =.config/ranger/rc.conf=.
+#+begin_src conf
+  map <C-d> shell dragon-drop -a -x %p
+#+end_src
+
+
 * Emacs Anywhere
 + Refer to the emacs anywhere github
 #+begin_src sh
