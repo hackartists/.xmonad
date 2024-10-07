@@ -20,6 +20,18 @@
   default=xapp
   org.freedesktop.impl.portal.FileChooser=termfilechooser;xapp;
   org.freedesktop.FileManager1=xapp;
+  org.freedesktop.impl.portal.Settings=darkman # for darkmode
+#+end_src
+
+*** Dark mode
++ install =darkman=
+#+begin_src sh
+  yay -S darkman
+#+end_src
+
++ Enable =darkman=.
+#+begin_src sh
+  systemctl --user enable --now darkman.service
 #+end_src
 
 *** Create termfilechooser config
