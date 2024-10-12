@@ -26,7 +26,7 @@
 *** Dark mode
 + install =darkman=
 #+begin_src sh
-  yay -S darkman
+  yay -S darkman xdg-desktop-portal-gtk
 #+end_src
 
 + Enable =darkman=.
