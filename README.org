@@ -9,7 +9,7 @@
 + Google chrome uses Dbus
 
 #+begin_src sh
-  yay -S xdg-desktop-portal xdg-desktop-portal-xapp xdg-desktop-portal-termfilechooser-git kitty python-pydbus --noconfirm
+  yay -S xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-xapp xdg-desktop-portal-termfilechooser-git kitty python-pydbus --noconfirm
 #+end_src
 
 ** Configure XDG Desktop Portal
@@ -17,7 +17,7 @@
 + $HOME/.config/xdg-desktop-portal/portals.conf
 #+begin_src conf
   [preferred]
-  default=xapp
+  default=gtk
   org.freedesktop.impl.portal.FileChooser=termfilechooser;xapp;
   org.freedesktop.FileManager1=xapp;
   org.freedesktop.impl.portal.Settings=darkman # for darkmode
