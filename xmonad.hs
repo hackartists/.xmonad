@@ -125,19 +125,20 @@ myFocusColor  = "#ff0000" -- "#46d9ff"   -- Border color of focused windows
 windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
--- addCustomWSGroup :: WSGroupId -> WorkspaceId -> WorkspaceId  -> WorkspaceId -> X()
--- addCustomWSGroup n s1 s0 s2 = addRawWSGroup n [(S 0, s0), (S 2, s2), (S 1, s1)]
+addCustomWSGroup :: WSGroupId -> WorkspaceId -> WorkspaceId  -> WorkspaceId -> X()
+addCustomWSGroup n s0 s1 s2 = addRawWSGroup n [(S 0, s0), (S 2, s1), (S 1, s2)]
 
-addCustomWSGroup :: WSGroupId -> WorkspaceId -> WorkspaceId  -> X()
-addCustomWSGroup n s0 s1 = addRawWSGroup n [(S 0, s0), (S 1, s1)]
+-- addCustomWSGroup :: WSGroupId -> WorkspaceId -> WorkspaceId  -> X()
+-- addCustomWSGroup n s0 s1 = addRawWSGroup n [(S 0, s0), (S 1, s1)]
 
 myStartupHook :: X ()
 myStartupHook = do
-    addCustomWSGroup "dev" ( myWorkspaces !! 1 ) ( head myWorkspaces ) 
-    addCustomWSGroup "vir"  ( myWorkspaces !! 4 ) ( myWorkspaces !! 10 )
-    addCustomWSGroup "wtask" ( myWorkspaces !! 3 ) ( myWorkspaces !! 6 )
-    addCustomWSGroup "meet" ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 )
-    addCustomWSGroup "chat" ( myWorkspaces !! 1 ) ( myWorkspaces !! 5 )
+    addCustomWSGroup "dev" ( head myWorkspaces ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 2 )
+    addCustomWSGroup "web-dev" ( head myWorkspaces ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 6 )
+    addCustomWSGroup "vir"  ( myWorkspaces !! 4 ) ( myWorkspaces !! 10 ) ( myWorkspaces !! 2 )
+    addCustomWSGroup "wtask" ( myWorkspaces !! 3 ) ( myWorkspaces !! 6 ) ( myWorkspaces !! 2 )
+    addCustomWSGroup "meet" ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 2 )
+    addCustomWSGroup "chat" ( myWorkspaces !! 1 ) ( myWorkspaces !! 5 ) ( myWorkspaces !! 2 )
 
     spawnOnce "/bin/bash $HOME/.xmonad/tray.sh"
     spawnOnce "/bin/bash $HOME/.xmonad/startup.sh"
@@ -491,7 +492,7 @@ workspaceAction = makeAction 1 [
   , ("(v)irtual-machine", (0, xK_v), viewCenteredWSGroup "vir")
   , ("(m)eet", (0, xK_m), viewCenteredWSGroup "meet")
   , ("(c)hat", (0, xK_c), viewCenteredWSGroup "chat")
-  , ("(w)eb task", (0, xK_w), viewCenteredWSGroup "wtask")
+  , ("(w)eb dev", (0, xK_w), viewCenteredWSGroup "web-dev")
   , ("(g)o to workspace", (0, xK_g), gridselectWorkspace wsconfig W.greedyView)
   , ("(b)ring workspace", (0, xK_b), gridselectWorkspace wsconfig (\ws -> W.greedyView ws . W.shift ws))
   ]
@@ -506,8 +507,6 @@ emacsAction = makeAction 1 [
   , ("es(h)ell", (0, xK_h), spawn (myEmacs ++ "--eval '(eshell)'"))    -- eshell
   , ("m(a)stodon", (0, xK_a), spawn (myEmacs ++ "--eval '(mastodon)'"))  -- mastodon.el
   , ("(v)term", (0, xK_v), spawn (myEmacs ++ "--eval '(vterm nil)'")) -- vterm if on GNU Emacs
-  -- emms is an emacs audio player. I set it to auto start playing in a specific directory.
-  , ("e(M)ms", (shiftMask, xK_m), spawn (myEmacs ++ "--eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/Non-Classical/70s-80s/\")'"))
 
   ]
 
@@ -577,6 +576,7 @@ myManageHook = composeAll
      -- name of my workspaces and the names would be very long if using clickable workspaces.
      [
        title =? "emacs-main" --> doShift ( head myWorkspaces )
+     , resource =? "emacs@hackartist-archlinux" --> doShift ( myWorkspaces !! 2 )
      , className =? "Google-chrome"                --> doShift ( myWorkspaces !! 1 )
      , title =? "Emulator" --> (doShift ( myWorkspaces !! 2 ))
      , title =? "Android Emulator - luffy:5554" --> doShift ( myWorkspaces !! 2 )
@@ -616,6 +616,7 @@ myManageHook = composeAll
      , className =? "Blueman-manager"               --> doShift "0:misc"
      , className =? "libreoffice-writer"           --> doShift "0:misc"
      , className =? "kakaotalk.exe"                --> doFloat
+     , className =? "kakaotalk.exe"                --> doShift "0:misc"
      , className =? "VirtualBox Manager"           --> doShift "0:misc"
      , className =? "PulseUI"                      --> doShift "0:misc"
      -- , className =? "org.remmina.Remmina"          --> doShift "0:misc"

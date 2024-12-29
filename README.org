@@ -71,6 +71,8 @@
   export QT_IM_MODULE='ibus'
   export XMODIFIERS='@im=ibus'
   export GLFW_IM_MODULE=ibus
+  export QT_QPA_PLATFORMTHEME=qt6ct
+
   exec xmonad &> ~/xmonad.log
 #+end_src
 
@@ -92,33 +94,3 @@
   yay -S xclip xdotool xorg-xwininfo
   curl -fsSL https://raw.github.com/zachcurry/emacs-anywhere/master/install | bash
 #+end_src
-
-* KDE Desktop Setup
-*** Configure KDE Desktop
-+ Setting =$HOME/.xinitrc= file
-
-#+begin_src conf
-  export GTK_THEME=Adwaita:dark
-  export XDG_SESSION_TYPE=x11
-
-  export DE='kde'
-  export XDG_CURRENT_DESKTOP=KDE
-  export KDE_SESSION_VERSION=5
-  export XDG_MENU_PREFIX=plasma-
-  export XDG_CONFIG_DIRS=/home/hackartist/.config/kdedefaults:/etc/xdg
-
-  exec xmonad &> ~/xmonad.log
-#+end_src
-
-*** Starting X11
-+ Guarantee stopping =xdg-desktop-portal=
-  + Execute the below command if you are trying to run X11 twice or more.
-#+begin_src sh
-  systemctl stop --user xdg-desktop-portal.service
-#+end_src
-
-** Link ranger kdialog
-#+begin_src sh
-  sudo ln -s $HOME/.xmonad/bin/ranger-kdialog /usr/local/bin/kdialog
-#+end_src
-
