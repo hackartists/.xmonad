@@ -315,7 +315,7 @@ mygridConfig depth = do
         | depth == 1 = buildDefaultGSConfig myColorizer1
         | depth == 2 = buildDefaultGSConfig myColorizer2
         | otherwise = buildDefaultGSConfig myColorizer3
-  conf{ gs_cellwidth    = 200
+  conf{ gs_cellwidth    = 300
        , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
        }
 
