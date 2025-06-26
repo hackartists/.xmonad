@@ -15,6 +15,7 @@ CMD_COLOR="color: color picker"
 CMD_DICT="dict: dictionary"
 CMD_UC="unicode: unicode symbols"
 CMD_PASS="pass: standard password manager"
+CMD_TODO="todo: TODO list"
 
 if [[ -z "$1" ]]; then
     echo $CMD_CALC
@@ -33,6 +34,7 @@ if [[ -z "$1" ]]; then
     echo $CMD_DICT
     echo $CMD_UC
     echo $CMD_PASS
+    echo $CMD_TODO
 fi
 
 case $1 in
@@ -96,4 +98,9 @@ case $1 in
     "$CMD_PASS")
         kill `pidof rofi`
         ROFI_PASS_BACKEND=wtype ROFI_PASS_CLIPBOARD_BACKEND=wl-clipboard rofi-pass
+        ;;
+    "$CMD_TODO")
+        kill `pidof rofi`
+        bash ~/.xmonad/bin/rofi-todos.sh
+        ;;
 esac
