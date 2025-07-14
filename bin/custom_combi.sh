@@ -16,6 +16,7 @@ CMD_DICT="dict: dictionary"
 CMD_UC="unicode: unicode symbols"
 CMD_PASS="pass: standard password manager"
 CMD_TODO="todo: TODO list"
+CMD_CAMERA="toggle camera: toggle camera on/off"
 
 if [[ -z "$1" ]]; then
     echo $CMD_CALC
@@ -35,6 +36,7 @@ if [[ -z "$1" ]]; then
     echo $CMD_UC
     echo $CMD_PASS
     echo $CMD_TODO
+    echo $CMD_CAMERA
 fi
 
 case $1 in
@@ -102,5 +104,14 @@ case $1 in
     "$CMD_TODO")
         kill `pidof rofi`
         bash ~/.xmonad/bin/rofi-todos.sh
+        ;;
+    "$CMD_CAMERA")
+        kill `pidof rofi`
+        l=`sudo lsmod | grep uvcvideo | wc -l`
+        if [ $l -eq 0 ]; then
+            sudo modprobe uvcvideo > /dev/null
+        else
+            sudo rmmod uvcvideo > /dev/null
+        fi
         ;;
 esac
