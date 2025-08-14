@@ -145,7 +145,7 @@ myStartupHook = do
     spawnOnce "/bin/bash $HOME/.xmonad/startup.sh"
 
     setWMName "LG3D"
-    viewCenteredWSGroup "devb"
+    viewCenteredWSGroup "dev"
 
 myScratchPads :: [NamedScratchpad]
 myScratchPads = [ NS "terminal" spawnTerm findTerm manageDefault
