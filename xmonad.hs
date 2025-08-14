@@ -139,6 +139,7 @@ myStartupHook = do
     addCustomWSGroup "wtask" ( myWorkspaces !! 3 ) ( myWorkspaces !! 6 ) ( myWorkspaces !! 2 )
     addCustomWSGroup "meet" ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 2 )
     addCustomWSGroup "chat" ( myWorkspaces !! 1 ) ( myWorkspaces !! 5 ) ( myWorkspaces !! 2 )
+    addCustomWSGroup "figma" ( myWorkspaces !! 6 ) ( myWorkspaces !! 7 ) ( myWorkspaces !! 1 )
 
     spawnOnce "/bin/bash $HOME/.xmonad/tray.sh"
     spawnOnce "/bin/bash $HOME/.xmonad/startup.sh"
@@ -491,6 +492,7 @@ workspaceAction = makeAction 1 [
   ("(d)evelop", (0, xK_d), viewCenteredWSGroup "dev")
   , ("(v)irtual-machine", (0, xK_v), viewCenteredWSGroup "vir")
   , ("(m)eet", (0, xK_m), viewCenteredWSGroup "meet")
+  , ("(f)igma", (0, xK_f), viewCenteredWSGroup "figma")
   , ("(c)hat", (0, xK_c), viewCenteredWSGroup "chat")
   , ("(w)eb dev", (0, xK_w), viewCenteredWSGroup "web-dev")
   , ("(g)o to workspace", (0, xK_g), gridselectWorkspace wsconfig W.greedyView)
