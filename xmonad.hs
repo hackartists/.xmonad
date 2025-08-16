@@ -141,7 +141,6 @@ myStartupHook = do
     addCustomWSGroup "chat" ( myWorkspaces !! 1 ) ( myWorkspaces !! 5 ) ( myWorkspaces !! 2 )
     addCustomWSGroup "figma" ( myWorkspaces !! 6 ) ( myWorkspaces !! 7 ) ( myWorkspaces !! 1 )
 
-    spawnOnce "/bin/bash $HOME/.xmonad/tray.sh"
     spawnOnce "/bin/bash $HOME/.xmonad/startup.sh"
 
     setWMName "LG3D"
