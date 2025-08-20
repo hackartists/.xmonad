@@ -79,7 +79,7 @@ case $1 in
         ;;
     "$CMD_SCRCPY" )
         kill `pidof rofi`
-        scrcpy
+        scrcpy -K
         ;;
     "$CMD_COLOR" )
         kill `pidof rofi`
