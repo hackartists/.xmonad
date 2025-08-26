@@ -38,7 +38,10 @@ then
     fi
 fi
 
-XMONAD_TRAY_MONITOR=$((XMONAD_TRAY_MONITOR + 1))
+# for three monitors
+# XMONAD_TRAY_MONITOR=$((XMONAD_TRAY_MONITOR + 1))
+# for two monitors
+XMONAD_TRAY_MONITOR=$((XMONAD_TRAY_MONITOR))
 pkill -TERM trayer
 sleep 0.1
 
