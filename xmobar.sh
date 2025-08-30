@@ -38,10 +38,15 @@ then
     fi
 fi
 
-# for three monitors
-# XMONAD_TRAY_MONITOR=$((XMONAD_TRAY_MONITOR + 1))
-# for two monitors
-XMONAD_TRAY_MONITOR=$((XMONAD_TRAY_MONITOR))
+TOTAL_MONITORS=$(xrandr --listmonitors | awk '/Monitors:/ {print $2}')
+
+if [ "$TOTAL_MONITORS" -ge "3" ]
+then
+    XMONAD_TRAY_MONITOR=$((XMONAD_TRAY_MONITOR + 1))
+else
+    XMONAD_TRAY_MONITOR=$((XMONAD_TRAY_MONITOR))
+fi
+
 pkill -TERM trayer
 sleep 0.1
 
