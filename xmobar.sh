@@ -38,18 +38,18 @@ then
     fi
 fi
 
-TOTAL_MONITORS=$(xrandr --listmonitors | awk '/Monitors:/ {print $2}')
+# TOTAL_MONITORS=$(xrandr --listmonitors | awk '/Monitors:/ {print $2}')
 
-if [ "$TOTAL_MONITORS" -ge "3" ]
-then
-    XMONAD_TRAY_MONITOR=$((XMONAD_TRAY_MONITOR + 1))
-else
-    XMONAD_TRAY_MONITOR=$((XMONAD_TRAY_MONITOR))
-fi
+# if [ "$TOTAL_MONITORS" -ge "3" ]
+# then
+#     XMONAD_TRAY_MONITOR=$((XMONAD_TRAY_MONITOR + 1))
+# else
+#     XMONAD_TRAY_MONITOR=$((XMONAD_TRAY_MONITOR))
+# fi
 
 pkill -TERM trayer
 sleep 0.1
 
-trayer --edge top --align center --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand true --monitor $XMONAD_TRAY_MONITOR --transparent true --alpha 0 --tint 0x282c34  --height $XMONAD_TRAY_HEIGHT --iconspacing 5 &
+trayer --edge top --align center --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand true --monitor primary --transparent true --alpha 0 --tint 0x282c34  --height $XMONAD_TRAY_HEIGHT --iconspacing 5 &
 
 xmobar -x $XMONAD_TRAY_MONITOR --font=$XMOBAR_FONT --position="Static {xpos=$XMOBAR_POS,ypos=$XMOBAR_YPOS,width=$XMOBAR_WIDTH,height=$XMOBAR_HEIGHT}" $HOME/.xmonad/xmobarrc.hs 
