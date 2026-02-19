@@ -134,7 +134,7 @@ addCustomWSGroup n s0 s1 s2 = addRawWSGroup n [(S 0, s0), (S 2, s1), (S 1, s2)]
 myStartupHook :: X ()
 myStartupHook = do
     addCustomWSGroup "dev" ( head myWorkspaces ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 2 )
-    addCustomWSGroup "web-dev" ( head myWorkspaces ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 6 )
+    addCustomWSGroup "web-dev" ( head myWorkspaces ) ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 )
     addCustomWSGroup "vir"  ( myWorkspaces !! 4 ) ( myWorkspaces !! 10 ) ( myWorkspaces !! 2 )
     addCustomWSGroup "wtask" ( myWorkspaces !! 3 ) ( myWorkspaces !! 6 ) ( myWorkspaces !! 2 )
     addCustomWSGroup "meet" ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 2 )
