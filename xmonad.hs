@@ -135,7 +135,7 @@ myStartupHook :: X ()
 myStartupHook = do
     addCustomWSGroup "dev" ( head myWorkspaces ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 2 )
     addCustomWSGroup "web-dev" ( head myWorkspaces ) ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 )
-    addCustomWSGroup "vir"  ( myWorkspaces !! 4 ) ( myWorkspaces !! 10 ) ( myWorkspaces !! 2 )
+    addCustomWSGroup "vir"  ( myWorkspaces !! 4 ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 0 )
     addCustomWSGroup "wtask" ( myWorkspaces !! 3 ) ( myWorkspaces !! 6 ) ( myWorkspaces !! 2 )
     addCustomWSGroup "meet" ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 2 )
     addCustomWSGroup "chat" ( myWorkspaces !! 1 ) ( myWorkspaces !! 5 ) ( myWorkspaces !! 2 )
@@ -284,14 +284,14 @@ myShowWNameTheme = def
 myLayoutHook = avoidStruts $ mouseResize $ windowArrange
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
              where
-               myDefaultLayout =     withBorder myBorderWidth tall
+               myDefaultLayout =     withBorder myBorderWidth threeCol
                                  ||| magnify
                                  ||| noBorders monocle
                                  ||| floats
                                  ||| noBorders tabs
                                  ||| grid
                                  ||| spirals
-                                 ||| threeCol
+                                 ||| tall
                                  ||| threeRow
                                  ||| tallAccordion
                                  ||| wideAccordion
