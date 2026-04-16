@@ -134,6 +134,7 @@ addCustomWSGroup n s0 s1 s2 = addRawWSGroup n [(S 0, s0), (S 2, s1), (S 1, s2)]
 myStartupHook :: X ()
 myStartupHook = do
     addCustomWSGroup "dev" ( head myWorkspaces ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 2 )
+    addCustomWSGroup "ai" ( myWorkspaces !! 2 ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 2 )
     addCustomWSGroup "web-dev" ( head myWorkspaces ) ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 )
     addCustomWSGroup "vir"  ( myWorkspaces !! 4 ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 0 )
     addCustomWSGroup "wtask" ( myWorkspaces !! 3 ) ( myWorkspaces !! 6 ) ( myWorkspaces !! 2 )
@@ -401,13 +402,11 @@ layoutAction = makeAction 1
 appFavoriteAction = makeAction 2 [
   (name, key, spawn cmd)
   | (name, key, cmd) <- [ ("ranger", (0, xK_1), "kitty -e ranger")
+                        , ("(b)iyard", (0, xK_b), "kitty --title=biyard-console --working-directory /home/hackartist/data/devel/github.com/biyard/biyard  --class biyard-console claude -r PO")
+                        , ("ra(t)el", (0, xK_t), "kitty --title=ratel-consoel --working-directory /home/hackartist/data/devel/github.com/biyard/ratel  --class ratel-console claude -r PO")
                         , ("(c)laude", (0, xK_c), "claude-desktop")
                         , ("(d)iscord", (0, xK_d), "discord")
                         , ("call(g)rind", (0, xK_g), "kcachegrind")
-                        , ("(g)imp", (0, xK_1), "gimp")
-                        , ("(k)denlive", (0, xK_k), "kdenlive")
-                        , ("(o)bs", (0, xK_o), "obs")
-                        , ("(p)cmanfm", (0, xK_p), "pcmanfm")
                         , ("sc(r)cpy", (0, xK_r), "scrcpy -K")
                         , ("(s)lack", (0, xK_s), "slack")
                         , ("(w)hatapps", (0, xK_w), "QT_IM_MODULE='uim' GTK_IM_MODULE='uim' XMODIFIERS='@im=uim' whatsdesk")
@@ -488,7 +487,8 @@ screenAction = makeAction 1 [
   ]
 
 workspaceAction = makeAction 1 [
-  ("(d)evelop", (0, xK_d), viewCenteredWSGroup "dev")
+  ("(a)i", (0, xK_a), viewCenteredWSGroup "ai")
+  , ("(d)evelop", (0, xK_d), viewCenteredWSGroup "dev")
   , ("(v)irtual-machine", (0, xK_v), viewCenteredWSGroup "vir")
   , ("(m)eet", (0, xK_m), viewCenteredWSGroup "meet")
   , ("(f)igma", (0, xK_f), viewCenteredWSGroup "figma")
@@ -549,7 +549,7 @@ hotkeyAction = makeAction 0
 -- Workspaces
 myAllWorkspaces = [("1",xK_1,"emacs")
                    , ("2",xK_2,"web")
-                   , ("3",xK_3,"dbg")
+                   , ("3",xK_3,"ai")
                    , ("4",xK_4,"test")
                    , ("5",xK_5,"vm")
                    , ("6",xK_6,"msg")
@@ -577,6 +577,8 @@ myManageHook = composeAll
      -- name of my workspaces and the names would be very long if using clickable workspaces.
      [
        title =? "emacs-main" --> doShift ( head myWorkspaces )
+     , title =? "biyard-console" --> doShift ( myWorkspaces !! 2 )
+     , title =? "ratel-console" --> doShift ( myWorkspaces !! 2 )
      , resource =? "emacs@hackartist-archlinux" --> doShift ( myWorkspaces !! 2 )
      , className =? "Google-chrome"                --> doShift ( myWorkspaces !! 1 )
      , title =? "Emulator" --> (doShift ( myWorkspaces !! 2 ))
