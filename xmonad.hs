@@ -549,7 +549,7 @@ hotkeyAction = makeAction 0
 -- Workspaces
 myAllWorkspaces = [("1",xK_1,"emacs")
                    , ("2",xK_2,"web")
-                   , ("3",xK_3,"ai")
+                   , ("3",xK_3,"ratel-ai")
                    , ("4",xK_4,"test")
                    , ("5",xK_5,"vm")
                    , ("6",xK_6,"msg")
@@ -577,8 +577,8 @@ myManageHook = composeAll
      -- name of my workspaces and the names would be very long if using clickable workspaces.
      [
        title =? "emacs-main" --> doShift ( head myWorkspaces )
-     , title =? "biyard-console" --> doShift ( myWorkspaces !! 2 )
-     , title =? "ratel-console" --> doShift ( myWorkspaces !! 2 )
+     , title =? "ratel-dev" --> doShift ( myWorkspaces !! 2 )
+     , title =? "ratel-po" --> doShift ( myWorkspaces !! 2 )
      , resource =? "emacs@hackartist-archlinux" --> doShift ( myWorkspaces !! 2 )
      , className =? "Google-chrome"                --> doShift ( myWorkspaces !! 1 )
      , title =? "Emulator" --> (doShift ( myWorkspaces !! 2 ))
