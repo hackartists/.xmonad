@@ -583,6 +583,7 @@ myManageHook = composeAll
      , className =? "Google-chrome"                --> doShift ( myWorkspaces !! 1 )
      , title =? "App" --> (doShift ( myWorkspaces !! 2 ))
      , className =? "claude"                     --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
+     , className =? "claude-desktop"                     --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , className =? "Claude"                     --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , className =? "chatall"                     --> doShift ( myWorkspaces !! 2 )
      , className =? "Electron"                     --> doShift ( myWorkspaces !! 2 )
