@@ -716,6 +716,8 @@ myAdditionalKeys  =
   , ("C-M1-h", decScreenSpacing 4)
   , ("C-M1-l", incScreenSpacing 4)
 
+  , ("C-S-4", spawn "scrot -s --freeze -e 'xclip -selection clipboard -t image/png -i $f'")
+
   , ("M-<Tab>", windows W.focusDown)
   , ("M-S-<Tab>", windows W.focusUp)
 
