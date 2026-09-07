@@ -25,7 +25,9 @@ save="$3"
 path="$4"
 out="$5"
 echo "multiple:$1 directory:$2 save:$3 path:$4 out:$5"
-echo "multiple:$1 directory:$2 save:$3 path:$4 out:$5" >> /tmp/ranger-wrapper.log
+echo "multiple:$1 directory:$2 save:$3 path:$4 out:$5 ($@)" >> /tmp/ranger-wrapper.log
+is_dir=`[ "$directory" = "1" ] && echo "true" || echo "false"`
+echo "is_dir:$is_dir" >> /tmp/ranger-wrapper.log
 cmd="/usr/bin/ranger"
 termcmd="${TERMCMD:-/usr/bin/kitty}"
 # termcmd="${TERMCMD:-/usr/bin/urxvt}"
@@ -53,13 +55,14 @@ if [ "$save" = "1" ]; then
 # 2) If you quit ranger without opening a file, this file
 #    will be removed and the save operation aborted.
 # ' > "$path"
-# elif [ "$directory" = "1" ]; then
-#     set -- --choosedir="$out" --show-only-dirs --cmd="echo Select directory (quit in dir to select it)"
+elif [ "$directory" = "1" ]; then
+    set -- --choosedir="$out" --show-only-dirs --cmd="echo Select directory (quit in dir to select it)"
 elif [ "$multiple" = "1" ]; then
     set -- --choosefiles="$out" --cmd="echo Select file(s) (open file to select it; <Space> to select multiple)"
 else
     set -- --choosefile="$out" --cmd="echo Select file (open file to select it)"
 fi
+echo "Running: $termcmd -- $cmd $@" >> /tmp/ranger-wrapper.log
 
 "$termcmd" -- $cmd "$@"
 if [ "$save" = "1" ] && [ ! -s "$out" ]; then

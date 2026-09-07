@@ -316,7 +316,7 @@ mygridConfig depth = do
         | depth == 1 = buildDefaultGSConfig myColorizer1
         | depth == 2 = buildDefaultGSConfig myColorizer2
         | otherwise = buildDefaultGSConfig myColorizer3
-  conf{ gs_cellwidth    = 300
+  conf{ gs_cellwidth    = 200
        , gs_font =  "xft:NanumGothic:size=11:regular:antialias=true:hinting=true"
        }
 
@@ -402,13 +402,12 @@ layoutAction = makeAction 1
 appFavoriteAction = makeAction 2 [
   (name, key, spawn cmd)
   | (name, key, cmd) <- [ ("ranger", (0, xK_1), "kitty -e ranger")
-                        , ("(b)iyard", (0, xK_b), "kitty --title=biyard-console --working-directory /home/hackartist/data/devel/github.com/biyard/biyard  --class biyard-console claude -r PO")
-                        , ("ra(t)el", (0, xK_t), "kitty --title=ratel-consoel --working-directory /home/hackartist/data/devel/github.com/biyard/ratel  --class ratel-console claude -r PO")
                         , ("(c)laude", (0, xK_c), "claude-desktop")
                         , ("(d)iscord", (0, xK_d), "discord")
                         , ("call(g)rind", (0, xK_g), "kcachegrind")
                         , ("sc(r)cpy", (0, xK_r), "scrcpy -K")
                         , ("(s)lack", (0, xK_s), "slack")
+                        , ("(t)elegram", (0, xK_t), "Telegram")
                         , ("(w)hatapps", (0, xK_w), "QT_IM_MODULE='uim' GTK_IM_MODULE='uim' XMODIFIERS='@im=uim' whatsdesk")
                         , ("(m)ain emacs", (0, xK_m), "emacs --name emacs-main")
                         ]
@@ -601,7 +600,7 @@ myManageHook = composeAll
      , className =? "org.remmina.Remmina"          --> doShift "5:vm"
      , className =? "zoom"                         --> doShift "6:msg"
      , className =? "whatsdesk"                    --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
-     , className =? "TelegramDesktop"              --> doShift "6:msg"
+     , className =? "TelegramDesktop"              --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , className =? "yakyak"                       --> doShift "6:msg"
      , title     =? "WhatsApp"                     --> doShift "6:msg"
      , title     =? "Huddle: #general - Biyard - Slack" --> doShift "6:msg"
