@@ -133,8 +133,8 @@ addCustomWSGroup n s0 s1 s2 = addRawWSGroup n [(S 0, s0), (S 2, s1), (S 1, s2)]
 
 myStartupHook :: X ()
 myStartupHook = do
-    addCustomWSGroup "dev" ( head myWorkspaces ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 2 )
-    addCustomWSGroup "ai" ( myWorkspaces !! 2 ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 2 )
+    addCustomWSGroup "dev" ( head myWorkspaces ) ( myWorkspaces !! 2 ) ( myWorkspaces !! 1 )
+    addCustomWSGroup "ai" ( myWorkspaces !! 2 ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 0 )
     addCustomWSGroup "web-dev" ( head myWorkspaces ) ( myWorkspaces !! 6 ) ( myWorkspaces !! 1 )
     addCustomWSGroup "vir"  ( myWorkspaces !! 4 ) ( myWorkspaces !! 1 ) ( myWorkspaces !! 0 )
     addCustomWSGroup "wtask" ( myWorkspaces !! 3 ) ( myWorkspaces !! 6 ) ( myWorkspaces !! 2 )
@@ -399,10 +399,11 @@ layoutAction = makeAction 1
                     ]
                 ]
 
-appFavoriteAction = makeAction 2 [
+appFavoriteAction = makeAction 2 $
+  ("(c)laude", (0, xK_c), windows (W.greedyView (myWorkspaces !! 2)) >> spawn "claude-desktop")
+  : [
   (name, key, spawn cmd)
   | (name, key, cmd) <- [ ("ranger", (0, xK_1), "kitty -e ranger")
-                        , ("(c)laude", (0, xK_c), "claude-desktop")
                         , ("(d)iscord", (0, xK_d), "discord")
                         , ("call(g)rind", (0, xK_g), "kcachegrind")
                         , ("sc(r)cpy", (0, xK_r), "scrcpy -K")
@@ -548,7 +549,7 @@ hotkeyAction = makeAction 0
 -- Workspaces
 myAllWorkspaces = [("1",xK_1,"emacs")
                    , ("2",xK_2,"web")
-                   , ("3",xK_3,"ratel-ai")
+                   , ("3",xK_3,"ai")
                    , ("4",xK_4,"test")
                    , ("5",xK_5,"vm")
                    , ("6",xK_6,"msg")
@@ -581,9 +582,9 @@ myManageHook = composeAll
      , resource =? "emacs@hackartist-archlinux" --> doShift ( myWorkspaces !! 2 )
      , className =? "Google-chrome"                --> doShift ( myWorkspaces !! 1 )
      , title =? "App" --> (doShift ( myWorkspaces !! 2 ))
-     , title =? "Claude"                     --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
-     , className =? "com.anthroipic.claude"                     --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
-     , className =? "com.anthroipic.Claude"                     --> doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
+     , title =? "Claude"                     --> doShift ( myWorkspaces !! 2 ) --doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
+     , className =? "com.anthroipic.claude"    --> doShift ( myWorkspaces !! 2 ) --doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
+     , className =? "com.anthroipic.Claude"    --> doShift ( myWorkspaces !! 2 ) -- doRectFloat (W.RationalRect 0.05 0.05 0.9 0.9)
      , className =? "chatall"                     --> doShift ( myWorkspaces !! 2 )
      , className =? "Electron"                     --> doShift ( myWorkspaces !! 2 )
      , className =? "kcachegrind"                  --> doShift ( myWorkspaces !! 2 )
